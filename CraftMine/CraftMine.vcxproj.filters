@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Fichiers de ressources\shaders">
+      <UniqueIdentifier>{43b3d6fe-9794-41e1-af08-855897753450}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers de ressources\textures">
+      <UniqueIdentifier>{07777cc6-2b9f-4ab7-b14a-32612a2f94aa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -24,18 +30,41 @@
     <ClCompile Include="..\..\..\..\Documents\libs\glad\src\glad.c">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
+    <ClCompile Include="src\Camera.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MyWindow.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\stb_image.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Shader.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="include\MyWindow.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="include\stb_image.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Camera.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\fragmentShader.glsl">
-      <Filter>Fichiers de ressources</Filter>
+    <None Include="res\shaders\fragmentShader.glsl">
+      <Filter>Fichiers de ressources\shaders</Filter>
     </None>
-    <None Include="res\vertexShader.glsl">
-      <Filter>Fichiers de ressources</Filter>
+    <None Include="res\shaders\vertexShader.glsl">
+      <Filter>Fichiers de ressources\shaders</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\textures\texture.jpg">
+      <Filter>Fichiers de ressources\textures</Filter>
+    </Image>
   </ItemGroup>
 </Project>

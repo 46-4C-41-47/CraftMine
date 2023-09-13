@@ -9,9 +9,14 @@ using std::string;
 Shader::Shader(const char* vertexShaderPath, const char* fragmentShaderPath) {
     int  success;
     char infoLog[512];
+    string vertexCode, fragmentCode;
 
-    string vertexCode = getShaderCode(vertexShaderPath);
-    string fragmentCode = getShaderCode(fragmentShaderPath);
+    try {
+        vertexCode = getShaderCode(vertexShaderPath);
+        fragmentCode = getShaderCode(fragmentShaderPath);
+    } catch (std::exception) {
+        throw std::exception("unable to create the shader object");
+    }
 
     unsigned int vertexShader = initShader(vertexCode.c_str(), GL_VERTEX_SHADER);
     unsigned int fragmentShader = initShader(fragmentCode.c_str(), GL_FRAGMENT_SHADER);
@@ -53,7 +58,7 @@ string Shader::getShaderCode(const char* shaderPath) {
     catch (std::ifstream::failure e)
     {
         cerr << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << endl;
-        return NULL;
+        throw std::exception("unable to load the shader file");
     }
 
     return shaderCode;
