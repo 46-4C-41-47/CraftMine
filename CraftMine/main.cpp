@@ -270,7 +270,7 @@ int main(void)
         Sleep(max(delta - ((glfwGetTime() - startingTime) / 1000), 0));
     }
 
-    delete cam;
+    delete cam, shader;
 
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
