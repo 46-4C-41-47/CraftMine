@@ -7,6 +7,7 @@
 
 #include "Vertex.h"
 #include "Texture.h"
+#include "Shader.h"
 
 
 using std::vector;
@@ -17,12 +18,12 @@ private:
     unsigned int VAO, VBO, EBO;
 
     vector<Vertex>       vertices;
-    vector<unsigned int> indices;
-    vector<Texture>      textures;
+    //vector<unsigned int> indices;
+    vector<unsigned int>      textures;
 
     void setupMesh();
 
 public:
-    Mesh(vector<Vertex> vertices, vector<unsigned int> indices, vector<Texture> textures);
-    //void Draw(Shader& shader);
+    Mesh(vector<Vertex> vertices, vector<unsigned int> textures);
+    void Draw(Shader& shader);
 };
