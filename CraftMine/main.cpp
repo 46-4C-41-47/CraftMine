@@ -286,7 +286,6 @@ int main(void)
     }
     shader->sendInt("textureData", 0);
 
-    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     glEnable(GL_DEPTH_TEST);
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
