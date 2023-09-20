@@ -104,13 +104,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\Elève\Documents\libs\glfw-3.3.8.bin.WIN64\include;C:\Users\Elève\Documents\libs\glad\include;C:\Users\Elève\Documents\libs\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\rbesson\OneDrive - SOGECOQ LECOQSPORTIF\Documents\libs\glfw-3.3.8.bin.WIN64\include;C:\Users\rbesson\OneDrive - SOGECOQ LECOQSPORTIF\Documents\libs\glad\include;C:\Users\rbesson\OneDrive - SOGECOQ LECOQSPORTIF\Documents\libs\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>glfw3.lib;opengl32.lib;kernel32.lib;user32.lib;gdi32.lib;shell32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Users\Elève\Documents\libs\glfw-3.3.8.bin.WIN64\lib-vc2022;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\rbesson\OneDrive - SOGECOQ LECOQSPORTIF\Documents\libs\glfw-3.3.8.bin.WIN64\lib-vc2022;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -121,7 +121,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\Elève\Documents\libs\glfw-3.3.8.bin.WIN64\include;C:\Users\Elève\Documents\libs\glad\include;C:\Users\Elève\Documents\libs\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\rbesson\OneDrive - SOGECOQ LECOQSPORTIF\Documents\libs\glfw-3.3.8.bin.WIN64\include;C:\Users\rbesson\OneDrive - SOGECOQ LECOQSPORTIF\Documents\libs\glad\include;C:\Users\rbesson\OneDrive - SOGECOQ LECOQSPORTIF\Documents\libs\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -129,22 +129,30 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>glfw3.lib;opengl32.lib;kernel32.lib;user32.lib;gdi32.lib;shell32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Users\Elève\Documents\libs\glfw-3.3.8.bin.WIN64\lib-vc2022;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\rbesson\OneDrive - SOGECOQ LECOQSPORTIF\Documents\libs\glfw-3.3.8.bin.WIN64\lib-vc2022;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\Documents\libs\glad\src\glad.c" />
+    <ClCompile Include="..\..\..\..\..\OneDrive - SOGECOQ LECOQSPORTIF\Documents\libs\glad\src\glad.c" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\Camera.cpp" />
+    <ClCompile Include="src\Chunk.cpp" />
+    <ClCompile Include="src\Mesh.cpp" />
     <ClCompile Include="src\MyWindow.cpp" />
     <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\stb_image.cpp" />
+    <ClCompile Include="src\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\BlockTypes.h" />
     <ClInclude Include="include\Camera.h" />
+    <ClInclude Include="include\Chunk.h" />
+    <ClInclude Include="include\Mesh.h" />
     <ClInclude Include="include\MyWindow.h" />
     <ClInclude Include="include\Shader.h" />
     <ClInclude Include="include\stb_image.h" />
+    <ClInclude Include="include\Texture.h" />
+    <ClInclude Include="include\Vertex.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\fragmentShader.glsl" />

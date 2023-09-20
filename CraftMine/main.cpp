@@ -8,10 +8,12 @@
 
 #include <windows.h>
 #include <iostream>
+#include <vector>
 
 #include "include/Shader.h"
 #include "include/Camera.h"
 #include "include/stb_image.h"
+#include "include/Mesh.h"
 
 
 using std::cout;
@@ -137,6 +139,51 @@ namespace cube
         -0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 0.0f,  0.0f, 0.0f,
         -0.5f,  0.5f, -0.5f,  0.0f, 0.0f, 0.0f,  0.0f, 1.0f
     };
+
+    float verticesShortVAO[] = {
+        // vertex coordinates   texture coordinates
+          -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+           0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+           0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+           0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+          -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+          -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+
+          -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+           0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+           0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+           0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+          -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+          -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+
+          -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+          -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+          -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+          -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+          -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+          -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+           0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+           0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+           0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+           0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+           0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+           0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+          -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+           0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+           0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+           0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+          -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+          -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+
+          -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+           0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+           0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+           0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+          -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+          -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+    };
 }
 
 
@@ -177,7 +224,25 @@ void processInput(GLFWwindow* window, Camera* cam)
 }
 
 
-int main(void)
+Mesh* initMesh(unsigned int textureAddress) {
+    vector<unsigned int> textures;
+
+    for (int i = 0; i < sizeof(cube::verticesVAO) / sizeof(float); i++) {
+        textures.push_back(textureAddress);
+    }
+
+    return new Mesh(cube::verticesVAO, &textures);
+}
+
+
+int main() {
+    Mesh* mesh = new Mesh(cube::verticesVAO, 0);
+
+    return 0;
+}
+
+
+/*int main(void)
 {
     const double delta = 1000.0f / 60;
     const int frameWidth = 800, frameHeight = 500;
@@ -259,6 +324,8 @@ int main(void)
     }
     stbi_image_free(textureData);
 
+    Mesh* mesh = initMesh(texture);
+
     // VBO
     glGenBuffers(1, &VBO);
 
@@ -267,7 +334,7 @@ int main(void)
     glBindVertexArray(VAO);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(cube::verticesVAO), cube::verticesVAO, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(cube::verticesShortVAO), cube::verticesShortVAO, GL_STATIC_DRAW);
 
     // position attribute
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
@@ -311,8 +378,9 @@ int main(void)
         shader->sendMat4("view", cam->getViewMatrix());
         shader->sendMat4("projection", projection);
 
-        glBindVertexArray(VAO);
-        glDrawArrays(GL_TRIANGLES, 0, 36);
+        //glBindVertexArray(VAO);
+        //glDrawArrays(GL_TRIANGLES, 0, 36);
+        mesh->Draw(*shader);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
@@ -328,4 +396,4 @@ int main(void)
 
     glfwTerminate();
     return 0;
-}
+}*/

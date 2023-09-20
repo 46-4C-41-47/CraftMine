@@ -17,13 +17,14 @@ class Mesh {
 private:
     unsigned int VAO, VBO, EBO;
 
-    vector<Vertex>       vertices;
+    vector<Vertex>* vertices;
     //vector<unsigned int> indices;
-    vector<unsigned int>      textures;
+    vector<unsigned int>* textures;
 
-    void setupMesh();
+    void initMesh();
 
 public:
-    Mesh(vector<Vertex> vertices, vector<unsigned int> textures);
+    Mesh(float* rawData, vector<unsigned int>* textures);
+    Mesh(vector<Vertex>* vertices, vector<unsigned int>* textures);
     void Draw(Shader& shader);
 };
