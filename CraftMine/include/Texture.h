@@ -10,13 +10,8 @@
 
 
 
-class Texture {
-private:
-	unsigned int texture;
-
-public:
-	Texture(std::string path);
-
-	inline unsigned int getAddress() { return texture; }
-	inline void free() { glDeleteTextures(1, &texture); }
+struct Texture {
+    unsigned int id;
+    int width;
+    int height;
 };

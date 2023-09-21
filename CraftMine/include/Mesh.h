@@ -13,16 +13,15 @@ using std::vector;
 
 class Mesh {
 private:
-    unsigned int VAO, VBO;
+    unsigned int VAO, VBO, texture;
     size_t sizeOfVertices;
 
     vector<float> vertices;
-    vector<unsigned int> textures;
 
     void initMesh();
 
 public:
-    Mesh(vector<float> v);
+    Mesh(vector<float> v, unsigned int t);
     ~Mesh();
 
     void Draw(Shader& shader);

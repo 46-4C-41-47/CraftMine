@@ -1,7 +1,8 @@
 #include "../include/Camera.h"
 
 
-Camera::Camera() {
+Camera::Camera() 
+{
 	position = vec3(0.0f, 0.0f, 0.0f);
 	computeVectors();
 
@@ -11,7 +12,8 @@ Camera::Camera() {
 }
 
 
-Camera::Camera(vec3 pos, vec3 pointToLook) {
+Camera::Camera(vec3 pos, vec3 pointToLook) 
+{
 	position = pos;
 	direction = normalize(pos - pointToLook);
 	computeVectors();
@@ -25,24 +27,28 @@ Camera::Camera(vec3 pos, vec3 pointToLook) {
 Camera::~Camera() {}
 
 
-void Camera::computeVectors() {
+void Camera::computeVectors() 
+{
 	up = vec3(0.0f, 1.0f, 0.0f);
 	right = normalize(glm::cross(up, direction));
 	up = glm::cross(direction, right);
 }
 
-void Camera::rebuildViewMatrix() {
+void Camera::rebuildViewMatrix() 
+{
 	viewMatrix = glm::lookAt(position, position + (-direction), up);
 }
 
 
-void Camera::move(vec3 newLocation) {
+void Camera::move(vec3 newLocation) 
+{
 	position = newLocation;
 	rebuildViewMatrix();
 }
 
 
-void Camera::lookAt(vec3 pointToLookAt) {
+void Camera::lookAt(vec3 pointToLookAt) 
+{
 	// TO DO 
 	// direction = normalize(position - pointToLookAt);
 	computeVectors();
@@ -50,7 +56,8 @@ void Camera::lookAt(vec3 pointToLookAt) {
 }
 
 
-void Camera::computeDirection() {
+void Camera::computeDirection() 
+{
 	direction.x = glm::cos(yawValue) * glm::cos(pitchValue);
 	direction.y = glm::sin(pitchValue);
 	direction.z = glm::sin(yawValue) * glm::cos(pitchValue);
@@ -60,12 +67,14 @@ void Camera::computeDirection() {
 }
 
 
-void Camera::moveUpward(float offset) {
+void Camera::moveUpward(float offset) 
+{
 	position = position + vec3(0.0f, offset, 0.0f);
 	rebuildViewMatrix();
 }
 
-void Camera::moveSideWays(float offset) {
+void Camera::moveSideWays(float offset) 
+{
 	position = position + vec3(
 		right.x * offset, 
 		right.y * offset, 
@@ -74,7 +83,8 @@ void Camera::moveSideWays(float offset) {
 	rebuildViewMatrix();
 }
 
-void Camera::moveForward(float offset) {
+void Camera::moveForward(float offset) 
+{
 	position = position - vec3(
 		direction.x * offset, 
 		direction.y * offset, 
@@ -84,12 +94,14 @@ void Camera::moveForward(float offset) {
 }
 
 
-void Camera::yaw(float angleInRadians) { 
+void Camera::yaw(float angleInRadians) 
+{ 
 	yawValue += angleInRadians; 
 	computeDirection();
 }
 
-void Camera::pitch(float angleInRadians) { 
+void Camera::pitch(float angleInRadians) 
+{ 
 	pitchValue += angleInRadians;
 	
 	double halfPI = PI * 0.5;
@@ -103,13 +115,15 @@ void Camera::pitch(float angleInRadians) {
 	computeDirection();
 }
 
-void Camera::roll(float angleInRadians) { 
+void Camera::roll(float angleInRadians) 
+{ 
 	rollValue += angleInRadians; 
 	computeDirection();
 }
 
 
-void Camera::proccessMouse(int x, int y) {
+void Camera::proccessMouse(int x, int y) 
+{
 	if (lastX == -1 || lastY == -1) {
 		lastX = x;
 		lastY = y;

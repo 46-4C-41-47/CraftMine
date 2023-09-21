@@ -1,8 +1,9 @@
 #include "../include/Mesh.h"
 
 
-Mesh::Mesh(vector<float> v) {
+Mesh::Mesh(vector<float> v, unsigned int t) {
     vertices = v;
+    texture = t;
 
     initMesh();
 }
@@ -45,6 +46,11 @@ void Mesh::Draw(Shader& shader)
         glBindTexture(GL_TEXTURE_2D, textures[i]);
     }
     glActiveTexture(GL_TEXTURE0);*/
+    
+    shader.sendInt("texture1", 0);
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture);
 
     // draw mesh
     glBindVertexArray(VAO);

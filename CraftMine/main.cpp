@@ -9,11 +9,13 @@
 #include <windows.h>
 #include <iostream>
 #include <vector>
+#include <string>
 
 #include "include/Shader.h"
 #include "include/Camera.h"
 #include "include/stb_image.h"
 #include "include/Mesh.h"
+#include "include/Texture.h"
 
 
 using std::cout;
@@ -51,138 +53,49 @@ namespace cube
         2, 6, 7
     };
 
-    vector<float> verticesVAOc = {
-        -0.5f, -0.5f, -0.5f,
-         0.5f, -0.5f, -0.5f,
-         0.5f,  0.5f, -0.5f,
-         0.5f,  0.5f, -0.5f,
-        -0.5f,  0.5f, -0.5f,
-        -0.5f, -0.5f, -0.5f,
-
-        -0.5f, -0.5f,  0.5f,
-         0.5f, -0.5f,  0.5f,
-         0.5f,  0.5f,  0.5f,
-         0.5f,  0.5f,  0.5f,
-        -0.5f,  0.5f,  0.5f,
-        -0.5f, -0.5f,  0.5f,
-
-        -0.5f,  0.5f,  0.5f,
-        -0.5f,  0.5f, -0.5f,
-        -0.5f, -0.5f, -0.5f,
-        -0.5f, -0.5f, -0.5f,
-        -0.5f, -0.5f,  0.5f,
-        -0.5f,  0.5f,  0.5f,
-
-         0.5f,  0.5f,  0.5f,
-         0.5f,  0.5f, -0.5f,
-         0.5f, -0.5f, -0.5f,
-         0.5f, -0.5f, -0.5f,
-         0.5f, -0.5f,  0.5f,
-         0.5f,  0.5f,  0.5f,
-
-        -0.5f, -0.5f, -0.5f,
-         0.5f, -0.5f, -0.5f,
-         0.5f, -0.5f,  0.5f,
-         0.5f, -0.5f,  0.5f,
-        -0.5f, -0.5f,  0.5f,
-        -0.5f, -0.5f, -0.5f,
-
-        -0.5f,  0.5f, -0.5f,
-         0.5f,  0.5f, -0.5f,
-         0.5f,  0.5f,  0.5f,
-         0.5f,  0.5f,  0.5f,
-        -0.5f,  0.5f,  0.5f,
-        -0.5f,  0.5f, -0.5f,
-    };
-
     vector<float> verticesVAOcnt = {
       // vertex coordinates   normal vector      texture coordinates
-        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 0.0f,  0.0f, 0.0f,
-         0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 0.0f,  1.0f, 0.0f,
-         0.5f,  0.5f, -0.5f,  0.0f, 0.0f, 0.0f,  1.0f, 1.0f,
-         0.5f,  0.5f, -0.5f,  0.0f, 0.0f, 0.0f,  1.0f, 1.0f,
-        -0.5f,  0.5f, -0.5f,  0.0f, 0.0f, 0.0f,  0.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 0.0f,  0.0f, 0.0f,
-
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 0.0f,  0.0f, 0.0f,
-         0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 0.0f,  1.0f, 0.0f,
-         0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 0.0f,  1.0f, 1.0f,
-         0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 0.0f,  1.0f, 1.0f,
-        -0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 0.0f,  0.0f, 1.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 0.0f,  0.0f, 0.0f,
-
-        -0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 0.0f,  1.0f, 0.0f,
-        -0.5f,  0.5f, -0.5f,  0.0f, 0.0f, 0.0f,  1.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 0.0f,  0.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 0.0f,  0.0f, 1.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 0.0f,  0.0f, 0.0f,
-        -0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 0.0f,  1.0f, 0.0f,
-
-         0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 0.0f,  1.0f, 0.0f,
-         0.5f,  0.5f, -0.5f,  0.0f, 0.0f, 0.0f,  1.0f, 1.0f,
-         0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 0.0f,  0.0f, 1.0f,
-         0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 0.0f,  0.0f, 1.0f,
-         0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 0.0f,  0.0f, 0.0f,
-         0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 0.0f,  1.0f, 0.0f,
-
-        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 0.0f,  0.0f, 1.0f,
-         0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 0.0f,  1.0f, 1.0f,
-         0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 0.0f,  1.0f, 0.0f,
-         0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 0.0f,  1.0f, 0.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 0.0f,  0.0f, 0.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 0.0f,  0.0f, 1.0f,
-
-        -0.5f,  0.5f, -0.5f,  0.0f, 0.0f, 0.0f,  0.0f, 1.0f,
-         0.5f,  0.5f, -0.5f,  0.0f, 0.0f, 0.0f,  1.0f, 1.0f,
-         0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 0.0f,  1.0f, 0.0f,
-         0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 0.0f,  1.0f, 0.0f,
-        -0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 0.0f,  0.0f, 0.0f,
-        -0.5f,  0.5f, -0.5f,  0.0f, 0.0f, 0.0f,  0.0f, 1.0f
-    };
-
-    vector<float> verticesVAOct = {
-        // vertex coordinates   texture coordinates
-          -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-           0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-           0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-           0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-          -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-          -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-
-          -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-           0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-           0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-           0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-          -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-          -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-
-          -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-          -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-          -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-          -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-          -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-          -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-           0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-           0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-           0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-           0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-           0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-           0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-          -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-           0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-           0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-           0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-          -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-          -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-
-          -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-           0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-           0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-           0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-          -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-          -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+        -0.5f, -0.5f, -0.5f,   0.0f,  0.0f,  0.0f,   0.0f, 0.0f,
+         0.5f, -0.5f, -0.5f,   0.0f,  0.0f,  0.0f,   1.0f, 0.0f,
+         0.5f,  0.5f, -0.5f,   0.0f,  0.0f,  0.0f,   1.0f, 1.0f,
+         0.5f,  0.5f, -0.5f,   0.0f,  0.0f,  0.0f,   1.0f, 1.0f,
+        -0.5f,  0.5f, -0.5f,   0.0f,  0.0f,  0.0f,   0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,   0.0f,  0.0f,  0.0f,   0.0f, 0.0f,
+                                                   
+        -0.5f, -0.5f,  0.5f,   0.0f,  0.0f,  0.0f,   0.0f, 0.0f,
+         0.5f, -0.5f,  0.5f,   0.0f,  0.0f,  0.0f,   1.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,   0.0f,  0.0f,  0.0f,   1.0f, 1.0f,
+         0.5f,  0.5f,  0.5f,   0.0f,  0.0f,  0.0f,   1.0f, 1.0f,
+        -0.5f,  0.5f,  0.5f,   0.0f,  0.0f,  0.0f,   0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f,   0.0f,  0.0f,  0.0f,   0.0f, 0.0f,
+                                                   
+        -0.5f,  0.5f,  0.5f,   0.0f,  0.0f,  0.0f,   1.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f,   0.0f,  0.0f,  0.0f,   1.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,   0.0f,  0.0f,  0.0f,   0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,   0.0f,  0.0f,  0.0f,   0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f,   0.0f,  0.0f,  0.0f,   0.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f,   0.0f,  0.0f,  0.0f,   1.0f, 0.0f,
+                                                   
+         0.5f,  0.5f,  0.5f,   0.0f,  0.0f,  0.0f,   1.0f, 0.0f,
+         0.5f,  0.5f, -0.5f,   0.0f,  0.0f,  0.0f,   1.0f, 1.0f,
+         0.5f, -0.5f, -0.5f,   0.0f,  0.0f,  0.0f,   0.0f, 1.0f,
+         0.5f, -0.5f, -0.5f,   0.0f,  0.0f,  0.0f,   0.0f, 1.0f,
+         0.5f, -0.5f,  0.5f,   0.0f,  0.0f,  0.0f,   0.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,   0.0f,  0.0f,  0.0f,   1.0f, 0.0f,
+                                                   
+        -0.5f, -0.5f, -0.5f,   0.0f,  0.0f,  0.0f,   0.0f, 1.0f,
+         0.5f, -0.5f, -0.5f,   0.0f,  0.0f,  0.0f,   1.0f, 1.0f,
+         0.5f, -0.5f,  0.5f,   0.0f,  0.0f,  0.0f,   1.0f, 0.0f,
+         0.5f, -0.5f,  0.5f,   0.0f,  0.0f,  0.0f,   1.0f, 0.0f,
+        -0.5f, -0.5f,  0.5f,   0.0f,  0.0f,  0.0f,   0.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f,   0.0f,  0.0f,  0.0f,   0.0f, 1.0f,
+                                                   
+        -0.5f,  0.5f, -0.5f,   0.0f,  0.0f,  0.0f,   0.0f, 1.0f,
+         0.5f,  0.5f, -0.5f,   0.0f,  0.0f,  0.0f,   1.0f, 1.0f,
+         0.5f,  0.5f,  0.5f,   0.0f,  0.0f,  0.0f,   1.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,   0.0f,  0.0f,  0.0f,   1.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f,   0.0f,  0.0f,  0.0f,   0.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f,   0.0f,  0.0f,  0.0f,   0.0f, 1.0f
     };
 }
 
@@ -221,6 +134,39 @@ void processInput(GLFWwindow* window, Camera* cam)
 
     if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
         cam->moveUpward(-cam->CAM_SPEED);
+}
+
+
+Texture* loadTexture(std::string path) {
+    unsigned int address;
+    int width, height, nrChannels;
+    unsigned char* data;
+
+    glGenTextures(1, &address);
+    glBindTexture(GL_TEXTURE_2D, address);
+    
+    // set the texture wrapping parameters
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    
+    // set texture filtering parameters
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    
+    // load image, create texture and generate mipmaps
+    data = stbi_load(path.c_str(), &width, &height, &nrChannels, 0);
+    if (data)
+    {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
+    else
+    {
+        std::cout << "Failed to load texture, path : " << path << std::endl;
+    }
+    stbi_image_free(data);
+
+    return new Texture { address, width, height };
 }
 
 
@@ -279,8 +225,10 @@ int main(void)
     glEnable(GL_DEPTH_TEST);
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
+    Texture* t = loadTexture("./res/textures/texture.jpg");
+
     cam = new Camera(vec3(0.0f, 0.0f, 6.0f), vec3(0.0f, 0.0f, 0.0f));
-    mesh = new Mesh(cube::verticesVAOcnt);
+    mesh = new Mesh(cube::verticesVAOcnt, t->id);
 
     // game loop
     while (!glfwWindowShouldClose(window))
@@ -305,8 +253,7 @@ int main(void)
         shader->sendMat4("view", cam->getViewMatrix());
         shader->sendMat4("projection", projection);
 
-        //glBindVertexArray(VAO);
-        //glDrawArrays(GL_TRIANGLES, 0, 36);
+        // draw meshes
         mesh->Draw(*shader);
 
         glfwSwapBuffers(window);
