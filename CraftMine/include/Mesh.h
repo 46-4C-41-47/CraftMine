@@ -5,8 +5,6 @@
 
 #include <vector>
 
-#include "Vertex.h"
-#include "Texture.h"
 #include "Shader.h"
 
 
@@ -15,16 +13,17 @@ using std::vector;
 
 class Mesh {
 private:
-    unsigned int VAO, VBO, EBO;
+    unsigned int VAO, VBO;
+    size_t sizeOfVertices;
 
-    vector<Vertex>* vertices;
-    //vector<unsigned int> indices;
-    vector<unsigned int>* textures;
+    vector<float> vertices;
+    vector<unsigned int> textures;
 
     void initMesh();
 
 public:
-    Mesh(float* rawData, vector<unsigned int>* textures);
-    Mesh(vector<Vertex>* vertices, vector<unsigned int>* textures);
+    Mesh(vector<float> v);
+    ~Mesh();
+
     void Draw(Shader& shader);
 };

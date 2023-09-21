@@ -51,51 +51,51 @@ namespace cube
         2, 6, 7
     };
 
-    /*float verticesVAO[] = {
-        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-         0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+    vector<float> verticesVAOc = {
+        -0.5f, -0.5f, -0.5f,
+         0.5f, -0.5f, -0.5f,
+         0.5f,  0.5f, -0.5f,
+         0.5f,  0.5f, -0.5f,
+        -0.5f,  0.5f, -0.5f,
+        -0.5f, -0.5f, -0.5f,
 
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-         0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-         0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-        -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+        -0.5f, -0.5f,  0.5f,
+         0.5f, -0.5f,  0.5f,
+         0.5f,  0.5f,  0.5f,
+         0.5f,  0.5f,  0.5f,
+        -0.5f,  0.5f,  0.5f,
+        -0.5f, -0.5f,  0.5f,
 
-        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-        -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f,
+        -0.5f,  0.5f, -0.5f,
+        -0.5f, -0.5f, -0.5f,
+        -0.5f, -0.5f, -0.5f,
+        -0.5f, -0.5f,  0.5f,
+        -0.5f,  0.5f,  0.5f,
 
-         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-         0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-         0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-         0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,
+         0.5f,  0.5f, -0.5f,
+         0.5f, -0.5f, -0.5f,
+         0.5f, -0.5f, -0.5f,
+         0.5f, -0.5f,  0.5f,
+         0.5f,  0.5f,  0.5f,
 
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-         0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-         0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,
+         0.5f, -0.5f, -0.5f,
+         0.5f, -0.5f,  0.5f,
+         0.5f, -0.5f,  0.5f,
+        -0.5f, -0.5f,  0.5f,
+        -0.5f, -0.5f, -0.5f,
 
-        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-         0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-         0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-        -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
-    };*/
+        -0.5f,  0.5f, -0.5f,
+         0.5f,  0.5f, -0.5f,
+         0.5f,  0.5f,  0.5f,
+         0.5f,  0.5f,  0.5f,
+        -0.5f,  0.5f,  0.5f,
+        -0.5f,  0.5f, -0.5f,
+    };
 
-    float verticesVAO[] = {
+    vector<float> verticesVAOcnt = {
       // vertex coordinates   normal vector      texture coordinates
         -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 0.0f,  0.0f, 0.0f,
          0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 0.0f,  1.0f, 0.0f,
@@ -140,7 +140,7 @@ namespace cube
         -0.5f,  0.5f, -0.5f,  0.0f, 0.0f, 0.0f,  0.0f, 1.0f
     };
 
-    float verticesShortVAO[] = {
+    vector<float> verticesVAOct = {
         // vertex coordinates   texture coordinates
           -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
            0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
@@ -224,20 +224,100 @@ void processInput(GLFWwindow* window, Camera* cam)
 }
 
 
-Mesh* initMesh(unsigned int textureAddress) {
-    vector<unsigned int> textures;
+int main(void)
+{
+    const double delta = 1000.0f / 60;
+    const int frameWidth = 800, frameHeight = 500;
+    const float aspectRatio = (float)frameWidth / (float)frameHeight;
 
-    for (int i = 0; i < sizeof(cube::verticesVAO) / sizeof(float); i++) {
-        textures.push_back(textureAddress);
+    double startingTime;
+
+    Shader* shader;
+    Mesh* mesh;
+
+    if (!glfwInit())
+    {
+        cerr << "Initialization of GLFW failed\n";
+        return 1;
     }
 
-    return new Mesh(cube::verticesVAO, &textures);
-}
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
+    GLFWwindow* window = glfwCreateWindow(frameWidth, frameHeight, "JavaScript = caca", NULL, NULL);
 
-int main() {
-    Mesh* mesh = new Mesh(cube::verticesVAO, 0);
+    if (window == NULL)
+    {
+        cerr << "GLFW window creation failed\n";
+        glfwTerminate();
+        return 2;
+    }
 
+    glfwMakeContextCurrent(window);
+
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+    {
+        cerr << "Failed to initialize GLAD" << std::endl;
+        return 3;
+    }
+
+    glViewport(0, 0, frameWidth, frameHeight);
+
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    glfwSetCursorPosCallback(window, mouse_callback);
+
+    try
+    {
+        shader = new Shader("./res/shaders/vertexShader.glsl", "./res/shaders/fragmentShader.glsl");
+    }
+    catch (std::exception)
+    {
+        return 1;
+    }
+
+    glEnable(GL_DEPTH_TEST);
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+    cam = new Camera(vec3(0.0f, 0.0f, 6.0f), vec3(0.0f, 0.0f, 0.0f));
+    mesh = new Mesh(cube::verticesVAOcnt);
+
+    // game loop
+    while (!glfwWindowShouldClose(window))
+    {
+        startingTime = glfwGetTime();
+
+        processInput(window, cam);
+
+        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        glm::mat4 model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(1.0f, 1.0f, -3.0f));
+
+        glm::mat4 view = glm::mat4(1.0f);
+
+        glm::mat4 projection;
+        projection = glm::perspective(glm::radians(90.0f), aspectRatio, 0.1f, 100.0f);
+
+        shader->use();
+        shader->sendMat4("model", model);
+        shader->sendMat4("view", cam->getViewMatrix());
+        shader->sendMat4("projection", projection);
+
+        //glBindVertexArray(VAO);
+        //glDrawArrays(GL_TRIANGLES, 0, 36);
+        mesh->Draw(*shader);
+
+        glfwSwapBuffers(window);
+        glfwPollEvents();
+
+        Sleep(max(delta - ((glfwGetTime() - startingTime) / 1000), 0));
+    }
+
+    delete cam, shader;
+
+    glfwTerminate();
     return 0;
 }
 
@@ -326,6 +406,7 @@ int main() {
 
     Mesh* mesh = initMesh(texture);
 
+    
     // VBO
     glGenBuffers(1, &VBO);
 
@@ -369,13 +450,16 @@ int main() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         glm::mat4 model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(1.0f, 1.0f, -3.0f));
+
+        glm::mat4 view = glm::mat4(1.0f);
 
         glm::mat4 projection;
         projection = glm::perspective(glm::radians(90.0f), aspectRatio, 0.1f, 100.0f);
 
         shader->use();
         shader->sendMat4("model", model);
-        shader->sendMat4("view", cam->getViewMatrix());
+        shader->sendMat4("view", view);
         shader->sendMat4("projection", projection);
 
         //glBindVertexArray(VAO);
@@ -389,6 +473,7 @@ int main() {
     }
 
     delete cam, shader;
+    delete mesh;
 
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
