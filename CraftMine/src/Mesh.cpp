@@ -32,21 +32,14 @@ void Mesh::initMesh()
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
     // vertex texture coords
     glEnableVertexAttribArray(2);
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(5 * sizeof(float)));
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
 
     glBindVertexArray(0);
 }
 
 
 void Mesh::Draw(Shader& shader)
-{
-    /*for (unsigned int i = 0; i < texturesSize; i++)
-    {
-        glActiveTexture(GL_TEXTURE0 + i); // activate proper texture unit before binding
-        glBindTexture(GL_TEXTURE_2D, textures[i]);
-    }
-    glActiveTexture(GL_TEXTURE0);*/
-    
+{   
     shader.sendInt("texture1", 0);
 
     glActiveTexture(GL_TEXTURE0);

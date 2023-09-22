@@ -87,7 +87,7 @@ void Camera::moveForward(float offset)
 {
 	position = position - vec3(
 		direction.x * offset, 
-		direction.y * offset, 
+		0, 
 		direction.z * offset
 	);
 	rebuildViewMatrix();

@@ -68,7 +68,7 @@
     <ClInclude Include="include\Texture.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="include\BlockTypes.h">
+    <ClInclude Include="include\Block.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>

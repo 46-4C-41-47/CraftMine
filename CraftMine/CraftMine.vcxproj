@@ -143,7 +143,7 @@
     <ClCompile Include="src\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\BlockTypes.h" />
+    <ClInclude Include="include\Block.h" />
     <ClInclude Include="include\Camera.h" />
     <ClInclude Include="include\Chunk.h" />
     <ClInclude Include="include\Mesh.h" />
