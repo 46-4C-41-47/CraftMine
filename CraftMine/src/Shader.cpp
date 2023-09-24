@@ -85,18 +85,29 @@ unsigned int Shader::initShader(const char* shaderCode, GLenum shaderType) {
     return shaderId;
 }
 
-void Shader::sendMat4(const std::string& name, const glm::mat4& value) {
-    unsigned int uniformID = glGetUniformLocation(finalShader, name.c_str());
-    glUniformMatrix4fv(uniformID, 1, GL_FALSE, glm::value_ptr(value));
+
+void Shader::sendVec3(const std::string& name, glm::vec3& value)
+{
+    glUniform3fv(glGetUniformLocation(finalShader, name.c_str()), 1, glm::value_ptr(value));
 }
 
 
-void Shader::sendInt(const std::string& name, int value) {
-    unsigned int uniformID = glGetUniformLocation(finalShader, name.c_str());
-    glUniform1i(glGetUniformLocation(uniformID, name.c_str()), value);
+void Shader::sendMat4(const std::string& name, const glm::mat4& value) 
+{
+    glUniformMatrix4fv(glGetUniformLocation(finalShader, name.c_str()), 1, GL_FALSE, glm::value_ptr(value));
 }
 
 
-void Shader::use() {
-    glUseProgram(finalShader);
+void Shader::sendFloat(const std::string& name, float value) 
+{
+    glUniform1f(glGetUniformLocation(finalShader, name.c_str()), value);
 }
+
+
+void Shader::sendInt(const std::string& name, int value) 
+{
+    glUniform1i(glGetUniformLocation(finalShader, name.c_str()), value);
+}
+
+
+void Shader::use() { glUseProgram(finalShader); }

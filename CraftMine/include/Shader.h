@@ -30,6 +30,8 @@ public:
     inline unsigned int getId() { return finalShader; }
 
     void use();
+    void sendVec3(const std::string& name, glm::vec3& value);
     void sendMat4(const std::string& name, const glm::mat4& value);
+    void sendFloat(const std::string& name, float value);
     void sendInt(const std::string& name, int value);
 };
