@@ -53,95 +53,6 @@ namespace cube
         2, 7, 3, // left
         2, 6, 7
     };
-
-    vector<float> verticesVAOcnt = {
-      // vertex coordinates   normal vector      texture coordinates
-        -0.5f, -0.5f, -0.5f,   0.0f,  0.0f, -1.0f,   0.0f, 0.0f, // front
-         0.5f, -0.5f, -0.5f,   0.0f,  0.0f, -1.0f,   1.0f, 0.0f,
-         0.5f,  0.5f, -0.5f,   0.0f,  0.0f, -1.0f,   1.0f, 1.0f,
-         0.5f,  0.5f, -0.5f,   0.0f,  0.0f, -1.0f,   1.0f, 1.0f,
-        -0.5f,  0.5f, -0.5f,   0.0f,  0.0f, -1.0f,   0.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f,   0.0f,  0.0f, -1.0f,   0.0f, 0.0f,
-                                                   
-        -0.5f, -0.5f,  0.5f,   0.0f,  0.0f,  1.0f,   0.0f, 0.0f, // back
-         0.5f, -0.5f,  0.5f,   0.0f,  0.0f,  1.0f,   1.0f, 0.0f,
-         0.5f,  0.5f,  0.5f,   0.0f,  0.0f,  1.0f,   1.0f, 1.0f,
-         0.5f,  0.5f,  0.5f,   0.0f,  0.0f,  1.0f,   1.0f, 1.0f,
-        -0.5f,  0.5f,  0.5f,   0.0f,  0.0f,  1.0f,   0.0f, 1.0f,
-        -0.5f, -0.5f,  0.5f,   0.0f,  0.0f,  1.0f,   0.0f, 0.0f,
-                                                   
-        -0.5f,  0.5f,  0.5f,  -1.0f,  0.0f,  0.0f,   1.0f, 0.0f, // left
-        -0.5f,  0.5f, -0.5f,  -1.0f,  0.0f,  0.0f,   1.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f,  -1.0f,  0.0f,  0.0f,   0.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f,  -1.0f,  0.0f,  0.0f,   0.0f, 1.0f,
-        -0.5f, -0.5f,  0.5f,  -1.0f,  0.0f,  0.0f,   0.0f, 0.0f,
-        -0.5f,  0.5f,  0.5f,  -1.0f,  0.0f,  0.0f,   1.0f, 0.0f,
-                                                   
-         0.5f,  0.5f,  0.5f,   1.0f,  0.0f,  0.0f,   1.0f, 0.0f, // right
-         0.5f,  0.5f, -0.5f,   1.0f,  0.0f,  0.0f,   1.0f, 1.0f,
-         0.5f, -0.5f, -0.5f,   1.0f,  0.0f,  0.0f,   0.0f, 1.0f,
-         0.5f, -0.5f, -0.5f,   1.0f,  0.0f,  0.0f,   0.0f, 1.0f,
-         0.5f, -0.5f,  0.5f,   1.0f,  0.0f,  0.0f,   0.0f, 0.0f,
-         0.5f,  0.5f,  0.5f,   1.0f,  0.0f,  0.0f,   1.0f, 0.0f,
-                                                   
-        -0.5f, -0.5f, -0.5f,   0.0f, -1.0f,  0.0f,   0.0f, 1.0f, // bottom
-         0.5f, -0.5f, -0.5f,   0.0f, -1.0f,  0.0f,   1.0f, 1.0f,
-         0.5f, -0.5f,  0.5f,   0.0f, -1.0f,  0.0f,   1.0f, 0.0f,
-         0.5f, -0.5f,  0.5f,   0.0f, -1.0f,  0.0f,   1.0f, 0.0f,
-        -0.5f, -0.5f,  0.5f,   0.0f, -1.0f,  0.0f,   0.0f, 0.0f,
-        -0.5f, -0.5f, -0.5f,   0.0f, -1.0f,  0.0f,   0.0f, 1.0f,
-                                                   
-        -0.5f,  0.5f, -0.5f,   0.0f,  1.0f,  0.0f,   0.0f, 1.0f, // top
-         0.5f,  0.5f, -0.5f,   0.0f,  1.0f,  0.0f,   1.0f, 1.0f,
-         0.5f,  0.5f,  0.5f,   0.0f,  1.0f,  0.0f,   1.0f, 0.0f,
-         0.5f,  0.5f,  0.5f,   0.0f,  1.0f,  0.0f,   1.0f, 0.0f,
-        -0.5f,  0.5f,  0.5f,   0.0f,  1.0f,  0.0f,   0.0f, 0.0f,
-        -0.5f,  0.5f, -0.5f,   0.0f,  1.0f,  0.0f,   0.0f, 1.0f
-    };
-
-    vector<float> verticesVAOc = {
-          -0.5f, -0.5f, -0.5f, // front
-           0.5f, -0.5f, -0.5f,
-           0.5f,  0.5f, -0.5f,
-           0.5f,  0.5f, -0.5f,
-          -0.5f,  0.5f, -0.5f,
-          -0.5f, -0.5f, -0.5f,
-
-          -0.5f, -0.5f,  0.5f, // back
-           0.5f, -0.5f,  0.5f,
-           0.5f,  0.5f,  0.5f,
-           0.5f,  0.5f,  0.5f,
-          -0.5f,  0.5f,  0.5f,
-          -0.5f, -0.5f,  0.5f,
-
-          -0.5f,  0.5f,  0.5f, // left
-          -0.5f,  0.5f, -0.5f,
-          -0.5f, -0.5f, -0.5f,
-          -0.5f, -0.5f, -0.5f,
-          -0.5f, -0.5f,  0.5f,
-          -0.5f,  0.5f,  0.5f,
-
-           0.5f,  0.5f,  0.5f, // right
-           0.5f,  0.5f, -0.5f,
-           0.5f, -0.5f, -0.5f,
-           0.5f, -0.5f, -0.5f,
-           0.5f, -0.5f,  0.5f,
-           0.5f,  0.5f,  0.5f,
-
-          -0.5f, -0.5f, -0.5f, // bottom
-           0.5f, -0.5f, -0.5f,
-           0.5f, -0.5f,  0.5f,
-           0.5f, -0.5f,  0.5f,
-          -0.5f, -0.5f,  0.5f,
-          -0.5f, -0.5f, -0.5f,
-
-          -0.5f,  0.5f, -0.5f, // top
-           0.5f,  0.5f, -0.5f,
-           0.5f,  0.5f,  0.5f,
-           0.5f,  0.5f,  0.5f,
-          -0.5f,  0.5f,  0.5f,
-          -0.5f,  0.5f, -0.5f
-    };
 }
 
 
@@ -234,7 +145,7 @@ Texture* loadTexture(std::string path) {
 }
 
 
-int main(void)
+int main()
 {
     const double delta = 1000.0f / 60;
     const int frameWidth = 800, frameHeight = 500;
@@ -243,8 +154,9 @@ int main(void)
     double startingTime;
 
     Shader* objectShader, *lightShader;
-    Mesh* mesh, *mesh2, * lightSource, *test;
+    Mesh* mesh;
     Chunk* chunk;
+    Light* light;
 
     glm::mat4 projection = glm::perspective(glm::radians(90.0f), aspectRatio, 0.1f, 100.0f);
 
@@ -297,20 +209,18 @@ int main(void)
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     Texture* t = loadTexture("./res/textures/texture.jpg");
-    Light light = { vec3(0.0f, 3.0f, -5.0f), vec3(0.99f, 0.99f, 0.99f), 0.6f };
 
     cam = new Camera(vec3(0.0f, 0.0f, 6.0f), vec3(0.0f, 0.0f, 0.0f));
-    //mesh = new Mesh(cube::verticesVAOcnt, vec3(0.0f, 0.0f, -5.0f), t->id, &light);
-    //mesh2 = new Mesh(cube::verticesVAOcnt, vec3(0.0f, 0.0f, -6.0f), t->id, &light);
-    chunk = new Chunk(&light, t->id);
-    lightSource = new Mesh(cube::verticesVAOc, &light);
+
+    light = new Light(vec3(0.0f, 3.0f, -5.0f), vec3(0.99f, 0.99f, 0.99f), 0.6f);
+    chunk = new Chunk(light, t->id);
 
     // game loop
     while (!glfwWindowShouldClose(window))
     {
         startingTime = glfwGetTime();
 
-        processInput(window, cam, &light);
+        processInput(window, cam, light);
 
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -318,17 +228,8 @@ int main(void)
         glm::mat4 view = cam->getViewMatrix();
 
         // draw meshes
-        lightSource->Draw(*lightShader, light, projection, view);
-        
-        //mesh->Draw(*shader, projection, view);
-        //mesh2->Draw(*shader, projection, view);
-        
-        //cout << chunk->getMesh().size() << "\n";
-
-        for (int i = 0; i < chunk->getMesh().size(); i++)
-        {
-            chunk->getMesh()[i].Draw(*objectShader, light, projection, view);
-        }
+        light->draw(*lightShader, projection, view);
+        chunk->draw(*objectShader, projection, view);
 
         glfwSwapBuffers(window);
         glfwPollEvents();

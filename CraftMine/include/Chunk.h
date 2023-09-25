@@ -10,6 +10,7 @@
 
 #include "Block.h"
 #include "Mesh.h"
+#include "Shader.h"
 
 
 class Chunk {
@@ -18,6 +19,7 @@ private:
     unsigned int texture;
     bool needToUpdate = true;
     glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f);
+	vector<Mesh>* mesh;
 	vector<float> cubeVAO = {
         // vertex coordinates   normal vector      texture coordinates
           -0.5f, -0.5f, -0.5f,   0.0f,  0.0f, -1.0f,   0.0f, 0.0f, // front
@@ -62,7 +64,7 @@ private:
           -0.5f,  0.5f,  0.5f,   0.0f,  1.0f,  0.0f,   0.0f, 0.0f,
           -0.5f,  0.5f, -0.5f,   0.0f,  1.0f,  0.0f,   0.0f, 1.0f
     };
-	vector<Mesh>* mesh;
+    Mesh* test;
 	Shader* shader;
 	Light* light;
 	Block::Type* chunkData;
@@ -73,10 +75,11 @@ private:
 	void generateMesh();
 
 public:
-	const int WIDTH = 8, HEIGHT = 4;
+	const int WIDTH = 16, HEIGHT = 16;
 
 	Chunk(Light* l, unsigned int t);
 	~Chunk();
 
 	vector<Mesh> getMesh();
+    void draw(Shader& shader, glm::mat4& projection, glm::mat4& view);
 };

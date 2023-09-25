@@ -17,19 +17,16 @@ using std::vector;
 
 class Mesh {
 private:
-    bool isLight = false;
-    unsigned int VAO, VBO, texture = 0;
-    vector<float> vertices;
+    unsigned int VAO, VBO, bufferSize, texture = 0;
 
-    void initMesh();
-    void initLightSource();
+    void initMesh(vector<float>& buffer);
 
 public:
     glm::vec3 position;
 
-    Mesh(vector<float> v, glm::vec3 p, unsigned int t);
-    Mesh(vector<float> v, Light* l);
+    Mesh(vector<float>& v, glm::vec3 p, unsigned int t);
     ~Mesh();
 
-    void Draw(Shader& shader, Light& light, glm::mat4& projection, glm::mat4& view);
+    void draw(Shader& shader, Light& light, glm::mat4& projection, glm::mat4& view);
+    void setBuffer(vector<float>& newBuffer);
 };

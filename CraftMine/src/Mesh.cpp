@@ -1,28 +1,21 @@
 #include "../include/Mesh.h"
 
 
-Mesh::Mesh(vector<float> v, glm::vec3 p, unsigned int t) {
-    vertices = v;
+Mesh::Mesh(vector<float>& v, glm::vec3 p, unsigned int t) 
+{
     texture = t;
     position = p;
 
-    initMesh();
-}
+    bufferSize = v.size();
 
-
-Mesh::Mesh(vector<float> v, Light* l) {
-    vertices = v;
-    position = l->position;
-    isLight = true;
-
-    initLightSource();
+    initMesh(v);
 }
 
 
 Mesh::~Mesh() {}
 
 
-void Mesh::initMesh() 
+void Mesh::initMesh(vector<float>& buffer) 
 {
     glGenBuffers(1, &VBO);
     glGenVertexArrays(1, &VAO);
@@ -31,7 +24,7 @@ void Mesh::initMesh()
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
     /*   /!\ A potentiellement remplacer par GL_DYNAMIC_DRAW /!\   */
-    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), &vertices[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, buffer.size() * sizeof(float), &buffer[0], GL_STATIC_DRAW);
 
     // vertex positions
     glEnableVertexAttribArray(0);
@@ -49,43 +42,17 @@ void Mesh::initMesh()
 }
 
 
-void Mesh::initLightSource() {
-    glGenBuffers(1, &VBO);
-    glGenVertexArrays(1, &VAO);
-
-    glBindVertexArray(VAO);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-
-    /*   /!\ A potentiellement remplacer par GL_DYNAMIC_DRAW /!\   */
-    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), &vertices[0], GL_STATIC_DRAW);
-
-    // vertex positions
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-
-    glBindVertexArray(0);
-}
-
-
-void Mesh::Draw(Shader& shader, Light& light, glm::mat4& projection, glm::mat4& view)
+void Mesh::draw(Shader& shader, Light& light, glm::mat4& projection, glm::mat4& view)
 {
     shader.use();
 
-    if (isLight) 
-    {
-        position = light.position;
-        shader.sendVec3("color", light.color);
-    }
-    else 
-    {
-        shader.sendInt("texture1", 0);
-        shader.sendVec3("lightPos", light.position);
-        shader.sendVec3("lightColor", light.color);
-        shader.sendFloat("ambientStrength", light.ambientStrength);
+    shader.sendInt("texture1", 0);
+    shader.sendVec3("lightPos", light.position);
+    shader.sendVec3("lightColor", light.color);
+    shader.sendFloat("ambientStrength", light.ambientStrength);
 
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, texture);
-    }
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture);
     
     glm::mat4 model = glm::mat4(1.0f);
     model = glm::translate(model, position);
@@ -96,11 +63,16 @@ void Mesh::Draw(Shader& shader, Light& light, glm::mat4& projection, glm::mat4& 
 
     // draw mesh
     glBindVertexArray(VAO);
-    
-    if (isLight)
-        glDrawArrays(GL_TRIANGLES, 0, vertices.size() / 3);
-    else 
-        glDrawArrays(GL_TRIANGLES, 0, vertices.size() / 8);
+    glDrawArrays(GL_TRIANGLES, 0, bufferSize / 8);
 
     glBindVertexArray(0);
+}
+
+
+void Mesh::setBuffer(vector<float>& newBuffer)
+{
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
+    /*   /!\ A potentiellement remplacer par GL_DYNAMIC_DRAW /!\   */
+    glBufferData(GL_ARRAY_BUFFER, newBuffer.size() * sizeof(float), &newBuffer[0], GL_STATIC_DRAW);
 }
