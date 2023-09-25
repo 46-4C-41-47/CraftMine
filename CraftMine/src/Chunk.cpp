@@ -1,9 +1,13 @@
 #include "../include/Chunk.h"
 
 
-Chunk::Chunk() 
+Chunk::Chunk(Light* l, unsigned int t) 
 {
 	chunkData = new Block::Type[WIDTH * WIDTH * HEIGHT];
+	light = l;
+	texture = t;
+
+	init();
 }
 
 
@@ -40,5 +44,32 @@ void Chunk::init()
 
 void Chunk::generateMesh() 
 {
+	mesh = new vector<Mesh>();
 
+	for (int z = 0; z < HEIGHT; z++)
+	{
+		for (int y = 0; y < WIDTH; y++)
+		{
+			for (int x = 0; x < WIDTH; x++)
+			{
+				if (chunkData[x + y * WIDTH + z * WIDTH] != Block::Type::Empty)
+				{
+					mesh->push_back(Mesh(cubeVAO, glm::vec3(x + position.x, z + position.z, y + position.y), texture));
+				}
+			}
+		}
+	}
+
+	needToUpdate = false;
+}
+
+
+vector<Mesh> Chunk::getMesh() 
+{
+	if (needToUpdate) 
+	{
+		generateMesh();
+	}
+
+	return *mesh;
 }

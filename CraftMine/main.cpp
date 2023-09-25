@@ -16,6 +16,7 @@
 #include "include/stb_image.h"
 #include "include/Mesh.h"
 #include "include/Texture.h"
+#include "include/Chunk.h"
 
 
 using std::cout;
@@ -241,8 +242,9 @@ int main(void)
 
     double startingTime;
 
-    Shader* shader, *lightShader;
-    Mesh* mesh, * lightSource, *test;
+    Shader* objectShader, *lightShader;
+    Mesh* mesh, *mesh2, * lightSource, *test;
+    Chunk* chunk;
 
     glm::mat4 projection = glm::perspective(glm::radians(90.0f), aspectRatio, 0.1f, 100.0f);
 
@@ -280,7 +282,7 @@ int main(void)
 
     try
     {
-        shader = new Shader("./res/shaders/vertexShader.glsl", "./res/shaders/fragmentShader.glsl");
+        objectShader = new Shader("./res/shaders/vertexShader.glsl", "./res/shaders/fragmentShader.glsl");
         lightShader = new Shader(
             "./res/shaders/light/lightVertexShader.glsl", 
             "./res/shaders/light/lightFragmentShader.glsl"
@@ -295,11 +297,13 @@ int main(void)
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     Texture* t = loadTexture("./res/textures/texture.jpg");
-    Light light = { vec3(0.0f, 3.0f, -5.0f), vec3(0.99f, 0.99f, 0.99f), 0.4f };
+    Light light = { vec3(0.0f, 3.0f, -5.0f), vec3(0.99f, 0.99f, 0.99f), 0.6f };
 
     cam = new Camera(vec3(0.0f, 0.0f, 6.0f), vec3(0.0f, 0.0f, 0.0f));
-    mesh = new Mesh(cube::verticesVAOcnt, vec3(0.0f, 0.0f, -5.0f), t->id, &light);
-    lightSource = new Mesh(cube::verticesVAOcnt, &light);
+    //mesh = new Mesh(cube::verticesVAOcnt, vec3(0.0f, 0.0f, -5.0f), t->id, &light);
+    //mesh2 = new Mesh(cube::verticesVAOcnt, vec3(0.0f, 0.0f, -6.0f), t->id, &light);
+    chunk = new Chunk(&light, t->id);
+    lightSource = new Mesh(cube::verticesVAOc, &light);
 
     // game loop
     while (!glfwWindowShouldClose(window))
@@ -314,8 +318,17 @@ int main(void)
         glm::mat4 view = cam->getViewMatrix();
 
         // draw meshes
-        mesh->Draw(*shader, projection, view);
-        lightSource->Draw(*lightShader, projection, view);
+        lightSource->Draw(*lightShader, light, projection, view);
+        
+        //mesh->Draw(*shader, projection, view);
+        //mesh2->Draw(*shader, projection, view);
+        
+        //cout << chunk->getMesh().size() << "\n";
+
+        for (int i = 0; i < chunk->getMesh().size(); i++)
+        {
+            chunk->getMesh()[i].Draw(*objectShader, light, projection, view);
+        }
 
         glfwSwapBuffers(window);
         glfwPollEvents();
@@ -323,7 +336,7 @@ int main(void)
         Sleep(max(delta - ((glfwGetTime() - startingTime) / 1000), 0));
     }
 
-    delete cam, shader, lightShader;
+    delete cam, objectShader, lightShader, chunk;
 
     glfwTerminate();
     return 0;

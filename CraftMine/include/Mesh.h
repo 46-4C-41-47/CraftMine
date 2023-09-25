@@ -4,6 +4,7 @@
 #include <GLFW/glfw3.h>
 
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 #include <vector>
 
@@ -18,7 +19,6 @@ class Mesh {
 private:
     bool isLight = false;
     unsigned int VAO, VBO, texture = 0;
-    Light* light;
     vector<float> vertices;
 
     void initMesh();
@@ -27,9 +27,9 @@ private:
 public:
     glm::vec3 position;
 
-    Mesh(vector<float> v, glm::vec3 p, unsigned int t, Light* l);
+    Mesh(vector<float> v, glm::vec3 p, unsigned int t);
     Mesh(vector<float> v, Light* l);
     ~Mesh();
 
-    void Draw(Shader& shader, glm::mat4& projection, glm::mat4& view);
+    void Draw(Shader& shader, Light& light, glm::mat4& projection, glm::mat4& view);
 };

@@ -1,10 +1,9 @@
 #include "../include/Mesh.h"
 
 
-Mesh::Mesh(vector<float> v, glm::vec3 p, unsigned int t, Light* l) {
+Mesh::Mesh(vector<float> v, glm::vec3 p, unsigned int t) {
     vertices = v;
     texture = t;
-    light = l;
     position = p;
 
     initMesh();
@@ -13,11 +12,10 @@ Mesh::Mesh(vector<float> v, glm::vec3 p, unsigned int t, Light* l) {
 
 Mesh::Mesh(vector<float> v, Light* l) {
     vertices = v;
-    light = l;
     position = l->position;
     isLight = true;
 
-    initMesh();
+    initLightSource();
 }
 
 
@@ -42,6 +40,7 @@ void Mesh::initMesh()
     // vertex normals
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+
     // vertex texture coords
     glEnableVertexAttribArray(2);
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
@@ -68,21 +67,21 @@ void Mesh::initLightSource() {
 }
 
 
-void Mesh::Draw(Shader& shader, glm::mat4& projection, glm::mat4& view)
+void Mesh::Draw(Shader& shader, Light& light, glm::mat4& projection, glm::mat4& view)
 {
     shader.use();
 
     if (isLight) 
     {
-        position = light->position;
-        shader.sendVec3("color", light->color);
+        position = light.position;
+        shader.sendVec3("color", light.color);
     }
     else 
     {
         shader.sendInt("texture1", 0);
-        shader.sendVec3("lightPos", light->position);
-        shader.sendVec3("lightColor", light->color);
-        shader.sendFloat("ambientStrength", light->ambientStrength);
+        shader.sendVec3("lightPos", light.position);
+        shader.sendVec3("lightColor", light.color);
+        shader.sendFloat("ambientStrength", light.ambientStrength);
 
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, texture);
@@ -99,9 +98,9 @@ void Mesh::Draw(Shader& shader, glm::mat4& projection, glm::mat4& view)
     glBindVertexArray(VAO);
     
     if (isLight)
-        glDrawArrays(GL_TRIANGLES, 0, vertices.size() / 8);
-    else 
         glDrawArrays(GL_TRIANGLES, 0, vertices.size() / 3);
+    else 
+        glDrawArrays(GL_TRIANGLES, 0, vertices.size() / 8);
 
     glBindVertexArray(0);
 }
