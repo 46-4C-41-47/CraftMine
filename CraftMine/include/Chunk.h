@@ -6,6 +6,7 @@
 #include <glm/glm.hpp>
 
 #include <iostream>
+#include <algorithm>
 #include <vector>
 
 #include "Block.h"
@@ -18,9 +19,9 @@ private:
 	const int MIN_HEIGHT = 128, MAX_HEIGHT = 192;
     unsigned int texture;
     bool needToUpdate = true;
+	std::vector<Block::ChunkBlock>* blocks;
     glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f);
     Mesh* mesh;
-	Shader* shader;
 	Light* light;
 	Block::Type* chunkData;
 
@@ -30,7 +31,7 @@ private:
 	void generateMesh();
 
 public:
-	const int WIDTH = 16, HEIGHT = 192;
+	const int WIDTH = 32, HEIGHT = 192;
 
 	Chunk(Light* l, unsigned int t);
 	~Chunk();
