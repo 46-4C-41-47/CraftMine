@@ -26,7 +26,7 @@ using std::endl;
 Camera* cam;
 
 
-namespace cube 
+namespace cube
 {
     const float vertices[] = {
          1.0f,  1.0f,  1.0f,

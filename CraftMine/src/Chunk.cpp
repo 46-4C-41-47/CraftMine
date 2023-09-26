@@ -1,6 +1,57 @@
 #include "../include/Chunk.h"
 
 
+namespace Cube
+{
+	const int faceSize = 48;
+
+	const vector<float> verticesVAOcnt = {
+		// vertex coordinates    normal vector         texture coordinates
+		  -0.5f, -0.5f, -0.5f,   0.0f,  0.0f, -1.0f,   0.0f, 0.0f, // front
+		   0.5f, -0.5f, -0.5f,   0.0f,  0.0f, -1.0f,   1.0f, 0.0f,
+		   0.5f,  0.5f, -0.5f,   0.0f,  0.0f, -1.0f,   1.0f, 1.0f,
+		   0.5f,  0.5f, -0.5f,   0.0f,  0.0f, -1.0f,   1.0f, 1.0f,
+		  -0.5f,  0.5f, -0.5f,   0.0f,  0.0f, -1.0f,   0.0f, 1.0f,
+		  -0.5f, -0.5f, -0.5f,   0.0f,  0.0f, -1.0f,   0.0f, 0.0f,
+
+		  -0.5f, -0.5f,  0.5f,   0.0f,  0.0f,  1.0f,   0.0f, 0.0f, // back
+		   0.5f, -0.5f,  0.5f,   0.0f,  0.0f,  1.0f,   1.0f, 0.0f,
+		   0.5f,  0.5f,  0.5f,   0.0f,  0.0f,  1.0f,   1.0f, 1.0f,
+		   0.5f,  0.5f,  0.5f,   0.0f,  0.0f,  1.0f,   1.0f, 1.0f,
+		  -0.5f,  0.5f,  0.5f,   0.0f,  0.0f,  1.0f,   0.0f, 1.0f,
+		  -0.5f, -0.5f,  0.5f,   0.0f,  0.0f,  1.0f,   0.0f, 0.0f,
+
+		  -0.5f,  0.5f,  0.5f,  -1.0f,  0.0f,  0.0f,   1.0f, 0.0f, // left
+		  -0.5f,  0.5f, -0.5f,  -1.0f,  0.0f,  0.0f,   1.0f, 1.0f,
+		  -0.5f, -0.5f, -0.5f,  -1.0f,  0.0f,  0.0f,   0.0f, 1.0f,
+		  -0.5f, -0.5f, -0.5f,  -1.0f,  0.0f,  0.0f,   0.0f, 1.0f,
+		  -0.5f, -0.5f,  0.5f,  -1.0f,  0.0f,  0.0f,   0.0f, 0.0f,
+		  -0.5f,  0.5f,  0.5f,  -1.0f,  0.0f,  0.0f,   1.0f, 0.0f,
+
+		   0.5f,  0.5f,  0.5f,   1.0f,  0.0f,  0.0f,   1.0f, 0.0f, // right
+		   0.5f,  0.5f, -0.5f,   1.0f,  0.0f,  0.0f,   1.0f, 1.0f,
+		   0.5f, -0.5f, -0.5f,   1.0f,  0.0f,  0.0f,   0.0f, 1.0f,
+		   0.5f, -0.5f, -0.5f,   1.0f,  0.0f,  0.0f,   0.0f, 1.0f,
+		   0.5f, -0.5f,  0.5f,   1.0f,  0.0f,  0.0f,   0.0f, 0.0f,
+		   0.5f,  0.5f,  0.5f,   1.0f,  0.0f,  0.0f,   1.0f, 0.0f,
+
+		  -0.5f, -0.5f, -0.5f,   0.0f, -1.0f,  0.0f,   0.0f, 1.0f, // bottom
+		   0.5f, -0.5f, -0.5f,   0.0f, -1.0f,  0.0f,   1.0f, 1.0f,
+		   0.5f, -0.5f,  0.5f,   0.0f, -1.0f,  0.0f,   1.0f, 0.0f,
+		   0.5f, -0.5f,  0.5f,   0.0f, -1.0f,  0.0f,   1.0f, 0.0f,
+		  -0.5f, -0.5f,  0.5f,   0.0f, -1.0f,  0.0f,   0.0f, 0.0f,
+		  -0.5f, -0.5f, -0.5f,   0.0f, -1.0f,  0.0f,   0.0f, 1.0f,
+
+		  -0.5f,  0.5f, -0.5f,   0.0f,  1.0f,  0.0f,   0.0f, 1.0f, // top
+		   0.5f,  0.5f, -0.5f,   0.0f,  1.0f,  0.0f,   1.0f, 1.0f,
+		   0.5f,  0.5f,  0.5f,   0.0f,  1.0f,  0.0f,   1.0f, 0.0f,
+		   0.5f,  0.5f,  0.5f,   0.0f,  1.0f,  0.0f,   1.0f, 0.0f,
+		  -0.5f,  0.5f,  0.5f,   0.0f,  1.0f,  0.0f,   0.0f, 0.0f,
+		  -0.5f,  0.5f, -0.5f,   0.0f,  1.0f,  0.0f,   0.0f, 1.0f
+	};
+};
+
+
 Chunk::Chunk(Light* l, unsigned int t) 
 {
 	chunkData = new Block::Type[WIDTH * WIDTH * HEIGHT];
@@ -30,7 +81,7 @@ void Chunk::init()
 			{
 				if (rand() % 2 == 0) 
 				{
-					chunkData[x + y * WIDTH + z * WIDTH] = Block::Type::Stone;
+					chunkData[x + y * WIDTH + z * WIDTH] = Block::Type::Dirt;
 				} 
 				else 
 				{
@@ -44,8 +95,8 @@ void Chunk::init()
 
 void Chunk::generateMesh() 
 {
-	//vector<float> meshVAO = {};
-	mesh = new vector<Mesh>();
+	vector<float> meshVAO;
+	float buffer[8];
 
 	for (int z = 0; z < HEIGHT; z++)
 	{
@@ -55,19 +106,32 @@ void Chunk::generateMesh()
 			{
 				if (chunkData[x + y * WIDTH + z * WIDTH] != Block::Type::Empty)
 				{
-					mesh->push_back(Mesh(cubeVAO, glm::vec3(x + position.x, z + position.z, y + position.y), texture));
-					/*meshVAO.insert(meshVAO.begin(), Block::Cube::front.begin(), Block::Cube::front.end());
-					meshVAO.insert(meshVAO.begin(), Block::Cube::back.begin(), Block::Cube::back.end());
-					meshVAO.insert(meshVAO.begin(), Block::Cube::left.begin(), Block::Cube::left.end());
-					meshVAO.insert(meshVAO.begin(), Block::Cube::right.begin(), Block::Cube::right.end());
-					meshVAO.insert(meshVAO.begin(), Block::Cube::bottom.begin(), Block::Cube::bottom.end());
-					meshVAO.insert(meshVAO.begin(), Block::Cube::top.begin(), Block::Cube::top.end());*/
+					for (int i = 0; i < 6; i++) 
+					{
+						for (int j = 0; j < Cube::faceSize; j += 8)
+						{
+							int triangleIndex = i * Cube::faceSize + j;
+
+							// z and y axis get swaped to make z the up/down axis
+							buffer[0] = Cube::verticesVAOcnt[triangleIndex + 0] + (float)x;
+							buffer[1] = Cube::verticesVAOcnt[triangleIndex + 1] + (float)z;
+							buffer[2] = Cube::verticesVAOcnt[triangleIndex + 2] + (float)y;
+
+							buffer[3] = Cube::verticesVAOcnt[triangleIndex + 3];
+							buffer[4] = Cube::verticesVAOcnt[triangleIndex + 4];
+							buffer[5] = Cube::verticesVAOcnt[triangleIndex + 5];
+							buffer[6] = Cube::verticesVAOcnt[triangleIndex + 6];
+							buffer[7] = Cube::verticesVAOcnt[triangleIndex + 7];
+
+							meshVAO.insert(meshVAO.end(), buffer, buffer + 8);
+						}
+					}
 				}
 			}
 		}
 	}
 
-	//test = new Mesh(meshVAO, glm::vec3(0.0f, 0.0f, 0.0f), texture);
+	mesh = new Mesh(meshVAO, glm::vec3(0.0f, 0.0f, 0.0f), texture);
 
 	needToUpdate = false;
 }
@@ -80,21 +144,5 @@ void Chunk::draw(Shader& shader, glm::mat4& projection, glm::mat4& view)
 		generateMesh();
 	}
 
-	for (int i = 0; i < mesh->size(); i++)
-	{
-		(*mesh)[i].draw(shader, *light, projection, view);
-	}
-
-	//test->draw(shader, *light, projection, view);
-}
-
-
-vector<Mesh> Chunk::getMesh() 
-{
-	if (needToUpdate) 
-	{
-		generateMesh();
-	}
-
-	return *mesh;
+	mesh->draw(shader, *light, projection, view);
 }
