@@ -210,7 +210,7 @@ int main()
 
     Texture* t = loadTexture("./res/textures/texture.jpg");
 
-    cam = new Camera(vec3(15.0f, 70.0f, 15.0f), vec3(0.0f, 0.0f, 0.0f));
+    cam = new Camera(vec3(15.0f, 35.0f, 15.0f), vec3(0.0f, 0.0f, 0.0f));
 
     light = new Light(vec3(0.0f, 90.0f, -5.0f), vec3(0.99f, 0.99f, 0.99f), 0.6f);
     chunk = new Chunk(light, t->id);
