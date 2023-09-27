@@ -170,7 +170,7 @@ int main()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    GLFWwindow* window = glfwCreateWindow(frameWidth, frameHeight, "JavaScript = caca", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(frameWidth, frameHeight, "CraftMine", NULL, NULL);
 
     if (window == NULL)
     {
@@ -210,9 +210,9 @@ int main()
 
     Texture* t = loadTexture("./res/textures/texture.jpg");
 
-    cam = new Camera(vec3(0.0f, 0.0f, 6.0f), vec3(0.0f, 0.0f, 0.0f));
+    cam = new Camera(vec3(15.0f, 70.0f, 15.0f), vec3(0.0f, 0.0f, 0.0f));
 
-    light = new Light(vec3(0.0f, 3.0f, -5.0f), vec3(0.99f, 0.99f, 0.99f), 0.6f);
+    light = new Light(vec3(0.0f, 90.0f, -5.0f), vec3(0.99f, 0.99f, 0.99f), 0.6f);
     chunk = new Chunk(light, t->id);
 
     // game loop

@@ -31,7 +31,7 @@ private:
 	void generateMesh();
 
 public:
-	const int WIDTH = 32, HEIGHT = 192;
+	const int WIDTH = 32, HEIGHT = 64;
 
 	Chunk(Light* l, unsigned int t);
 	~Chunk();
