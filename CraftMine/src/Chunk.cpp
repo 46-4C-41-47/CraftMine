@@ -130,30 +130,51 @@ void Chunk::generateMesh()
 }*/
 
 
+double* Chunk::getHeightMap() 
+{
+	double* heightMap = new double[WIDTH * WIDTH];
+	Noise n(6464.984250);
+	double frequency = 0.0002541;
+	srand(time(NULL));
+
+	for (int x = 0; x < WIDTH; x++)
+	{
+		for (int y = 0; y < WIDTH; y++)
+		{
+			heightMap[x + y * WIDTH] = (n.smoothNoise(x + frequency, y + frequency, 0) + 1) / 2;
+		}
+	}
+
+	return heightMap;
+}
+
+
 void Chunk::init()
 {
-	Noise n(0.1);
+	double* heightMap = getHeightMap();
 
-	for (int z = 0; z < WIDTH; z++)
+	for (int y = 0; y < HEIGHT; y++)
 	{
-		for (int y = 0; y < HEIGHT; y++)
+		for (int z = 0; z < WIDTH; z++)
 		{
 			for (int x = 0; x < WIDTH; x++)
 			{
-				if ( y < (n.smoothNoise(x, y) * HEIGHT_RANGE + HEIGHT * 0.5))
-					chunkData[x + y * WIDTH + z * HEIGHT] = Block::Type::Dirt;
+				if (y <= heightMap[x + z * WIDTH] * HEIGHT_RANGE + 16)
+					chunkData[getIndex(x, y, z)] = Block::Type::Dirt;
 				else
-					chunkData[x + y * WIDTH + z * HEIGHT] = Block::Type::Empty;
+					chunkData[getIndex(x, y, z)] = Block::Type::Empty;
 			}
 		}
 	}
+
+	delete heightMap;
 }
 
 
 inline Block::Type* Chunk::getBlock(int x, int y, int z)
 {
 	if ((0 <= x && x < WIDTH) && (0 <= y && y < HEIGHT) && (0 <= z && z < WIDTH))
-		return &(chunkData[x + y * WIDTH + z * HEIGHT]);
+		return &(chunkData[getIndex(x, y, z)]);
 	return nullptr;
 }
 
@@ -164,9 +185,9 @@ void Chunk::generateMesh()
 	float buffer[8];
 
 	// Un algo d'une complexité t'as peur 
-	for (int z = 0; z < WIDTH; z++)
+	for (int y = 0; y < HEIGHT; y++)
 	{
-		for (int y = 0; y < HEIGHT; y++)
+		for (int z = 0; z < WIDTH; z++)
 		{
 			for (int x = 0; x < WIDTH; x++)
 			{
