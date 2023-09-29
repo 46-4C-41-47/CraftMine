@@ -1,4 +1,5 @@
 #include "../include/Chunk.h"
+#include "../include/Noise.h"
 
 
 namespace Cube
@@ -131,13 +132,18 @@ void Chunk::generateMesh()
 
 void Chunk::init()
 {
+	Noise n(0.1);
+
 	for (int z = 0; z < WIDTH; z++)
 	{
 		for (int y = 0; y < HEIGHT; y++)
 		{
 			for (int x = 0; x < WIDTH; x++)
 			{
-				chunkData[x + y * WIDTH + z * HEIGHT] = Block::Type::Dirt;
+				if ( y < (n.smoothNoise(x, y) * HEIGHT_RANGE + HEIGHT * 0.5))
+					chunkData[x + y * WIDTH + z * HEIGHT] = Block::Type::Dirt;
+				else
+					chunkData[x + y * WIDTH + z * HEIGHT] = Block::Type::Empty;
 			}
 		}
 	}
@@ -148,8 +154,7 @@ inline Block::Type* Chunk::getBlock(int x, int y, int z)
 {
 	if ((0 <= x && x < WIDTH) && (0 <= y && y < HEIGHT) && (0 <= z && z < WIDTH))
 		return &(chunkData[x + y * WIDTH + z * HEIGHT]);
-	else
-		return nullptr;
+	return nullptr;
 }
 
 

@@ -17,6 +17,7 @@
 #include "include/Mesh.h"
 #include "include/Texture.h"
 #include "include/Chunk.h"
+#include "include/Noise.h"
 
 
 using std::cout;

@@ -16,7 +16,7 @@
 
 class Chunk {
 private:
-	const int MIN_HEIGHT = 128, MAX_HEIGHT = 192;
+	const int MIN_HEIGHT = 128, MAX_HEIGHT = 192, HEIGHT_RANGE = 16;
     unsigned int texture, chunkDataSize;
     bool needToUpdate = true;
 	std::vector<Block::ChunkBlock>* blocks;
@@ -32,7 +32,7 @@ private:
 	Block::Type* getBlock(int x, int y, int z);
 
 public:
-	const int WIDTH = 128, HEIGHT = 32;
+	const int WIDTH = 32, HEIGHT = 32;
 
 	Chunk(Light* l, unsigned int t);
 	~Chunk();
