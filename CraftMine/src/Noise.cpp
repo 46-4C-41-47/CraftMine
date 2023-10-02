@@ -30,6 +30,23 @@ double Noise::grad(int hash, double x, double y, double z)
 }
 
 
+MyVec2 Noise::GetConstantVector(int v)
+{
+	int h = v & 3;
+
+	if (h == 0)
+		return MyVec2{ 1.0, 1.0 };
+	
+	if (h == 1)
+		return MyVec2{ -1.0, 1.0 };
+	
+	if (h == 2)
+		return MyVec2{-1.0, -1.0};
+	
+	return MyVec2{ 1.0, -1.0 };
+}
+
+
 double Noise::smoothNoise(double x, double y, double z) 
 {
     int X = (int)floor(x) & 255,                  // FIND UNIT CUBE THAT
@@ -44,7 +61,7 @@ double Noise::smoothNoise(double x, double y, double z)
            v = fade(y),                                // FOR EACH OF X,Y,Z.
            w = fade(z);
 
-    int A = p[X] + Y, AA = p[A] + Z, AB = p[A + 1] + Z,      // HASH COORDINATES OF
+    int A = p[X    ] + Y, AA = p[A] + Z, AB = p[A + 1] + Z,      // HASH COORDINATES OF
         B = p[X + 1] + Y, BA = p[B] + Z, BB = p[B + 1] + Z;      // THE 8 CUBE CORNERS,
 
     return lerp(w,  lerp(v, lerp(u, grad(p[AA    ], x    , y    , z   ),    // AND ADD
@@ -58,13 +75,35 @@ double Noise::smoothNoise(double x, double y, double z)
 }
 
 
-double Noise::noise2D(double x, double y, int size) {
-    double value = 0.0;
-    double initialSize = size;
-    while (size >= 1) {
-        value += smoothNoise((x / size), (y / size), 0) * size;
-        size /= 2.0;
-    }
+double Noise::classicNoise(double x, double y)
+{
+	int X = (int)floor(x) & 255;
+	int Y = (int)floor(y) & 255;
 
-    return value / initialSize;
+	double xf = x - floor(x);
+	double yf = y - floor(y);
+
+	MyVec2 topRight    = { xf - 1.0, yf - 1.0 };
+	MyVec2 topLeft     = { xf      , yf - 1.0 };
+	MyVec2 bottomRight = { xf - 1.0, yf       };
+	MyVec2 bottomLeft  = { xf      , yf       };
+
+	// Select a value from the permutation array for each of the 4 corners
+	int valueTopRight    = p[p[X + 1] + Y + 1];
+	int valueTopLeft     = p[p[X    ] + Y + 1];
+	int valueBottomRight = p[p[X + 1] + Y    ];
+	int valueBottomLeft  = p[p[X    ] + Y    ];
+
+	double dotTopRight = dot(topRight, GetConstantVector(valueTopRight));
+	double dotTopLeft = dot(topLeft, GetConstantVector(valueTopLeft));
+	double dotBottomRight = dot(bottomRight, GetConstantVector(valueBottomRight));
+	double dotBottomLeft = dot(bottomLeft, GetConstantVector(valueBottomLeft));
+
+	double u = fade(xf);
+	double v = fade(yf);
+
+	return lerp(u,
+		lerp(v, dotBottomLeft, dotTopLeft),
+		lerp(v, dotBottomRight, dotTopRight)
+	);
 }
