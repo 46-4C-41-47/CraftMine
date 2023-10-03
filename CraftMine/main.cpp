@@ -28,36 +28,6 @@ using std::unique_ptr;
 Camera* cam;
 
 
-namespace cube
-{
-    const float vertices[] = {
-         1.0f,  1.0f,  1.0f,
-         1.0f,  1.0f, -1.0f,
-        -1.0f,  1.0f, -1.0f,
-        -1.0f,  1.0f,  1.0f,
-         1.0f, -1.0f,  1.0f,
-         1.0f, -1.0f, -1.0f,
-        -1.0f, -1.0f, -1.0f,
-        -1.0f, -1.0f,  1.0f
-    };
-
-    const int indices[] = {
-        3, 0, 1, // top
-        3, 1, 2,
-        4, 6, 5, // bottom
-        4, 7, 6,
-        4, 0, 3, // front
-        4, 3, 7,
-        1, 6, 2, // back
-        1, 5, 6,
-        0, 5, 4, // right
-        0, 1, 5,
-        2, 7, 3, // left
-        2, 6, 7
-    };
-}
-
-
 void mouse_callback(GLFWwindow* window, double xpos, double ypos) 
 {
     cam->proccessMouse(xpos, ypos);
@@ -233,10 +203,7 @@ int main()
         camChunkY = floor(cam->position.z / Chunk::WIDTH);
 
         if (chunk->x != camChunkX || chunk->y != camChunkY)
-        {
-            // cout << "x : " << camChunkX << ", y : " << camChunkY << "\n";
             chunk = new Chunk(camChunkX, camChunkY, light.get(), t->id);
-        }
 
         glm::mat4 view = cam->getViewMatrix();
 
