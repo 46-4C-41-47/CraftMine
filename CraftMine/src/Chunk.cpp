@@ -71,7 +71,7 @@ void Chunk::init()
 {
 	Noise n(6817.8643);
 	double frequency = 50.461;
-	std::unique_ptr<double> heightMap(n.detailedNoise(x + frequency, y + frequency, WIDTH));
+	std::unique_ptr<double> heightMap(n.detailed2DNoise(x + frequency, y + frequency, WIDTH));
 
 	int half_height = (float)HEIGHT * 0.5f;
 
@@ -103,6 +103,8 @@ void Chunk::generateMesh()
 {
 	vector<float> meshVAO;
 	float buffer[8];
+	int chunkOffsetX = x * WIDTH;
+	int chunkOffsetY = y * WIDTH;
 
 	// Un algo d'une complexité t'as peur 
 	for (int y = 0; y < HEIGHT; y++)
@@ -149,7 +151,7 @@ void Chunk::generateMesh()
 		}
 	}
 
-	mesh = new Mesh(meshVAO, glm::vec3(0.0f, 0.0f, 0.0f), texture);
+	mesh = new Mesh(meshVAO, glm::vec3(chunkOffsetX, 0.0f, chunkOffsetY), texture);
 
 	needToUpdate = false;
 }

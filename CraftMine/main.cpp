@@ -23,6 +23,7 @@
 using std::cout;
 using std::cerr;
 using std::endl;
+using std::unique_ptr;
 
 Camera* cam;
 
@@ -155,9 +156,6 @@ int main()
     double startingTime;
 
     Shader* objectShader, *lightShader;
-    Mesh* mesh;
-    Chunk* chunk;
-    Light* light;
 
     glm::mat4 projection = glm::perspective(glm::radians(90.0f), aspectRatio, 0.1f, 100.0f);
 
@@ -195,7 +193,10 @@ int main()
 
     try
     {
-        objectShader = new Shader("./res/shaders/vertexShader.glsl", "./res/shaders/fragmentShader.glsl");
+        objectShader = new Shader(
+            "./res/shaders/vertexShader.glsl", 
+            "./res/shaders/fragmentShader.glsl"
+        );
         lightShader = new Shader(
             "./res/shaders/light/lightVertexShader.glsl", 
             "./res/shaders/light/lightFragmentShader.glsl"
@@ -211,20 +212,27 @@ int main()
 
     Texture* t = loadTexture("./res/textures/texture.jpg");
 
-    cam = new Camera(vec3(15.0f, 160.0f, 15.0f), vec3(0.0f, 0.0f, 0.0f));
+    cam = new Camera(vec3(15.0f, 150.0f, 15.0f), vec3(0.0f, 0.0f, 0.0f));
 
-    light = new Light(vec3(0.0f, 180.0f, -5.0f), vec3(0.99f, 0.99f, 0.99f), 0.4f);
-    chunk = new Chunk(0, 0, light, t->id);
+    unique_ptr<Light> light( new Light(vec3(0.0f, 180.0f, -5.0f), vec3(0.99f, 0.99f, 0.99f), 0.4f) );
+    unique_ptr<Chunk> chunk( new Chunk(0, 0, light.get(), t->id) );
+
+    int camChunkX, camChunkY;
 
     // game loop
     while (!glfwWindowShouldClose(window))
     {
         startingTime = glfwGetTime();
 
-        processInput(window, cam, light);
+        processInput(window, cam, light.get());
 
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        camChunkX = (int)(cam->position.x / Chunk::WIDTH);
+        camChunkY = cam->position.z / (float)Chunk::WIDTH;
+
+        cout << camChunkX << "\n";
 
         glm::mat4 view = cam->getViewMatrix();
 
@@ -238,7 +246,7 @@ int main()
         Sleep(max(delta - ((glfwGetTime() - startingTime) / 1000), 0));
     }
 
-    delete cam, objectShader, lightShader, chunk;
+    delete cam, objectShader, lightShader;
 
     glfwTerminate();
     return 0;

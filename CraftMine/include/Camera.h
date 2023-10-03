@@ -24,8 +24,6 @@ class Camera
 private:
 	double yawValue = 0.0f, pitchValue = 0.0f, rollValue = 0.0f;
 	int lastX = -1, lastY = -1, xOffset, yOffset;
-
-	vec3 position;
 	
 	vec3 direction;
 	vec3 up;
@@ -39,7 +37,9 @@ private:
 
 public:
 	const float HORIZONTAL_SENSITIVITY = 0.002f, VERTICAL_SENSITIVITY = 0.0016f;
-	const float CAM_SPEED = 0.3f;
+	const float CAM_SPEED = 0.4f;
+	
+	vec3 position;
 
 	Camera();
 	Camera(vec3 position, vec3 pointToLook);

@@ -109,7 +109,7 @@ double Noise::classicNoise(double x, double y)
 }
 
 
-double* Noise::detailedNoise(double x, double y, int resolution)
+double* Noise::detailed2DNoise(double x, double y, int resolution)
 {
 	double* res = new double[resolution * resolution];
 	double cornerValue[4];

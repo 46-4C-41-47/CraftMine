@@ -49,7 +49,7 @@ public:
     inline double lerp(double t, double a, double b) { return a + t * (b - a); }
     
     double classicNoise(double x, double y);
-    double* detailedNoise(double x, double y, int resolution);
+    double* detailed2DNoise(double x, double y, int resolution);
     double smoothNoise(double x, double y, double z);
 
     double noise1D(double x);
