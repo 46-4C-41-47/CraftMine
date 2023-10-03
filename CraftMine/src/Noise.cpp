@@ -107,3 +107,33 @@ double Noise::classicNoise(double x, double y)
 		lerp(v, dotBottomRight, dotTopRight)
 	);
 }
+
+
+double* Noise::detailedNoise(double x, double y, int resolution)
+{
+	double* res = new double[resolution * resolution];
+	double cornerValue[4];
+
+	cornerValue[0] = classicNoise(x    , y    );
+	cornerValue[1] = classicNoise(x + 1, y    );
+	cornerValue[2] = classicNoise(x    , y + 1);
+	cornerValue[3] = classicNoise(x + 1, y + 1);
+
+	double u, v, offset = 1.0 / resolution;
+
+	for (int x = 0; x < resolution; x++)
+	{
+		for (int y = 0; y < resolution; y++)
+		{
+			u = fade(x * offset);
+			v = fade(y * offset);
+
+			res[x + y * resolution] = lerp(u,
+				lerp(v, cornerValue[0], cornerValue[2]),
+				lerp(v, cornerValue[1], cornerValue[3])
+			);
+		}
+	}
+
+	return res;
+}

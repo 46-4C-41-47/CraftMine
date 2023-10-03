@@ -12,7 +12,7 @@ struct MyVec2
 };
 
 
-class Noise {
+class Noise final {
 private:
     int p[512];
     int permutation[256] = { 
@@ -35,8 +35,6 @@ private:
     };
 
     void init();
-    inline double fade(double t) { return t * t * t * (t * (t * 6 - 15) + 10); }
-    inline double lerp(double t, double a, double b) { return a + t * (b - a); }
     inline double dot(MyVec2 a, MyVec2 b) { return a.x * b.x + a.y * b.y; }
     double grad(int hash, double x, double y, double z);
     MyVec2 GetConstantVector(int v);
@@ -47,7 +45,11 @@ public:
     Noise();
     Noise(double s);
 
+    inline double fade(double t) { return t * t * t * (t * (t * 6 - 15) + 10); }
+    inline double lerp(double t, double a, double b) { return a + t * (b - a); }
+    
     double classicNoise(double x, double y);
+    double* detailedNoise(double x, double y, int resolution);
     double smoothNoise(double x, double y, double z);
 
     double noise1D(double x);

@@ -211,10 +211,10 @@ int main()
 
     Texture* t = loadTexture("./res/textures/texture.jpg");
 
-    cam = new Camera(vec3(15.0f, 35.0f, 15.0f), vec3(0.0f, 0.0f, 0.0f));
+    cam = new Camera(vec3(15.0f, 160.0f, 15.0f), vec3(0.0f, 0.0f, 0.0f));
 
-    light = new Light(vec3(0.0f, 90.0f, -5.0f), vec3(0.99f, 0.99f, 0.99f), 0.4f);
-    chunk = new Chunk(light, t->id);
+    light = new Light(vec3(0.0f, 180.0f, -5.0f), vec3(0.99f, 0.99f, 0.99f), 0.4f);
+    chunk = new Chunk(0, 0, light, t->id);
 
     // game loop
     while (!glfwWindowShouldClose(window))

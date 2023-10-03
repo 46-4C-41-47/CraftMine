@@ -1,5 +1,4 @@
 #include "../include/Chunk.h"
-#include "../include/Noise.h"
 
 
 namespace Cube
@@ -54,16 +53,10 @@ namespace Cube
 };
 
 
-bool comparator(Block::ChunkBlock a, Block::ChunkBlock b) { return a.id < b.id; }
-
-
-Chunk::Chunk(Light* l, unsigned int t) 
+Chunk::Chunk(int x, int y, Light* l, unsigned int t) : x{ x }, y{ y }, light{ l }, texture{ t }
 {
 	chunkData = new Block::Type[WIDTH * WIDTH * HEIGHT];
 	chunkDataSize = WIDTH * WIDTH * HEIGHT;
-	light = l;
-	texture = t;
-
 	init();
 }
 
@@ -74,28 +67,13 @@ Chunk::~Chunk()
 }
 
 
-double* Chunk::getHeightMap() 
-{
-	double* heightMap = new double[WIDTH * WIDTH];
-	Noise n(6464.984250);
-	double frequency = 1.01;
-	srand(time(NULL));
-
-	for (int x = 0; x < WIDTH; x++)
-	{
-		for (int y = 0; y < WIDTH; y++)
-		{
-			heightMap[x + y * WIDTH] = (n.classicNoise(x + frequency, y + frequency) + 1) / 2;
-		}
-	}
-
-	return heightMap;
-}
-
-
 void Chunk::init()
 {
-	double* heightMap = getHeightMap();
+	Noise n(6817.8643);
+	double frequency = 50.461;
+	std::unique_ptr<double> heightMap(n.detailedNoise(x + frequency, y + frequency, WIDTH));
+
+	int half_height = (float)HEIGHT * 0.5f;
 
 	for (int y = 0; y < HEIGHT; y++)
 	{
@@ -103,15 +81,13 @@ void Chunk::init()
 		{
 			for (int x = 0; x < WIDTH; x++)
 			{
-				if (y < heightMap[x + z * WIDTH] * HEIGHT_RANGE + 16)
+				if (y < heightMap.get()[x + z * WIDTH] * HEIGHT_RANGE + half_height)
 					chunkData[getIndex(x, y, z)] = Block::Type::Dirt;
 				else
 					chunkData[getIndex(x, y, z)] = Block::Type::Empty;
 			}
 		}
 	}
-
-	delete heightMap;
 }
 
 
@@ -138,12 +114,12 @@ void Chunk::generateMesh()
 				if (*getBlock(x, y, z) != Block::Type::Empty)
 				{
 					Block::Type* nearCube[] = {
-						getBlock(x, y, z - 1),
-						getBlock(x, y, z + 1),
-						getBlock(x - 1, y, z),
-						getBlock(x + 1, y, z),
-						getBlock(x, y - 1, z),
-						getBlock(x, y + 1, z),
+						getBlock(x    , y    , z - 1),
+						getBlock(x    , y    , z + 1),
+						getBlock(x - 1, y    , z    ),
+						getBlock(x + 1, y    , z    ),
+						getBlock(x    , y - 1, z    ),
+						getBlock(x    , y + 1, z    ),
 					};
 
 					for (int i = 0; i < 6; i++)
