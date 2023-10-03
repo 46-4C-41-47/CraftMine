@@ -215,7 +215,7 @@ int main()
     cam = new Camera(vec3(15.0f, 150.0f, 15.0f), vec3(0.0f, 0.0f, 0.0f));
 
     unique_ptr<Light> light( new Light(vec3(0.0f, 180.0f, -5.0f), vec3(0.99f, 0.99f, 0.99f), 0.4f) );
-    unique_ptr<Chunk> chunk( new Chunk(0, 0, light.get(), t->id) );
+    Chunk* chunk = new Chunk(0, 0, light.get(), t->id);
 
     int camChunkX, camChunkY;
 
@@ -229,10 +229,14 @@ int main()
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        camChunkX = (int)(cam->position.x / Chunk::WIDTH);
-        camChunkY = cam->position.z / (float)Chunk::WIDTH;
+        camChunkX = floor(cam->position.x / Chunk::WIDTH);
+        camChunkY = floor(cam->position.z / Chunk::WIDTH);
 
-        cout << camChunkX << "\n";
+        if (chunk->x != camChunkX || chunk->y != camChunkY)
+        {
+            // cout << "x : " << camChunkX << ", y : " << camChunkY << "\n";
+            chunk = new Chunk(camChunkX, camChunkY, light.get(), t->id);
+        }
 
         glm::mat4 view = cam->getViewMatrix();
 
@@ -246,7 +250,7 @@ int main()
         Sleep(max(delta - ((glfwGetTime() - startingTime) / 1000), 0));
     }
 
-    delete cam, objectShader, lightShader;
+    delete cam, objectShader, lightShader, chunk;
 
     glfwTerminate();
     return 0;

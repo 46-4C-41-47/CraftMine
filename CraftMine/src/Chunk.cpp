@@ -124,9 +124,15 @@ void Chunk::generateMesh()
 						getBlock(x    , y + 1, z    ),
 					};
 
+					// iterate over each cube face 
 					for (int i = 0; i < 6; i++)
 					{
-						if (nearCube[i] == nullptr || *nearCube[i] == Block::Type::Empty)
+						if ((nearCube[i] == nullptr || *nearCube[i] == Block::Type::Empty) 
+							&& !(y == 0           && i == 4) 
+							&& !(z == 0           && i == 0) 
+							&& !(z == (WIDTH - 1) && i == 1)
+							&& !(x == 0           && i == 2)
+							&& !(x == (WIDTH - 1) && i == 3))
 						{
 							for (int j = 0; j < Cube::faceSize; j += 8)
 							{

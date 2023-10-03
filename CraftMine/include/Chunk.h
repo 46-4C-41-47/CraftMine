@@ -18,7 +18,7 @@
 
 class Chunk {
 private:
-	const int MIN_HEIGHT = 128, MAX_HEIGHT = 192, HEIGHT_RANGE = 64, x, y;
+	const int MIN_HEIGHT = 128, MAX_HEIGHT = 192, HEIGHT_RANGE = 64;
 	const double noiseFrequency = 0.15413;
     unsigned int texture, chunkDataSize;
     bool needToUpdate = true;
@@ -36,7 +36,8 @@ private:
 	inline int getIndex(int x, int y, int z) { return x + (y * WIDTH) + (z * WIDTH * HEIGHT); }
 
 public:
-	static const int WIDTH = 64, HEIGHT = 256;
+	static const int WIDTH = 32, HEIGHT = 256;
+	const int x, y;
 
 	Chunk(int x, int y, Light* l, unsigned int t);
 	~Chunk();

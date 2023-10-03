@@ -37,7 +37,7 @@ private:
 
 public:
 	const float HORIZONTAL_SENSITIVITY = 0.002f, VERTICAL_SENSITIVITY = 0.0016f;
-	const float CAM_SPEED = 0.4f;
+	const float CAM_SPEED = 0.6f;
 	
 	vec3 position;
 
