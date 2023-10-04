@@ -36,11 +36,13 @@ private:
 	inline int getIndex(int x, int y, int z) { return x + (y * WIDTH) + (z * WIDTH * HEIGHT); }
 
 public:
-	static const int WIDTH = 32, HEIGHT = 256;
+	static const int WIDTH = 64, HEIGHT = 256, RADIUS = 2;
 	const int x, y;
 
 	Chunk(int x, int y, Light* l, unsigned int t);
 	~Chunk();
 
     void draw(Shader& shader, glm::mat4& projection, glm::mat4& view);
+
+	static void updateChunks(vector<Chunk*>& visibleChunks, const glm::vec3& pos, Light* l, unsigned int t);
 };

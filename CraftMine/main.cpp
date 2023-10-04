@@ -120,10 +120,15 @@ Texture* loadTexture(std::string path) {
 int main()
 {
     const double delta = 1000.0f / 60;
-    const int frameWidth = 800, frameHeight = 500;
+    const int frameWidth = 1400, frameHeight = 900;
     const float aspectRatio = (float)frameWidth / (float)frameHeight;
 
+    int camChunkX, camChunkY;
+
     double startingTime;
+
+    int borderWidth = Chunk::RADIUS * 2 + 1;
+    vector<Chunk*> visibleChunks(borderWidth * borderWidth, nullptr);
 
     Shader* objectShader, *lightShader;
 
@@ -184,10 +189,7 @@ int main()
 
     cam = new Camera(vec3(15.0f, 150.0f, 15.0f), vec3(0.0f, 0.0f, 0.0f));
 
-    unique_ptr<Light> light( new Light(vec3(0.0f, 180.0f, -5.0f), vec3(0.99f, 0.99f, 0.99f), 0.4f) );
-    Chunk* chunk = new Chunk(0, 0, light.get(), t->id);
-
-    int camChunkX, camChunkY;
+    unique_ptr<Light> light( new Light(vec3(0.0f, 180.0f, -5.0f), vec3(0.5f, 0.5f, 0.99f), 0.2f) );
 
     // game loop
     while (!glfwWindowShouldClose(window))
@@ -199,17 +201,15 @@ int main()
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        camChunkX = floor(cam->position.x / Chunk::WIDTH);
-        camChunkY = floor(cam->position.z / Chunk::WIDTH);
-
-        if (chunk->x != camChunkX || chunk->y != camChunkY)
-            chunk = new Chunk(camChunkX, camChunkY, light.get(), t->id);
-
+        Chunk::updateChunks(visibleChunks, cam->position, light.get(), t->id);
+        
         glm::mat4 view = cam->getViewMatrix();
 
         // draw meshes
         light->draw(*lightShader, projection, view);
-        chunk->draw(*objectShader, projection, view);
+
+        for (int i = 0; i < visibleChunks.size(); i++)
+            visibleChunks[i]->draw(*objectShader, projection, view);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
@@ -217,7 +217,7 @@ int main()
         Sleep(max(delta - ((glfwGetTime() - startingTime) / 1000), 0));
     }
 
-    delete cam, objectShader, lightShader, chunk;
+    delete cam, objectShader, lightShader;
 
     glfwTerminate();
     return 0;

@@ -172,3 +172,24 @@ void Chunk::draw(Shader& shader, glm::mat4& projection, glm::mat4& view)
 
 	mesh->draw(shader, *light, projection, view);
 }
+
+
+void Chunk::updateChunks(vector<Chunk*>& visibleChunks, const glm::vec3& pos, Light* l, unsigned int t)
+{
+	int borderSize = RADIUS * 2 + 1;
+	int camPosX = floor(pos.x / WIDTH);
+	int camPosY = floor(pos.z / WIDTH);
+
+	for (int i = 0; i < borderSize; i++)
+	{
+		for (int j = 0; i < borderSize; j++)
+		{
+			if (visibleChunks[i + j * borderSize]->y != j ||
+				visibleChunks[i + j * borderSize]->x != i ||
+				visibleChunks[i + j * borderSize] == nullptr)
+			{
+				visibleChunks[i + j * borderSize] = new Chunk(camPosX + i,camPosY + j, l, t);
+			}
+		}
+	}
+}
