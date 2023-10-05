@@ -44,5 +44,5 @@ public:
 
     void draw(Shader& shader, glm::mat4& projection, glm::mat4& view);
 
-	static void updateChunks(vector<Chunk*>& visibleChunks, const glm::vec3& pos, Light* l, unsigned int t);
+	static void updateChunks(Chunk** visibleChunks, const glm::vec3& pos, Light* l, unsigned int t);
 };

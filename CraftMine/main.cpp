@@ -109,7 +109,7 @@ Texture* loadTexture(std::string path) {
     }
     else
     {
-        std::cout << "Failed to load texture, path : " << path << std::endl;
+        cerr << "Failed to load texture, path : " << path << "\n";
     }
     stbi_image_free(data);
 
@@ -120,15 +120,15 @@ Texture* loadTexture(std::string path) {
 int main()
 {
     const double delta = 1000.0f / 60;
-    const int frameWidth = 1400, frameHeight = 900;
+    const int frameWidth = 800, frameHeight = 500;
     const float aspectRatio = (float)frameWidth / (float)frameHeight;
 
     int camChunkX, camChunkY;
 
     double startingTime;
 
-    int borderWidth = Chunk::RADIUS * 2 + 1;
-    vector<Chunk*> visibleChunks(borderWidth * borderWidth, nullptr);
+    const int tabSize = (Chunk::RADIUS * 2 + 1) * (Chunk::RADIUS * 2 + 1);
+    Chunk* visibleChunks[tabSize];
 
     Shader* objectShader, *lightShader;
 
@@ -157,7 +157,7 @@ int main()
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
-        cerr << "Failed to initialize GLAD" << std::endl;
+        cerr << "Failed to initialize GLAD\n";
         return 3;
     }
 
@@ -189,26 +189,26 @@ int main()
 
     cam = new Camera(vec3(15.0f, 150.0f, 15.0f), vec3(0.0f, 0.0f, 0.0f));
 
-    unique_ptr<Light> light( new Light(vec3(0.0f, 180.0f, -5.0f), vec3(0.5f, 0.5f, 0.99f), 0.2f) );
+    Light* light = new Light(vec3(0.0f, 180.0f, -5.0f), vec3(0.5f, 0.5f, 0.99f), 0.2f);
 
     // game loop
     while (!glfwWindowShouldClose(window))
     {
         startingTime = glfwGetTime();
 
-        processInput(window, cam, light.get());
+        processInput(window, cam, light);
 
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        Chunk::updateChunks(visibleChunks, cam->position, light.get(), t->id);
+        Chunk::updateChunks(visibleChunks, cam->position, light, t->id);
         
         glm::mat4 view = cam->getViewMatrix();
 
         // draw meshes
         light->draw(*lightShader, projection, view);
 
-        for (int i = 0; i < visibleChunks.size(); i++)
+        for (int i = 0; i < tabSize; i++)
             visibleChunks[i]->draw(*objectShader, projection, view);
 
         glfwSwapBuffers(window);
@@ -217,7 +217,7 @@ int main()
         Sleep(max(delta - ((glfwGetTime() - startingTime) / 1000), 0));
     }
 
-    delete cam, objectShader, lightShader;
+    delete cam, objectShader, lightShader, visibleChunks;
 
     glfwTerminate();
     return 0;
