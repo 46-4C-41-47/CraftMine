@@ -124,7 +124,7 @@ void Chunk::generateMesh()
 						getBlock(x    , y + 1, z    ),
 					};
 
-					// iterate over each cube face 
+					// iterate over each cube face and create the mesh buffer
 					for (int i = 0; i < 6; i++)
 					{
 						if ((nearCube[i] == nullptr || *nearCube[i] == Block::Type::Empty) 
@@ -184,12 +184,11 @@ void Chunk::updateChunks(Chunk** visibleChunks, const glm::vec3& pos, Light* l, 
 	{
 		for (int j = 0; j < borderSize; j++)
 		{
-			if (visibleChunks[i + j * borderSize] == nullptr ||
+			if (visibleChunks[i + j * borderSize] == nullptr || 
 				visibleChunks[i + j * borderSize]->x != camPosX + (i - RADIUS) ||
 				visibleChunks[i + j * borderSize]->y != camPosY + (j - RADIUS))
 			{
-				visibleChunks[i + j * borderSize] = new Chunk(camPosX + i,camPosY + j, l, t);
-				std::cout << "new Chunk\n";
+				visibleChunks[i + j * borderSize] = new Chunk(camPosX + (i - RADIUS),camPosY + (j - RADIUS), l, t);
 			}
 		}
 	}

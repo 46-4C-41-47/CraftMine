@@ -123,12 +123,10 @@ int main()
     const int frameWidth = 800, frameHeight = 500;
     const float aspectRatio = (float)frameWidth / (float)frameHeight;
 
-    int camChunkX, camChunkY;
-
     double startingTime;
 
     const int tabSize = (Chunk::RADIUS * 2 + 1) * (Chunk::RADIUS * 2 + 1);
-    Chunk* visibleChunks[tabSize];
+    Chunk* visibleChunks[tabSize] = { nullptr };
 
     Shader* objectShader, *lightShader;
 
@@ -189,7 +187,7 @@ int main()
 
     cam = new Camera(vec3(15.0f, 150.0f, 15.0f), vec3(0.0f, 0.0f, 0.0f));
 
-    Light* light = new Light(vec3(0.0f, 180.0f, -5.0f), vec3(0.5f, 0.5f, 0.99f), 0.2f);
+    Light* light = new Light(vec3(0.0f, 180.0f, -5.0f), vec3(0.99f, 0.99f, 0.99f), 0.2f);
 
     // game loop
     while (!glfwWindowShouldClose(window))

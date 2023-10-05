@@ -36,7 +36,7 @@ private:
 	inline int getIndex(int x, int y, int z) { return x + (y * WIDTH) + (z * WIDTH * HEIGHT); }
 
 public:
-	static const int WIDTH = 64, HEIGHT = 256, RADIUS = 2;
+	static const int WIDTH = 16, HEIGHT = 256, RADIUS = 1;
 	const int x, y;
 
 	Chunk(int x, int y, Light* l, unsigned int t);
