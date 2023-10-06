@@ -176,7 +176,7 @@ void Chunk::draw(Shader& shader, glm::mat4& projection, glm::mat4& view)
 
 glm::vec2 Chunk::updateChunks(Chunk** visibleChunks, const glm::vec2& previousPos, const glm::vec3& pos, Light* l, unsigned int t)
 {
-	int borderSize = RADIUS * 2 + 1;
+	const int borderSize = RADIUS * 2 + 1;
 	
 	int camPosX = floor(pos.x / WIDTH);
 	int camPosY = floor(pos.z / WIDTH);
@@ -186,6 +186,10 @@ glm::vec2 Chunk::updateChunks(Chunk** visibleChunks, const glm::vec2& previousPo
 
 	int newX, newY;
 
+	Chunk* visibleChunksCopy[borderSize * borderSize];
+
+	std::copy(visibleChunks, visibleChunks + borderSize * borderSize, visibleChunksCopy);
+
 	for (int x = 0; x < borderSize; x++)
 	{
 		for (int y = 0; y < borderSize; y++)
@@ -193,15 +197,10 @@ glm::vec2 Chunk::updateChunks(Chunk** visibleChunks, const glm::vec2& previousPo
 			newX = x + offsetX;
 			newY = y + offsetY;
 
-			if (0 < newX && newX < borderSize && 0 < newY && newY < borderSize)
-				visibleChunks[newX + newY * borderSize] = visibleChunks[x + y * borderSize];
-			else
-				visibleChunks[x + y * borderSize] = nullptr;
-
-			if (visibleChunks[x + y * borderSize] == nullptr)
-			{
+			if ((0 <= newX && newX < borderSize) && (0 <= newY && newY < borderSize) && visibleChunks[x + y * borderSize] != nullptr)
+				visibleChunks[x + y * borderSize] = visibleChunksCopy[newX + newY * borderSize];
+			else 
 				visibleChunks[x + y * borderSize] = new Chunk(camPosX + (x - RADIUS), camPosY + (y - RADIUS), l, t);
-			}
 		}
 	}
 

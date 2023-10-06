@@ -189,6 +189,8 @@ int main()
 
     Light* light = new Light(vec3(0.0f, 180.0f, -5.0f), vec3(0.99f, 0.99f, 0.99f), 0.2f);
 
+    glm::vec2 previousPos;
+
     // game loop
     while (!glfwWindowShouldClose(window))
     {
@@ -199,11 +201,11 @@ int main()
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        Chunk::updateChunks(visibleChunks, cam->position, light, t->id);
+        previousPos = Chunk::updateChunks(visibleChunks, previousPos, cam->position, light, t->id);
+        //~~~~~~~~^ TODO trouver une alternative pour ce systeme chelou
         
         glm::mat4 view = cam->getViewMatrix();
 
-        // draw meshes
         light->draw(*lightShader, projection, view);
 
         for (int i = 0; i < tabSize; i++)
@@ -220,3 +222,16 @@ int main()
     glfwTerminate();
     return 0;
 }
+
+/*
+TODO :
+classe Joueur
+ajuster la resolution du bruit pour la hauteur du terrain
+threader la generation des chunk
+prise en charge de textures différentes pour les blocs (finir la classe Block)
+ajouter des grottes
+améliorer l'algo de tri des faces à la jointure des chunks(Chunk::generateMesh())
+rendre le décor destructible
+ajouter des nuages
+ajouter un cycle jour nuit
+*/
