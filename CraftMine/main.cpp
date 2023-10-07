@@ -64,23 +64,8 @@ void processInput(GLFWwindow* window, Camera* cam, Light* lightSource)
         cam->moveUpward(-cam->CAM_SPEED);
 
 
-    if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS)
-        lightSource->position.x += 0.02f;
-
-    if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS)
-        lightSource->position.x -= 0.02f;
-
-    if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS)
-        lightSource->position.z += 0.02f;
-
-    if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS)
-        lightSource->position.z -= 0.02f;
-
-    if (glfwGetKey(window, GLFW_KEY_H) == GLFW_PRESS)
-        lightSource->position.y += 0.02f;
-
-    if (glfwGetKey(window, GLFW_KEY_N) == GLFW_PRESS)
-        lightSource->position.y -= 0.02f;
+    if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS)
+        lightSource->position = cam->position;
 }
 
 
@@ -120,7 +105,7 @@ Texture* loadTexture(std::string path) {
 int main()
 {
     const double delta = 1000.0f / 60;
-    const int frameWidth = 800, frameHeight = 500;
+    const int frameWidth = 1200, frameHeight = 800;
     const float aspectRatio = (float)frameWidth / (float)frameHeight;
 
     double startingTime;
@@ -130,7 +115,7 @@ int main()
 
     Shader* objectShader, *lightShader;
 
-    glm::mat4 projection = glm::perspective(glm::radians(90.0f), aspectRatio, 0.1f, 100.0f);
+    glm::mat4 projection = glm::perspective(glm::radians(90.0f), aspectRatio, 0.1f, 150.0f);
 
     if (!glfwInit())
     {
@@ -187,7 +172,7 @@ int main()
 
     cam = new Camera(vec3(15.0f, 150.0f, 15.0f), vec3(0.0f, 0.0f, 0.0f));
 
-    Light* light = new Light(vec3(0.0f, 180.0f, -5.0f), vec3(0.99f, 0.99f, 0.99f), 0.2f);
+    Light* light = new Light(vec3(0.0f, 180.0f, -5.0f), vec3(0.99f, 0.99f, 0.99f), 0.6f);
 
     glm::vec2 previousPos;
 
@@ -226,8 +211,9 @@ int main()
 /*
 TODO :
 classe Joueur
-ajuster la resolution du bruit pour la hauteur du terrain
-threader la generation des chunk
+ajouter un readme sur git
+faire une doc si j'ai pas la flemme
+rendre asynchrone la generation des chunks
 prise en charge de textures différentes pour les blocs (finir la classe Block)
 ajouter des grottes
 améliorer l'algo de tri des faces à la jointure des chunks(Chunk::generateMesh())

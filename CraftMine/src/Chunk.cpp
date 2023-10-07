@@ -69,11 +69,21 @@ Chunk::~Chunk()
 
 void Chunk::init()
 {
-	Noise n(6817.8643);
-	double frequency = 50.461;
-	std::unique_ptr<double> heightMap(n.detailed2DNoise(x + frequency, y + frequency, WIDTH));
+	Noise n(noiseSeed);
+	const int noiseBorderSize = WIDTH * SPREAD,
+			  half_height = (float)HEIGHT * 0.5f,
+			  offsetX = ((SPREAD + (this->x % SPREAD)) % SPREAD) * WIDTH,
+			  offsetY = ((SPREAD + (this->y % SPREAD)) % SPREAD) * WIDTH;
+	
+	int noiseX = floor((float)this->x / SPREAD), noiseY = floor((float)this->y / SPREAD);
 
-	int half_height = (float)HEIGHT * 0.5f;
+	std::unique_ptr<double> heightMap(
+		n.detailed2DNoise(
+			noiseX + noiseFrequency,
+			noiseY + noiseFrequency,
+			noiseBorderSize
+		)
+	);
 
 	for (int y = 0; y < HEIGHT; y++)
 	{
@@ -81,7 +91,9 @@ void Chunk::init()
 		{
 			for (int x = 0; x < WIDTH; x++)
 			{
-				if (y < heightMap.get()[x + z * WIDTH] * HEIGHT_RANGE + half_height)
+				int newX = (x + offsetX), newY = (z + offsetY);
+
+				if (y < heightMap.get()[newX + newY * noiseBorderSize] * HEIGHT_RANGE + half_height)
 					chunkData[getIndex(x, y, z)] = Block::Type::Dirt;
 				else
 					chunkData[getIndex(x, y, z)] = Block::Type::Empty;
@@ -103,8 +115,6 @@ void Chunk::generateMesh()
 {
 	vector<float> meshVAO;
 	float buffer[8];
-	int chunkOffsetX = x * WIDTH;
-	int chunkOffsetY = y * WIDTH;
 
 	// Un algo d'une complexité t'as peur 
 	for (int y = 0; y < HEIGHT; y++)
@@ -157,7 +167,7 @@ void Chunk::generateMesh()
 		}
 	}
 
-	mesh = new Mesh(meshVAO, glm::vec3(chunkOffsetX, 0.0f, chunkOffsetY), texture);
+	mesh = new Mesh(meshVAO, glm::vec3(x * WIDTH, 0.0f, y * WIDTH), texture);
 
 	needToUpdate = false;
 }
