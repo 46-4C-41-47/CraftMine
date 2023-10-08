@@ -74,13 +74,11 @@ void Chunk::init()
 			  half_height = (float)HEIGHT * 0.5f,
 			  offsetX = ((SPREAD + (this->x % SPREAD)) % SPREAD) * WIDTH,
 			  offsetY = ((SPREAD + (this->y % SPREAD)) % SPREAD) * WIDTH;
-	
-	int noiseX = floor((float)this->x / SPREAD), noiseY = floor((float)this->y / SPREAD);
 
 	std::unique_ptr<double> heightMap(
 		n.detailed2DNoise(
-			noiseX + noiseFrequency,
-			noiseY + noiseFrequency,
+			floor((float)this->x / SPREAD) + noiseFrequency,
+			floor((float)this->y / SPREAD) + noiseFrequency,
 			noiseBorderSize
 		)
 	);
@@ -91,9 +89,7 @@ void Chunk::init()
 		{
 			for (int x = 0; x < WIDTH; x++)
 			{
-				int newX = (x + offsetX), newY = (z + offsetY);
-
-				if (y < heightMap.get()[newX + newY * noiseBorderSize] * HEIGHT_RANGE + half_height)
+				if (y < heightMap.get()[(x + offsetX) + (z + offsetY) * noiseBorderSize] * HEIGHT_RANGE + half_height)
 					chunkData[getIndex(x, y, z)] = Block::Type::Dirt;
 				else
 					chunkData[getIndex(x, y, z)] = Block::Type::Empty;
@@ -108,6 +104,18 @@ inline Block::Type* Chunk::getBlock(int x, int y, int z)
 	if ((0 <= x && x < WIDTH) && (0 <= y && y < HEIGHT) && (0 <= z && z < WIDTH))
 		return &(chunkData[getIndex(x, y, z)]);
 	return nullptr;
+}
+
+
+bool Chunk::isThereABlock(int x, int y, int z)
+{
+	if ((0 <= x && x < WIDTH) &&
+		(0 <= y && y < HEIGHT) &&
+		(0 <= z && z < WIDTH) &&
+		chunkData[getIndex(x, y, z)] != Block::Type::Empty) {
+		return true;
+	}
+	return false;
 }
 
 
@@ -138,11 +146,10 @@ void Chunk::generateMesh()
 					for (int i = 0; i < 6; i++)
 					{
 						if ((nearCube[i] == nullptr || *nearCube[i] == Block::Type::Empty) 
-							&& !(y == 0           && i == 4) 
-							&& !(z == 0           && i == 0) 
-							&& !(z == (WIDTH - 1) && i == 1)
-							&& !(x == 0           && i == 2)
-							&& !(x == (WIDTH - 1) && i == 3))
+							&& !(z == 0           && i == 0 && (neighbors[1] == nullptr || !neighbors[1]->isThereABlock(x, y, WIDTH - 1)))
+							&& !(z == (WIDTH - 1) && i == 1 && (neighbors[0] == nullptr || !neighbors[0]->isThereABlock(x, y,         0)))
+							&& !(x == 0           && i == 2 && (neighbors[3] == nullptr || !neighbors[3]->isThereABlock(WIDTH - 1, y, z)))
+							&& !(x == (WIDTH - 1) && i == 3 && (neighbors[2] == nullptr || !neighbors[2]->isThereABlock(        0, y, z))))
 						{
 							for (int j = 0; j < Cube::faceSize; j += 8)
 							{
@@ -184,6 +191,15 @@ void Chunk::draw(Shader& shader, glm::mat4& projection, glm::mat4& view)
 }
 
 
+void Chunk::setNeighbor(int index, Chunk* value)
+{
+	neighbors[index] = value;
+
+	delete mesh;
+	generateMesh();
+}
+
+
 glm::vec2 Chunk::updateChunks(Chunk** visibleChunks, const glm::vec2& previousPos, const glm::vec3& pos, Light* l, unsigned int t)
 {
 	const int borderSize = RADIUS * 2 + 1;
@@ -211,6 +227,28 @@ glm::vec2 Chunk::updateChunks(Chunk** visibleChunks, const glm::vec2& previousPo
 				visibleChunks[x + y * borderSize] = visibleChunksCopy[newX + newY * borderSize];
 			else 
 				visibleChunks[x + y * borderSize] = new Chunk(camPosX + (x - RADIUS), camPosY + (y - RADIUS), l, t);
+
+			/*// set current chunk north pointer
+			if (0 <= y - 1)
+			{
+				visibleChunks[x + y * borderSize]->setNeighbor(0, visibleChunks[x + (y - 1) * borderSize]);
+				visibleChunks[x + (y - 1) * borderSize]->setNeighbor(2, visibleChunks[x + y * borderSize]);
+			}
+			else
+			{
+				visibleChunks[x + y * borderSize]->setNeighbor(0, nullptr);
+			}
+
+			// set current chunk west pointer
+			if (0 <= x - 1)
+			{
+				visibleChunks[x + y * borderSize]->setNeighbor(3, visibleChunks[(x - 1) + y * borderSize]);
+				visibleChunks[(x - 1) + y * borderSize]->setNeighbor(2, visibleChunks[x + y * borderSize]);
+			}
+			else
+			{
+				visibleChunks[x + y * borderSize]->setNeighbor(3, nullptr);
+			}*/
 		}
 	}
 

@@ -22,6 +22,10 @@ private:
 	const double noiseFrequency = 0.15413, noiseSeed = 684.6565;
     unsigned int texture, chunkDataSize;
     bool needToUpdate = true;
+	
+	// north south east west
+	Chunk* neighbors[4];
+	
 	std::vector<Block::ChunkBlock>* blocks;
     glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f);
     Mesh* mesh;
@@ -45,4 +49,7 @@ public:
     void draw(Shader& shader, glm::mat4& projection, glm::mat4& view);
 
 	static glm::vec2 updateChunks(Chunk** visibleChunks, const glm::vec2& previousPos, const glm::vec3& pos, Light* l, unsigned int t);
+	bool isThereABlock(int x, int y, int z);
+
+	void setNeighbor(int index, Chunk* value);
 };
