@@ -12,7 +12,9 @@ Mesh::Mesh(vector<float>& v, glm::vec3 p, unsigned int t)
 }
 
 
-Mesh::~Mesh() {}
+Mesh::~Mesh() {
+    glDeleteBuffers(1, &VBO);
+}
 
 
 void Mesh::initMesh(vector<float>& buffer) 

@@ -18,6 +18,8 @@
 
 class Chunk {
 private:
+	static const int cubeFaceSize = 48;
+	static const vector<float> cubeVerticesVAOcnt;
 	const int MIN_HEIGHT = 128, MAX_HEIGHT = 192, HEIGHT_RANGE = 64;
 	const double noiseFrequency = 0.15413, noiseSeed = 684.6565;
     unsigned int texture, chunkDataSize;
@@ -26,9 +28,8 @@ private:
 	// north south east west
 	Chunk* neighbors[4];
 	
-	std::vector<Block::ChunkBlock>* blocks;
     glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f);
-    Mesh* mesh;
+    Mesh* mesh = nullptr;
 	Light* light;
 	Block::Type* chunkData;
 
@@ -36,7 +37,7 @@ private:
 	void addWater();
 	void createCaves();
 	void generateMesh();
-	Block::Type* getBlock(int x, int y, int z);
+	Block::Type getBlock(int x, int y, int z);
 	inline int getIndex(int x, int y, int z) { return x + (y * WIDTH) + (z * WIDTH * HEIGHT); }
 
 public:

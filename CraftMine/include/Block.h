@@ -6,17 +6,18 @@
 
 namespace Block
 {
-	enum class Type 
+	enum class Type
 	{
-		Empty = 0,
-		Dirt = 1,
-		Grass = 2,
-		Stone = 3,
-		Water = 4,
-		Lava = 5,
-		Wood = 6,
-		Leaf = 7,
-		Diamond = 8,
+		Null = 0,
+		Empty = 1,
+		Dirt = 2,
+		Grass = 3,
+		Stone = 4,
+		Water = 5,
+		Lava = 6,
+		Wood = 7,
+		Leaf = 8,
+		Diamond = 9,
 	};
 
 
