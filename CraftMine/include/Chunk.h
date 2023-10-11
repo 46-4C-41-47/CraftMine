@@ -29,7 +29,7 @@ private:
 	Chunk* neighbors[4];
 	
     glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f);
-    Mesh* mesh = nullptr;
+    Mesh* mesh;
 	Light* light;
 	Block::Type* chunkData;
 
@@ -52,5 +52,5 @@ public:
 	static glm::vec2 updateChunks(Chunk** visibleChunks, const glm::vec2& previousPos, const glm::vec3& pos, Light* l, unsigned int t);
 	bool isThereABlock(int x, int y, int z);
 
-	void setNeighbor(int index, Chunk* value);
+	void setNeighbor(Chunk** value);
 };

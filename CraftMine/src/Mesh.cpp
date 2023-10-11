@@ -13,6 +13,7 @@ Mesh::Mesh(vector<float>& v, glm::vec3 p, unsigned int t)
 
 
 Mesh::~Mesh() {
+    glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
 }
 

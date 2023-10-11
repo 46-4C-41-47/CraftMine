@@ -144,10 +144,10 @@ void Chunk::generateMesh()
 					{
 						if ((nearCube[i] == Block::Type::Null || nearCube[i] == Block::Type::Empty)
 							&& !(y == 0           && i == 4)
-							&& !(z == 0           && i == 0 && (neighbors[1] == nullptr || !neighbors[1]->isThereABlock(x, y, WIDTH - 1)))
-							&& !(z == (WIDTH - 1) && i == 1 && (neighbors[0] == nullptr || !neighbors[0]->isThereABlock(x, y,         0)))
-							&& !(x == 0           && i == 2 && (neighbors[3] == nullptr || !neighbors[3]->isThereABlock(WIDTH - 1, y, z)))
-							&& !(x == (WIDTH - 1) && i == 3 && (neighbors[2] == nullptr || !neighbors[2]->isThereABlock(        0, y, z))))
+							&& !(z == 0           && i == 0 && (neighbors[1] == nullptr || neighbors[1]->isThereABlock(x, y, WIDTH - 1)))
+							&& !(z == (WIDTH - 1) && i == 1 && (neighbors[0] == nullptr || neighbors[0]->isThereABlock(x, y,         0)))
+							&& !(x == 0           && i == 2 && (neighbors[3] == nullptr || neighbors[3]->isThereABlock(WIDTH - 1, y, z)))
+							&& !(x == (WIDTH - 1) && i == 3 && (neighbors[2] == nullptr || neighbors[2]->isThereABlock(        0, y, z))))
 						{
 							for (int j = 0; j < cubeFaceSize; j += 8)
 							{
@@ -190,12 +190,20 @@ void Chunk::draw(Shader& shader, glm::mat4& projection, glm::mat4& view)
 }
 
 
-void Chunk::setNeighbor(int index, Chunk* value)
+void Chunk::setNeighbor(Chunk** value)
 {
-	neighbors[index] = value;
+	if (value[0] != neighbors[0] 
+		|| value[1] != neighbors[1] 
+		|| value[2] != neighbors[2] 
+		|| value[3] != neighbors[3]) 
+	{
+		neighbors[0] = value[0];
+		neighbors[1] = value[1];
+		neighbors[2] = value[2];
+		neighbors[3] = value[3];
 
-	delete mesh;
-	generateMesh();
+		generateMesh();
+	}
 }
 
 
@@ -209,54 +217,47 @@ glm::vec2 Chunk::updateChunks(Chunk** visibleChunks, const glm::vec2& previousPo
 	int offsetX = camPosX - (int)previousPos.x;
 	int offsetY = camPosY - (int)previousPos.y;
 
-	int newX, newY;
+	int x, y, newX, newY;
 
+	Chunk* neighborBuffer[4];
 	Chunk* visibleChunksCopy[borderSize * borderSize];
 
 	std::copy(visibleChunks, visibleChunks + borderSize * borderSize, visibleChunksCopy);
 
-	for (int x = 0; x < borderSize; x++)
+	for (int i = 0; i < borderSize * borderSize; i++)
 	{
-		for (int y = 0; y < borderSize; y++)
+		x = i % borderSize;
+		y = i / borderSize;
+
+		newX = x + offsetX;
+		newY = y + offsetY;
+
+		if ((0 <= newX && newX < borderSize) && (0 <= newY && newY < borderSize) && visibleChunks[x + y * borderSize] != nullptr)
 		{
-			newX = x + offsetX;
-			newY = y + offsetY;
-
-			if ((0 <= newX && newX < borderSize) && (0 <= newY && newY < borderSize) && visibleChunks[x + y * borderSize] != nullptr)
-			{
-				visibleChunks[x + y * borderSize] = visibleChunksCopy[newX + newY * borderSize];
-				visibleChunksCopy[newX + newY * borderSize] = nullptr;
-			}
-			else
-			{
-				visibleChunks[x + y * borderSize] = new Chunk(camPosX + (x - RADIUS), camPosY + (y - RADIUS), l, t);
-			}
-			/*// set current chunk north pointer
-			if (0 <= y - 1)
-			{
-				visibleChunks[x + y * borderSize]->setNeighbor(0, visibleChunks[x + (y - 1) * borderSize]);
-				visibleChunks[x + (y - 1) * borderSize]->setNeighbor(2, visibleChunks[x + y * borderSize]);
-			}
-			else
-			{
-				visibleChunks[x + y * borderSize]->setNeighbor(0, nullptr);
-			}
-
-			// set current chunk west pointer
-			if (0 <= x - 1)
-			{
-				visibleChunks[x + y * borderSize]->setNeighbor(3, visibleChunks[(x - 1) + y * borderSize]);
-				visibleChunks[(x - 1) + y * borderSize]->setNeighbor(2, visibleChunks[x + y * borderSize]);
-			}
-			else
-			{
-				visibleChunks[x + y * borderSize]->setNeighbor(3, nullptr);
-			}*/
+			visibleChunks[x + y * borderSize] = visibleChunksCopy[newX + newY * borderSize];
+			visibleChunksCopy[newX + newY * borderSize] = nullptr;
+		}
+		else
+		{
+			visibleChunks[x + y * borderSize] = new Chunk(camPosX + (x - RADIUS), camPosY + (y - RADIUS), l, t);
 		}
 	}
+	
 
 	for (int i = 0; i < borderSize * borderSize; i++)
+	{
+		x = i % borderSize;
+		y = i / borderSize;
+
+		neighborBuffer[0] = (y + 1) < borderSize ? visibleChunks[x + (y + 1) * borderSize] : nullptr;
+		neighborBuffer[2] = (x + 1) < borderSize ? visibleChunks[(x + 1) + y * borderSize] : nullptr;
+		neighborBuffer[1] = 0 <= (y - 1) ? visibleChunks[x + (y - 1) * borderSize] : nullptr;
+		neighborBuffer[3] = 0 <= (x - 1) ? visibleChunks[(x - 1) + y * borderSize] : nullptr;
+
+		visibleChunks[i]->setNeighbor(neighborBuffer);
+
 		delete visibleChunksCopy[i];
+	}
 
 	return glm::vec2((float)camPosX, (float)camPosY);
 }
