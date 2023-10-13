@@ -209,18 +209,17 @@ void Chunk::setNeighbor(Chunk** value)
 
 glm::vec2 Chunk::updateChunks(Chunk** visibleChunks, const glm::vec2& previousPos, const glm::vec3& pos, Light* l, unsigned int t)
 {
-	const int borderSize = RADIUS * 2 + 1;
-	
-	int camPosX = floor(pos.x / WIDTH);
-	int camPosY = floor(pos.z / WIDTH);
-
-	int offsetX = camPosX - (int)previousPos.x;
-	int offsetY = camPosY - (int)previousPos.y;
+	const int borderSize = RADIUS * 2 + 1
+		,camPosX = floor(pos.x / WIDTH)
+		,camPosY = floor(pos.z / WIDTH)
+		,offsetX = camPosX - (int)previousPos.x
+		,offsetY = camPosY - (int)previousPos.y;
 
 	int x, y, newX, newY;
 
 	Chunk* neighborBuffer[4];
 	Chunk* visibleChunksCopy[borderSize * borderSize];
+	std::future<Chunk*>* asyncChunks[borderSize * borderSize] = { nullptr };
 
 	std::copy(visibleChunks, visibleChunks + borderSize * borderSize, visibleChunksCopy);
 
@@ -239,15 +238,21 @@ glm::vec2 Chunk::updateChunks(Chunk** visibleChunks, const glm::vec2& previousPo
 		}
 		else
 		{
-			visibleChunks[x + y * borderSize] = new Chunk(camPosX + (x - RADIUS), camPosY + (y - RADIUS), l, t);
+			//visibleChunks[x + y * borderSize] = new Chunk(camPosX + (x - RADIUS), camPosY + (y - RADIUS), l, t);
+			asyncChunks[i] = new std::future<Chunk*>;
+			*asyncChunks[i] = std::async([=]() {
+				return new Chunk(camPosX + (x - RADIUS), camPosY + (y - RADIUS), l, t);
+			});
 		}
 	}
-	
 
 	for (int i = 0; i < borderSize * borderSize; i++)
 	{
 		x = i % borderSize;
 		y = i / borderSize;
+
+		if (asyncChunks[i] != nullptr)
+			visibleChunks[x + y * borderSize] = asyncChunks[i]->get();
 
 		neighborBuffer[0] = (y + 1) < borderSize ? visibleChunks[x + (y + 1) * borderSize] : nullptr;
 		neighborBuffer[2] = (x + 1) < borderSize ? visibleChunks[(x + 1) + y * borderSize] : nullptr;

@@ -10,6 +10,11 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <thread>
+#include <queue>
+#include <functional>
+#include <mutex>
+
 
 #include "include/Shader.h"
 #include "include/Camera.h"
@@ -18,6 +23,7 @@
 #include "include/Texture.h"
 #include "include/Chunk.h"
 #include "include/Noise.h"
+#include "include/ThreadPool.h"
 
 
 using std::cout;
@@ -102,7 +108,7 @@ Texture* loadTexture(std::string path) {
 }
 
 
-int main()
+/*int main()
 {
     const double delta = 1000.0f / 60;
     const int frameWidth = 1200, frameHeight = 800;
@@ -115,7 +121,7 @@ int main()
 
     Shader* objectShader, *lightShader;
 
-    glm::mat4 projection = glm::perspective(glm::radians(90.0f), aspectRatio, 0.1f, 150.0f);
+    glm::mat4 projection = glm::perspective(glm::radians(90.0f), aspectRatio, 0.1f, 200.0f);
 
     if (!glfwInit())
     {
@@ -199,14 +205,77 @@ int main()
         glfwSwapBuffers(window);
         glfwPollEvents();
 
-        Sleep(max(delta - ((glfwGetTime() - startingTime) / 1000), 0));
+        Sleep(max(delta - ((glfwGetTime() - startingTime) * 1000), 0));
     }
 
     delete cam, objectShader, lightShader, visibleChunks;
 
     glfwTerminate();
     return 0;
+}*/
+
+
+void threadWork(std::queue<std::function<void(void)>>* q, bool* shouldStop)
+{
+    cout << "thread start\n";
+
+    while (!*shouldStop || !q->empty())
+    {
+        if (!q->empty())
+        {
+            q->front()();
+            q->pop();
+        }
+    }
+
+    cout << "thread stopped\n";
 }
+
+
+void someWork(int i)
+{
+    cout << "work " << i << " started\n";
+    cout << "work " << i << " stopped\n\n";
+    Sleep(1000);
+}
+
+
+int main()
+{
+    ThreadPool tp(4);
+
+    tp.submitNoReturn(std::bind(someWork, 0));
+    tp.submitNoReturn(std::bind(someWork, 1));
+    tp.submitNoReturn(std::bind(someWork, 2));
+    tp.submitNoReturn(std::bind(someWork, 3));
+
+    Sleep(3000);
+}
+
+
+/*int main()
+{
+    glfwInit();
+
+    double start, elapsed, avg, sum = 0, d = 1000000;
+    std::mutex m;
+
+    for (int i = 0; i < d; i++)
+    {
+        start = glfwGetTime();
+
+        m.lock();
+        m.unlock();
+
+        sum += (glfwGetTime() - start) * 1000;
+    }
+
+    avg = sum / d;
+
+    cout << "average elapsed time : " << avg << "\n";
+
+    return 0;
+}*/
 
 /*
 TODO :
@@ -216,7 +285,6 @@ faire une doc si j'ai pas la flemme
 rendre asynchrone la generation des chunks
 prise en charge de textures différentes pour les blocs (finir la classe Block)
 ajouter des grottes
-améliorer l'algo de tri des faces à la jointure des chunks(Chunk::generateMesh())
 rendre le décor destructible
 ajouter des nuages
 ajouter un cycle jour nuit

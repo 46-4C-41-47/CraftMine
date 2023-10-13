@@ -9,6 +9,7 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
+#include <future>
 
 #include "Block.h"
 #include "Mesh.h"
@@ -41,7 +42,7 @@ private:
 	inline int getIndex(int x, int y, int z) { return x + (y * WIDTH) + (z * WIDTH * HEIGHT); }
 
 public:
-	static const int WIDTH = 16, HEIGHT = 256, RADIUS = 7, SPREAD = 4;
+	static const int WIDTH = 16, HEIGHT = 256, RADIUS = 8, SPREAD = 4;
 	const int x, y;
 
 	Chunk(int x, int y, Light* l, unsigned int t);
