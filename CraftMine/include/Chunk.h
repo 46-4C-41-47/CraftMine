@@ -1,20 +1,21 @@
 #pragma once
 
+#include <time.h>
 #include <cstdlib>
 #include <stdlib.h>
-#include <time.h>
 
 #include <glm/glm.hpp>
 
-#include <iostream>
-#include <algorithm>
 #include <vector>
 #include <future>
+#include <iostream>
+#include <algorithm>
 
-#include "Block.h"
 #include "Mesh.h"
+#include "Noise.h"
+#include "Block.h"
 #include "Shader.h"
-#include "../include/Noise.h"
+#include "ThreadPool.h"
 
 
 class Chunk {
@@ -40,6 +41,13 @@ private:
 	void generateMesh();
 	Block::Type getBlock(int x, int y, int z);
 	inline int getIndex(int x, int y, int z) { return x + (y * WIDTH) + (z * WIDTH * HEIGHT); }
+	static void setChunkPtr(
+		Chunk** ptr,
+		Light* l,
+		int x,
+		int y,
+		unsigned int t
+	);
 
 public:
 	static const int WIDTH = 16, HEIGHT = 256, RADIUS = 8, SPREAD = 4;
@@ -50,7 +58,14 @@ public:
 
     void draw(Shader& shader, glm::mat4& projection, glm::mat4& view);
 
-	static glm::vec2 updateChunks(Chunk** visibleChunks, const glm::vec2& previousPos, const glm::vec3& pos, Light* l, unsigned int t);
+	static glm::vec2 updateChunks(
+		Chunk** visibleChunks, 
+		Light* l, 
+		ThreadPool& tp, 
+		const glm::vec2& previousPos, 
+		const glm::vec3& pos, 
+		unsigned int t
+	);
 	bool isThereABlock(int x, int y, int z);
 
 	void setNeighbor(Chunk** value);

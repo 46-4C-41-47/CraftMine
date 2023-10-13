@@ -108,7 +108,7 @@ Texture* loadTexture(std::string path) {
 }
 
 
-/*int main()
+int main()
 {
     const double delta = 1000.0f / 60;
     const int frameWidth = 1200, frameHeight = 800;
@@ -117,8 +117,9 @@ Texture* loadTexture(std::string path) {
     double startingTime;
 
     const int tabSize = (Chunk::RADIUS * 2 + 1) * (Chunk::RADIUS * 2 + 1);
-    Chunk* visibleChunks[tabSize] = { nullptr };
 
+    ThreadPool tp(8);
+    Chunk* visibleChunks[tabSize] = { nullptr };
     Shader* objectShader, *lightShader;
 
     glm::mat4 projection = glm::perspective(glm::radians(90.0f), aspectRatio, 0.1f, 200.0f);
@@ -175,12 +176,12 @@ Texture* loadTexture(std::string path) {
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     Texture* t = loadTexture("./res/textures/texture.jpg");
-
-    cam = new Camera(vec3(15.0f, 150.0f, 15.0f), vec3(0.0f, 0.0f, 0.0f));
-
     Light* light = new Light(vec3(0.0f, 180.0f, -5.0f), vec3(0.99f, 0.99f, 0.99f), 0.6f);
-
+    
+    cam = new Camera(vec3(15.0f, 150.0f, 15.0f), vec3(0.0f, 0.0f, 0.0f));
     glm::vec2 previousPos;
+
+    double start, sum = 0, count = 0, avg;
 
     // game loop
     while (!glfwWindowShouldClose(window))
@@ -192,15 +193,21 @@ Texture* loadTexture(std::string path) {
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        previousPos = Chunk::updateChunks(visibleChunks, previousPos, cam->position, light, t->id);
-        //~~~~~~~~^ TODO trouver une alternative pour ce systeme chelou
-        
+        start = glfwGetTime();
+        previousPos = Chunk::updateChunks(visibleChunks, light, tp, previousPos, cam->position, t->id);
+//      ^~~~~~~~~~~ TODO trouver une alternative pour ce systeme chelou
+        sum += (glfwGetTime() - start);
+        count++;
+
         glm::mat4 view = cam->getViewMatrix();
 
         light->draw(*lightShader, projection, view);
 
         for (int i = 0; i < tabSize; i++)
-            visibleChunks[i]->draw(*objectShader, projection, view);
+        {
+            if (visibleChunks[i] != nullptr)
+                visibleChunks[i]->draw(*objectShader, projection, view);
+        }
 
         glfwSwapBuffers(window);
         glfwPollEvents();
@@ -210,46 +217,11 @@ Texture* loadTexture(std::string path) {
 
     delete cam, objectShader, lightShader, visibleChunks;
 
+    avg = (sum / count) * 1000;
+    cout << "update average execution time : " << avg << " ms\n";
+
     glfwTerminate();
     return 0;
-}*/
-
-
-void threadWork(std::queue<std::function<void(void)>>* q, bool* shouldStop)
-{
-    cout << "thread start\n";
-
-    while (!*shouldStop || !q->empty())
-    {
-        if (!q->empty())
-        {
-            q->front()();
-            q->pop();
-        }
-    }
-
-    cout << "thread stopped\n";
-}
-
-
-void someWork(int i)
-{
-    cout << "work " << i << " started\n";
-    cout << "work " << i << " stopped\n\n";
-    Sleep(1000);
-}
-
-
-int main()
-{
-    ThreadPool tp(4);
-
-    tp.submitNoReturn(std::bind(someWork, 0));
-    tp.submitNoReturn(std::bind(someWork, 1));
-    tp.submitNoReturn(std::bind(someWork, 2));
-    tp.submitNoReturn(std::bind(someWork, 3));
-
-    Sleep(3000);
 }
 
 
@@ -257,15 +229,12 @@ int main()
 {
     glfwInit();
 
-    double start, elapsed, avg, sum = 0, d = 1000000;
-    std::mutex m;
+    double start, avg, sum = 0, d = 1000000;
 
     for (int i = 0; i < d; i++)
     {
         start = glfwGetTime();
 
-        m.lock();
-        m.unlock();
 
         sum += (glfwGetTime() - start) * 1000;
     }
