@@ -2,6 +2,7 @@
 
 #include <mutex>
 #include <queue>
+#include <future>
 #include <thread>
 #include <iostream>
 #include <functional>
@@ -10,6 +11,8 @@
 class ThreadPool
 {
 private:
+	static const int THREAD_COUNT = 8;
+	static ThreadPool* instance;
 	bool shutdown;
 
 	std::mutex mutex;
@@ -19,12 +22,14 @@ private:
 
 	void threadWork(int threadIndex);
 
+	ThreadPool();
+
 public:
-	ThreadPool(int nbOfThreads);
+	static ThreadPool* getInstance();
 	~ThreadPool();
 
 	template<typename returnType>
-	void submit(std::function<returnType (void)> func);
+	std::future<returnType> submit(std::function<returnType (void)> func);
 
 	void submitNoReturn(std::function<void (void)> func);
 

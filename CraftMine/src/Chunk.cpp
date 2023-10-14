@@ -47,6 +47,9 @@ const vector<float> Chunk::cubeVerticesVAOcnt = {
 };
 
 
+ThreadPool* Chunk::threadPool = ThreadPool::getInstance();
+
+
 Chunk::Chunk(int x, int y, Light* l, unsigned int t) : x{ x }, y{ y }, light{ l }, texture{ t }
 {
 	chunkData = new Block::Type[WIDTH * WIDTH * HEIGHT];
@@ -202,30 +205,25 @@ void Chunk::setNeighbor(Chunk** value)
 		neighbors[2] = value[2];
 		neighbors[3] = value[3];
 
+		//threadPool->submitNoReturn([=]() { this->generateMesh(); });
 		generateMesh();
 	}
-}
-
-
-void Chunk::setChunkPtr(
-	Chunk** ptr, 
-	Light* l, 
-	int x, 
-	int y, 
-	unsigned int t
-) {
-	*ptr = new Chunk(x, y, l, t);
 }
 
 
 glm::vec2 Chunk::updateChunks(
 	Chunk** visibleChunks,
 	Light* l,
-	ThreadPool& tp,
 	const glm::vec2& previousPos,
 	const glm::vec3& pos,
 	unsigned int t
 ) {
+	bool newChunk = false;
+	double start, end0, end1, end2;
+
+	start = glfwGetTime();
+
+	// init
 	const int borderSize = RADIUS * 2 + 1
 		,camPosX = floor(pos.x / WIDTH)
 		,camPosY = floor(pos.z / WIDTH)
@@ -239,6 +237,10 @@ glm::vec2 Chunk::updateChunks(
 
 	std::copy(visibleChunks, visibleChunks + borderSize * borderSize, visibleChunksCopy);
 
+	end0 = (glfwGetTime() - start) * 1000;
+	start = glfwGetTime();
+
+	// phase 1
 	for (int i = 0; i < borderSize * borderSize; i++)
 	{
 		x = i % borderSize;
@@ -254,18 +256,18 @@ glm::vec2 Chunk::updateChunks(
 		}
 		else
 		{
-			//visibleChunks[x + y * borderSize] = new Chunk(camPosX + (x - RADIUS), camPosY + (y - RADIUS), l, t);
-			tp.submitNoReturn(std::bind(
-				&Chunk::setChunkPtr,
-				&visibleChunks[x + y * borderSize],
-				l,
-				camPosX + (x - RADIUS),
-				camPosY + (y - RADIUS),
-				t
-			));
+			threadPool->submitNoReturn([=]() {
+				int chunkX = camPosX + (x - RADIUS), chunkY = camPosY + (y - RADIUS);
+				visibleChunks[x + y * borderSize] = new Chunk(chunkX, chunkY, l, t);
+			});
+			newChunk = true;
 		}
 	}
 
+	end1 = (glfwGetTime() - start) * 1000;
+	start = glfwGetTime();
+
+	// phase 2
 	for (int i = 0; i < borderSize * borderSize; i++)
 	{
 		x = i % borderSize;
@@ -276,8 +278,19 @@ glm::vec2 Chunk::updateChunks(
 		neighborBuffer[1] = 0 <= (y - 1) ? visibleChunks[x + (y - 1) * borderSize] : nullptr;
 		neighborBuffer[3] = 0 <= (x - 1) ? visibleChunks[(x - 1) + y * borderSize] : nullptr;
 
-		visibleChunks[i]->setNeighbor(neighborBuffer);
+		if (visibleChunks[i] != nullptr)
+			visibleChunks[i]->setNeighbor(neighborBuffer);
 	}
+
+	end2 = (glfwGetTime() - start) * 1000;
+
+	/*if (newChunk)
+	{
+		std::cout << "(Chunk::updateChunks) elpased time :\n";
+		std::cout << "\telpased time 0 : " << end0 << " ms\n";
+		std::cout << "\telpased time 1 : " << end1 << " ms\n";
+		std::cout << "\telpased time 2 : " << end2 << " ms\n\n";
+	}*/
 
 	return glm::vec2((float)camPosX, (float)camPosY);
 }

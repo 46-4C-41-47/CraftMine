@@ -118,7 +118,6 @@ int main()
 
     const int tabSize = (Chunk::RADIUS * 2 + 1) * (Chunk::RADIUS * 2 + 1);
 
-    ThreadPool tp(8);
     Chunk* visibleChunks[tabSize] = { nullptr };
     Shader* objectShader, *lightShader;
 
@@ -181,8 +180,6 @@ int main()
     cam = new Camera(vec3(15.0f, 150.0f, 15.0f), vec3(0.0f, 0.0f, 0.0f));
     glm::vec2 previousPos;
 
-    double start, sum = 0, count = 0, avg;
-
     // game loop
     while (!glfwWindowShouldClose(window))
     {
@@ -193,11 +190,8 @@ int main()
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        start = glfwGetTime();
-        previousPos = Chunk::updateChunks(visibleChunks, light, tp, previousPos, cam->position, t->id);
+        previousPos = Chunk::updateChunks(visibleChunks, light, previousPos, cam->position, t->id);
 //      ^~~~~~~~~~~ TODO trouver une alternative pour ce systeme chelou
-        sum += (glfwGetTime() - start);
-        count++;
 
         glm::mat4 view = cam->getViewMatrix();
 
@@ -216,9 +210,6 @@ int main()
     }
 
     delete cam, objectShader, lightShader, visibleChunks;
-
-    avg = (sum / count) * 1000;
-    cout << "update average execution time : " << avg << " ms\n";
 
     glfwTerminate();
     return 0;
