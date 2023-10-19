@@ -1,7 +1,7 @@
 #include "../include/Mesh.h"
 
 
-Mesh::Mesh(vector<float>& v, glm::vec3 p, unsigned int t) 
+Mesh::Mesh(vector<BufferVertex>& v, glm::vec3 p, unsigned int t)
 {
     texture = t;
     position = p;
@@ -18,8 +18,9 @@ Mesh::~Mesh() {
 }
 
 
-void Mesh::initMesh(vector<float>& buffer) 
+void Mesh::initMesh(vector<BufferVertex>& buffer)
 {
+
     glGenBuffers(1, &VBO);
     glGenVertexArrays(1, &VAO);
 
@@ -27,20 +28,28 @@ void Mesh::initMesh(vector<float>& buffer)
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
     /*   /!\ A potentiellement remplacer par GL_DYNAMIC_DRAW /!\   */
-    glBufferData(GL_ARRAY_BUFFER, buffer.size() * sizeof(float), &buffer[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, buffer.size() * sizeof(BufferVertex), &buffer[0], GL_STATIC_DRAW);
 
-    // vertex positions
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 1, GL_INT, GL_FALSE, sizeof(BufferVertex), (void*)0);
 
-    // vertex normals
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+    // start at 1 to skip the id which is an int not a float
+    int byte_offset = 1;
+    for (int i = 1; i < BV_DISPOSITION_SIZE; i++)
+    {
+        glEnableVertexAttribArray(i);
+        glVertexAttribPointer(
+            i,
+            BV_DISPOSITION[i],
+            GL_FLOAT,
+            GL_FALSE,
+            sizeof(BufferVertex),
+            (void*)(byte_offset * sizeof(float))
+        );
 
-    // vertex texture coords
-    glEnableVertexAttribArray(2);
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-
+        byte_offset = byte_offset + BV_DISPOSITION[i];
+    }
+    
     glBindVertexArray(0);
 }
 
@@ -66,13 +75,13 @@ void Mesh::draw(Shader& shader, Light& light, glm::mat4& projection, glm::mat4& 
 
     // draw mesh
     glBindVertexArray(VAO);
-    glDrawArrays(GL_TRIANGLES, 0, bufferSize / 8);
+    glDrawArrays(GL_TRIANGLES, 0, bufferSize);
 
     glBindVertexArray(0);
 }
 
 
-void Mesh::setBuffer(vector<float>& newBuffer)
+void Mesh::setBuffer(vector<BufferVertex>& newBuffer)
 {
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
 

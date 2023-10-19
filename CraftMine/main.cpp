@@ -2,28 +2,30 @@
 #include <GLFW/glfw3.h>
 
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/string_cast.hpp>
 
 #include <windows.h>
-#include <iostream>
+
+#include <queue>
+#include <mutex>
 #include <vector>
 #include <string>
 #include <thread>
-#include <queue>
+#include <iostream>
 #include <functional>
-#include <mutex>
 
 
-#include "include/Shader.h"
-#include "include/Camera.h"
-#include "include/stb_image.h"
 #include "include/Mesh.h"
-#include "include/Texture.h"
 #include "include/Chunk.h"
 #include "include/Noise.h"
+#include "include/Shader.h"
+#include "include/Camera.h"
+#include "include/Texture.h"
+#include "include/stb_image.h"
 #include "include/ThreadPool.h"
+#include "include/BufferElement.h"
 
 
 using std::cout;
@@ -218,6 +220,30 @@ int main()
 
 /*int main()
 {
+    Chunk c(0, 0, nullptr, 0);
+    std::vector<BufferVertex> b = c.generateMesh();
+
+    int count = 0;
+    for (int* i = (int*)&b[0]; i < (int*)&b[0] + b.size() * 9; i++)
+    {
+        if (count % 9 == 0)
+        {
+            int index = (0xFFFF0000 & (*i)) >> 16, 
+                face_index = (0x0000FF00 & (*i)) >> 8, 
+                vertex_index = 0x000000FF & (*i);
+
+            std::cout << "\nindex : " << index << ", face index : " << face_index << ", vertex index : " << vertex_index << "\n";
+        }
+        else
+            std::cout << "value : " << *(float*)i << "\n";
+
+        count += 1;
+    }
+}*/
+
+
+/*int main()
+{
     glfwInit();
 
     double start, avg, sum = 0, d = 1000000;
@@ -243,6 +269,7 @@ classe Joueur
 ajouter un readme sur git
 faire une doc si j'ai pas la flemme
 rendre asynchrone la generation des chunks
+soft reload des chunks
 prise en charge de textures différentes pour les blocs (finir la classe Block)
 ajouter des grottes
 rendre le décor destructible

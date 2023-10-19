@@ -3,47 +3,47 @@
 
 const vector<float> Chunk::cubeVerticesVAOcnt = {
 	// vertex coordinates    normal vector         texture coordinates
-	  -0.5f, -0.5f, -0.5f,   0.0f,  0.0f, -1.0f,   0.0f, 0.0f, // front
-	   0.5f, -0.5f, -0.5f,   0.0f,  0.0f, -1.0f,   1.0f, 0.0f,
-	   0.5f,  0.5f, -0.5f,   0.0f,  0.0f, -1.0f,   1.0f, 1.0f,
-	   0.5f,  0.5f, -0.5f,   0.0f,  0.0f, -1.0f,   1.0f, 1.0f,
-	  -0.5f,  0.5f, -0.5f,   0.0f,  0.0f, -1.0f,   0.0f, 1.0f,
-	  -0.5f, -0.5f, -0.5f,   0.0f,  0.0f, -1.0f,   0.0f, 0.0f,
+	  0.0f, 0.0f, 0.0f,   0.0f,  0.0f, -1.0f,   0.0f, 0.0f, // front
+	  1.0f, 0.0f, 0.0f,   0.0f,  0.0f, -1.0f,   1.0f, 0.0f,
+	  1.0f, 1.0f, 0.0f,   0.0f,  0.0f, -1.0f,   1.0f, 1.0f,
+	  1.0f, 1.0f, 0.0f,   0.0f,  0.0f, -1.0f,   1.0f, 1.0f,
+	  0.0f, 1.0f, 0.0f,   0.0f,  0.0f, -1.0f,   0.0f, 1.0f,
+	  0.0f, 0.0f, 0.0f,   0.0f,  0.0f, -1.0f,   0.0f, 0.0f,
 
-	  -0.5f, -0.5f,  0.5f,   0.0f,  0.0f,  1.0f,   0.0f, 0.0f, // back
-	   0.5f, -0.5f,  0.5f,   0.0f,  0.0f,  1.0f,   1.0f, 0.0f,
-	   0.5f,  0.5f,  0.5f,   0.0f,  0.0f,  1.0f,   1.0f, 1.0f,
-	   0.5f,  0.5f,  0.5f,   0.0f,  0.0f,  1.0f,   1.0f, 1.0f,
-	  -0.5f,  0.5f,  0.5f,   0.0f,  0.0f,  1.0f,   0.0f, 1.0f,
-	  -0.5f, -0.5f,  0.5f,   0.0f,  0.0f,  1.0f,   0.0f, 0.0f,
+	  0.0f, 0.0f, 1.0f,   0.0f,  0.0f,  1.0f,   0.0f, 0.0f, // back
+	  1.0f, 0.0f, 1.0f,   0.0f,  0.0f,  1.0f,   1.0f, 0.0f,
+	  1.0f, 1.0f, 1.0f,   0.0f,  0.0f,  1.0f,   1.0f, 1.0f,
+	  1.0f, 1.0f, 1.0f,   0.0f,  0.0f,  1.0f,   1.0f, 1.0f,
+	  0.0f, 1.0f, 1.0f,   0.0f,  0.0f,  1.0f,   0.0f, 1.0f,
+	  0.0f, 0.0f, 1.0f,   0.0f,  0.0f,  1.0f,   0.0f, 0.0f,
 
-	  -0.5f,  0.5f,  0.5f,  -1.0f,  0.0f,  0.0f,   1.0f, 0.0f, // left
-	  -0.5f,  0.5f, -0.5f,  -1.0f,  0.0f,  0.0f,   1.0f, 1.0f,
-	  -0.5f, -0.5f, -0.5f,  -1.0f,  0.0f,  0.0f,   0.0f, 1.0f,
-	  -0.5f, -0.5f, -0.5f,  -1.0f,  0.0f,  0.0f,   0.0f, 1.0f,
-	  -0.5f, -0.5f,  0.5f,  -1.0f,  0.0f,  0.0f,   0.0f, 0.0f,
-	  -0.5f,  0.5f,  0.5f,  -1.0f,  0.0f,  0.0f,   1.0f, 0.0f,
+	  0.0f, 1.0f, 1.0f,  -1.0f,  0.0f,  0.0f,   1.0f, 0.0f, // left
+	  0.0f, 1.0f, 0.0f,  -1.0f,  0.0f,  0.0f,   1.0f, 1.0f,
+	  0.0f, 0.0f, 0.0f,  -1.0f,  0.0f,  0.0f,   0.0f, 1.0f,
+	  0.0f, 0.0f, 0.0f,  -1.0f,  0.0f,  0.0f,   0.0f, 1.0f,
+	  0.0f, 0.0f, 1.0f,  -1.0f,  0.0f,  0.0f,   0.0f, 0.0f,
+	  0.0f, 1.0f, 1.0f,  -1.0f,  0.0f,  0.0f,   1.0f, 0.0f,
 
-	   0.5f,  0.5f,  0.5f,   1.0f,  0.0f,  0.0f,   1.0f, 0.0f, // right
-	   0.5f,  0.5f, -0.5f,   1.0f,  0.0f,  0.0f,   1.0f, 1.0f,
-	   0.5f, -0.5f, -0.5f,   1.0f,  0.0f,  0.0f,   0.0f, 1.0f,
-	   0.5f, -0.5f, -0.5f,   1.0f,  0.0f,  0.0f,   0.0f, 1.0f,
-	   0.5f, -0.5f,  0.5f,   1.0f,  0.0f,  0.0f,   0.0f, 0.0f,
-	   0.5f,  0.5f,  0.5f,   1.0f,  0.0f,  0.0f,   1.0f, 0.0f,
+	  1.0f, 1.0f, 1.0f,   1.0f,  0.0f,  0.0f,   1.0f, 0.0f, // right
+	  1.0f, 1.0f, 0.0f,   1.0f,  0.0f,  0.0f,   1.0f, 1.0f,
+	  1.0f, 0.0f, 0.0f,   1.0f,  0.0f,  0.0f,   0.0f, 1.0f,
+	  1.0f, 0.0f, 0.0f,   1.0f,  0.0f,  0.0f,   0.0f, 1.0f,
+	  1.0f, 0.0f, 1.0f,   1.0f,  0.0f,  0.0f,   0.0f, 0.0f,
+	  1.0f, 1.0f, 1.0f,   1.0f,  0.0f,  0.0f,   1.0f, 0.0f,
 
-	  -0.5f, -0.5f, -0.5f,   0.0f, -1.0f,  0.0f,   0.0f, 1.0f, // bottom
-	   0.5f, -0.5f, -0.5f,   0.0f, -1.0f,  0.0f,   1.0f, 1.0f,
-	   0.5f, -0.5f,  0.5f,   0.0f, -1.0f,  0.0f,   1.0f, 0.0f,
-	   0.5f, -0.5f,  0.5f,   0.0f, -1.0f,  0.0f,   1.0f, 0.0f,
-	  -0.5f, -0.5f,  0.5f,   0.0f, -1.0f,  0.0f,   0.0f, 0.0f,
-	  -0.5f, -0.5f, -0.5f,   0.0f, -1.0f,  0.0f,   0.0f, 1.0f,
+	  0.0f, 0.0f, 0.0f,   0.0f, -1.0f,  0.0f,   0.0f, 1.0f, // bottom
+	  1.0f, 0.0f, 0.0f,   0.0f, -1.0f,  0.0f,   1.0f, 1.0f,
+	  1.0f, 0.0f, 1.0f,   0.0f, -1.0f,  0.0f,   1.0f, 0.0f,
+	  1.0f, 0.0f, 1.0f,   0.0f, -1.0f,  0.0f,   1.0f, 0.0f,
+	  0.0f, 0.0f, 1.0f,   0.0f, -1.0f,  0.0f,   0.0f, 0.0f,
+	  0.0f, 0.0f, 0.0f,   0.0f, -1.0f,  0.0f,   0.0f, 1.0f,
 
-	  -0.5f,  0.5f, -0.5f,   0.0f,  1.0f,  0.0f,   0.0f, 1.0f, // top
-	   0.5f,  0.5f, -0.5f,   0.0f,  1.0f,  0.0f,   1.0f, 1.0f,
-	   0.5f,  0.5f,  0.5f,   0.0f,  1.0f,  0.0f,   1.0f, 0.0f,
-	   0.5f,  0.5f,  0.5f,   0.0f,  1.0f,  0.0f,   1.0f, 0.0f,
-	  -0.5f,  0.5f,  0.5f,   0.0f,  1.0f,  0.0f,   0.0f, 0.0f,
-	  -0.5f,  0.5f, -0.5f,   0.0f,  1.0f,  0.0f,   0.0f, 1.0f
+	  0.0f, 1.0f, 0.0f,   0.0f,  1.0f,  0.0f,   0.0f, 1.0f, // top
+	  1.0f, 1.0f, 0.0f,   0.0f,  1.0f,  0.0f,   1.0f, 1.0f,
+	  1.0f, 1.0f, 1.0f,   0.0f,  1.0f,  0.0f,   1.0f, 0.0f,
+	  1.0f, 1.0f, 1.0f,   0.0f,  1.0f,  0.0f,   1.0f, 0.0f,
+	  0.0f, 1.0f, 1.0f,   0.0f,  1.0f,  0.0f,   0.0f, 0.0f,
+	  0.0f, 1.0f, 0.0f,   0.0f,  1.0f,  0.0f,   0.0f, 1.0f
 };
 
 
@@ -55,13 +55,14 @@ Chunk::Chunk(int x, int y, Light* l, unsigned int t) : x{ x }, y{ y }, light{ l 
 	chunkData = new Block::Type[WIDTH * WIDTH * HEIGHT];
 	chunkDataSize = WIDTH * WIDTH * HEIGHT;
 	init();
+	generateMesh();
 }
 
 
 Chunk::~Chunk() 
 {
 	delete[] chunkData;
-	delete mesh;
+	delete mesh, buffer;
 }
 
 
@@ -81,9 +82,9 @@ void Chunk::init()
 		)
 	);
 
-	for (int y = 0; y < HEIGHT; y++)
+	for (int z = 0; z < WIDTH; z++)
 	{
-		for (int z = 0; z < WIDTH; z++)
+		for (int y = 0; y < HEIGHT; y++)
 		{
 			for (int x = 0; x < WIDTH; x++)
 			{
@@ -119,15 +120,19 @@ bool Chunk::isThereABlock(int x, int y, int z)
 }
 
 
+void Chunk::updateMesh()
+{
+	threadPool->submitNoReturn(std::bind(&Chunk::generateMesh, this));
+}
+
+
 void Chunk::generateMesh()
 {
-	vector<float> meshVAO;
-	float buffer[8];
+	std::vector<BufferVertex>* meshVAO = new std::vector<BufferVertex>();
 
-	// Un algo d'une complexité t'as peur 
-	for (int y = 0; y < HEIGHT; y++)
+	for (int z = 0; z < WIDTH; z++)
 	{
-		for (int z = 0; z < WIDTH; z++)
+		for (int y = 0; y < HEIGHT; y++)
 		{
 			for (int x = 0; x < WIDTH; x++)
 			{
@@ -146,27 +151,32 @@ void Chunk::generateMesh()
 					for (int i = 0; i < 6; i++)
 					{
 						if ((nearCube[i] == Block::Type::Null || nearCube[i] == Block::Type::Empty)
-							&& !(y == 0           && i == 4)
-							&& !(z == 0           && i == 0 && (neighbors[1] == nullptr || neighbors[1]->isThereABlock(x, y, WIDTH - 1)))
-							&& !(z == (WIDTH - 1) && i == 1 && (neighbors[0] == nullptr || neighbors[0]->isThereABlock(x, y,         0)))
-							&& !(x == 0           && i == 2 && (neighbors[3] == nullptr || neighbors[3]->isThereABlock(WIDTH - 1, y, z)))
-							&& !(x == (WIDTH - 1) && i == 3 && (neighbors[2] == nullptr || neighbors[2]->isThereABlock(        0, y, z))))
+							&& !(y == 0 && i == 4)
+							&& !(z == 0 && i == 0 && (neighbors[1] == nullptr || neighbors[1]->isThereABlock(x, y, WIDTH - 1)))
+							&& !(x == 0 && i == 2 && (neighbors[3] == nullptr || neighbors[3]->isThereABlock(WIDTH - 1, y, z)))
+							&& !(z == (WIDTH - 1) && i == 1 && (neighbors[0] == nullptr || neighbors[0]->isThereABlock(x, y, 0)))
+							&& !(x == (WIDTH - 1) && i == 3 && (neighbors[2] == nullptr || neighbors[2]->isThereABlock(0, y, z))))
 						{
+							// iterate over each vertex which compose a cube face
 							for (int j = 0; j < cubeFaceSize; j += 8)
 							{
-								int triangleIndex = i * cubeFaceSize + j;
+								int vertex_index = i * cubeFaceSize + j;
 
-								buffer[0] = cubeVerticesVAOcnt[triangleIndex + 0] + (float)x;
-								buffer[1] = cubeVerticesVAOcnt[triangleIndex + 1] + (float)y;
-								buffer[2] = cubeVerticesVAOcnt[triangleIndex + 2] + (float)z;
+								BufferVertex bv = {
+									(getIndex(x, y, z) << 16) | (i << 8) | (j / 8),
 
-								buffer[3] = cubeVerticesVAOcnt[triangleIndex + 3];
-								buffer[4] = cubeVerticesVAOcnt[triangleIndex + 4];
-								buffer[5] = cubeVerticesVAOcnt[triangleIndex + 5];
-								buffer[6] = cubeVerticesVAOcnt[triangleIndex + 6];
-								buffer[7] = cubeVerticesVAOcnt[triangleIndex + 7];
+									cubeVerticesVAOcnt[vertex_index + 0] + (float)x,
+									cubeVerticesVAOcnt[vertex_index + 1] + (float)y,
+									cubeVerticesVAOcnt[vertex_index + 2] + (float)z,
 
-								meshVAO.insert(meshVAO.end(), buffer, buffer + 8);
+									cubeVerticesVAOcnt[vertex_index + 3],
+									cubeVerticesVAOcnt[vertex_index + 4],
+									cubeVerticesVAOcnt[vertex_index + 5],
+									cubeVerticesVAOcnt[vertex_index + 6],
+									cubeVerticesVAOcnt[vertex_index + 7]
+								};
+
+								meshVAO->insert(meshVAO->end(), bv);
 							}
 						}
 					}
@@ -175,21 +185,19 @@ void Chunk::generateMesh()
 		}
 	}
 
-	delete mesh;
-	mesh = new Mesh(meshVAO, glm::vec3(x * WIDTH, 0.0f, y * WIDTH), texture);
-
-	needToUpdate = false;
+	buffer = new ChunkMeshBuffer(meshVAO);
+	mesh = new Mesh(*meshVAO, glm::vec3(x * WIDTH, 0.0f, y * WIDTH), texture);
 }
 
 
 void Chunk::draw(Shader& shader, glm::mat4& projection, glm::mat4& view) 
 {
-	if (needToUpdate)
+	if (mesh != nullptr)
 	{
-		generateMesh();
+		meshMutex.lock();
+		mesh->draw(shader, *light, projection, view);
+		meshMutex.unlock();
 	}
-
-	mesh->draw(shader, *light, projection, view);
 }
 
 
@@ -207,6 +215,7 @@ void Chunk::setNeighbor(Chunk** value)
 
 		//threadPool->submitNoReturn([=]() { this->generateMesh(); });
 		generateMesh();
+		//updateMesh();
 	}
 }
 
@@ -256,10 +265,10 @@ glm::vec2 Chunk::updateChunks(
 		}
 		else
 		{
-			threadPool->submitNoReturn([=]() {
+			//threadPool->submitNoReturn([=]() {
 				int chunkX = camPosX + (x - RADIUS), chunkY = camPosY + (y - RADIUS);
 				visibleChunks[x + y * borderSize] = new Chunk(chunkX, chunkY, l, t);
-			});
+			//});
 			newChunk = true;
 		}
 	}
@@ -280,6 +289,8 @@ glm::vec2 Chunk::updateChunks(
 
 		if (visibleChunks[i] != nullptr)
 			visibleChunks[i]->setNeighbor(neighborBuffer);
+
+		delete visibleChunksCopy[i];
 	}
 
 	end2 = (glfwGetTime() - start) * 1000;
