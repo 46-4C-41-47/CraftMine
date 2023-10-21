@@ -35,6 +35,9 @@
 				SOUTH
 */
 
+using func::getChunkIndex;
+using func::getBufferId;
+
 using params::chunk::WIDTH;
 using params::chunk::HEIGHT;
 using params::chunk::SPREAD;
@@ -64,11 +67,6 @@ private:
 	void createCaves();
 	void generateMesh();
 	Block::Type getBlock(int x, int y, int z);
-	inline int getIndex(int x, int y, int z) { return x + (y * WIDTH) + (z * WIDTH * HEIGHT); }
-	inline unsigned int getBufferId(int x, int y, int z, int faceIndex, int vertexIndex) 
-	{ 
-		return (getIndex(x, y, z) << 16) | (faceIndex << 8) | vertexIndex; 
-	}
 
 public:
 	const int x, y;

@@ -25,10 +25,10 @@ public:
 
 	int find(unsigned int id);
 
-	void insertCube(unsigned int id, int x, int y, int z);
+	void insertCube(int x, int y, int z);
 	void removeCube(unsigned int id);
 
-	void insertFace(unsigned int id, int x, int y, int z, int face_index);
+	void insertFace(int x, int y, int z, int face_index);
 	void removeFace(unsigned int id);
 
 	void print();

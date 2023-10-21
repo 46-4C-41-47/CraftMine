@@ -33,7 +33,15 @@ namespace params
 
 namespace func
 {
-
+	static inline int getChunkIndex(int x, int y, int z) 
+	{ 
+		return x + (y * params::chunk::WIDTH) + (z * params::chunk::WIDTH * params::chunk::HEIGHT);
+	}
+	
+	static inline unsigned int getBufferId(int x, int y, int z, int faceIndex, int vertexIndex)
+	{
+		return (getChunkIndex(x, y, z) << 16) | (faceIndex << 8) | vertexIndex;
+	}
 }
 
 

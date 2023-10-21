@@ -43,9 +43,9 @@ void Chunk::init()
 			for (int x = 0; x < WIDTH; x++)
 			{
 				if (y < heightMap[(x + offsetX) + (z + offsetY) * noiseBorderSize] * HEIGHT_RANGE + half_height)
-					chunkData[getIndex(x, y, z)] = Block::Type::Dirt;
+					chunkData[getChunkIndex(x, y, z)] = Block::Type::Dirt;
 				else
-					chunkData[getIndex(x, y, z)] = Block::Type::Empty;
+					chunkData[getChunkIndex(x, y, z)] = Block::Type::Empty;
 			}
 		}
 	}
@@ -57,7 +57,7 @@ void Chunk::init()
 inline Block::Type Chunk::getBlock(int x, int y, int z)
 {
 	if ((0 <= x && x < WIDTH) && (0 <= y && y < HEIGHT) && (0 <= z && z < WIDTH))
-		return chunkData[getIndex(x, y, z)];
+		return chunkData[getChunkIndex(x, y, z)];
 	return Block::Type::Null;
 }
 
@@ -67,7 +67,7 @@ bool Chunk::isThereABlock(int x, int y, int z)
 	if ((0 <= x && x < WIDTH ) &&
 		(0 <= y && y < HEIGHT) &&
 		(0 <= z && z < WIDTH ) &&
-		chunkData[getIndex(x, y, z)] != Block::Type::Empty) {
+		chunkData[getChunkIndex(x, y, z)] != Block::Type::Empty) {
 		return true;
 	}
 	return false;
@@ -154,7 +154,7 @@ void Chunk::updateBorders(int borderIndex)
 	{
 		for (int j = 0; i < HEIGHT; j++)
 		{
-			chunkData[getIndex(i, j, WIDTH)];
+			chunkData[getChunkIndex(i, j, WIDTH)];
 
 			if (neighbors[borderIndex]->isThereABlock(i, j, 0))
 			{
