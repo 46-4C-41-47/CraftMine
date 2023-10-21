@@ -16,20 +16,36 @@
 #include "Noise.h"
 #include "Block.h"
 #include "Shader.h"
+#include "Parameters.h"
 #include "ThreadPool.h"
 #include "BufferElement.h"
 #include "ChunkMeshBuffer.h"
 
+/*
+				NORTH
+		---------------------
+	  y	|					|
+		|					|
+		|					|
+   WEST	|		CHUNK		| EAST
+		|					|
+		|					|
+		|					|
+		--------------------- x
+				SOUTH
+*/
+
+using params::chunk::WIDTH;
+using params::chunk::HEIGHT;
+using params::chunk::SPREAD;
+using params::chunk::RADIUS;
+using params::chunk::HEIGHT_RANGE;
+
 
 class Chunk {
 private:
-	static const int cubeFaceSize = 48;
-	static const std::vector<float> cubeVerticesVAOcnt;
 	static ThreadPool* threadPool;
-	
-	const int MIN_HEIGHT = 128, MAX_HEIGHT = 192, HEIGHT_RANGE = 64;
-	const double noiseFrequency = 0.15413, noiseSeed = 684.6565;
-    
+	    
 	unsigned int texture, chunkDataSize;
     bool updatingMesh = false;
 	
@@ -44,14 +60,17 @@ private:
 	
 	void init();
 	void addWater();
-	void updateMesh();
+	void updateBorders(int borderIndex);
 	void createCaves();
 	void generateMesh();
 	Block::Type getBlock(int x, int y, int z);
 	inline int getIndex(int x, int y, int z) { return x + (y * WIDTH) + (z * WIDTH * HEIGHT); }
+	inline unsigned int getBufferId(int x, int y, int z, int faceIndex, int vertexIndex) 
+	{ 
+		return (getIndex(x, y, z) << 16) | (faceIndex << 8) | vertexIndex; 
+	}
 
 public:
-	static const int WIDTH = 16, HEIGHT = 256, RADIUS = 8, SPREAD = 4;
 	const int x, y;
 
 	Chunk(int x, int y, Light* l, unsigned int t);

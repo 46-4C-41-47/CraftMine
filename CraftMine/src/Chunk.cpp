@@ -1,52 +1,6 @@
 #include "../include/Chunk.h"
 
 
-const vector<float> Chunk::cubeVerticesVAOcnt = {
-	// vertex coordinates    normal vector         texture coordinates
-	  0.0f, 0.0f, 0.0f,   0.0f,  0.0f, -1.0f,   0.0f, 0.0f, // front
-	  1.0f, 0.0f, 0.0f,   0.0f,  0.0f, -1.0f,   1.0f, 0.0f,
-	  1.0f, 1.0f, 0.0f,   0.0f,  0.0f, -1.0f,   1.0f, 1.0f,
-	  1.0f, 1.0f, 0.0f,   0.0f,  0.0f, -1.0f,   1.0f, 1.0f,
-	  0.0f, 1.0f, 0.0f,   0.0f,  0.0f, -1.0f,   0.0f, 1.0f,
-	  0.0f, 0.0f, 0.0f,   0.0f,  0.0f, -1.0f,   0.0f, 0.0f,
-
-	  0.0f, 0.0f, 1.0f,   0.0f,  0.0f,  1.0f,   0.0f, 0.0f, // back
-	  1.0f, 0.0f, 1.0f,   0.0f,  0.0f,  1.0f,   1.0f, 0.0f,
-	  1.0f, 1.0f, 1.0f,   0.0f,  0.0f,  1.0f,   1.0f, 1.0f,
-	  1.0f, 1.0f, 1.0f,   0.0f,  0.0f,  1.0f,   1.0f, 1.0f,
-	  0.0f, 1.0f, 1.0f,   0.0f,  0.0f,  1.0f,   0.0f, 1.0f,
-	  0.0f, 0.0f, 1.0f,   0.0f,  0.0f,  1.0f,   0.0f, 0.0f,
-
-	  0.0f, 1.0f, 1.0f,  -1.0f,  0.0f,  0.0f,   1.0f, 0.0f, // left
-	  0.0f, 1.0f, 0.0f,  -1.0f,  0.0f,  0.0f,   1.0f, 1.0f,
-	  0.0f, 0.0f, 0.0f,  -1.0f,  0.0f,  0.0f,   0.0f, 1.0f,
-	  0.0f, 0.0f, 0.0f,  -1.0f,  0.0f,  0.0f,   0.0f, 1.0f,
-	  0.0f, 0.0f, 1.0f,  -1.0f,  0.0f,  0.0f,   0.0f, 0.0f,
-	  0.0f, 1.0f, 1.0f,  -1.0f,  0.0f,  0.0f,   1.0f, 0.0f,
-
-	  1.0f, 1.0f, 1.0f,   1.0f,  0.0f,  0.0f,   1.0f, 0.0f, // right
-	  1.0f, 1.0f, 0.0f,   1.0f,  0.0f,  0.0f,   1.0f, 1.0f,
-	  1.0f, 0.0f, 0.0f,   1.0f,  0.0f,  0.0f,   0.0f, 1.0f,
-	  1.0f, 0.0f, 0.0f,   1.0f,  0.0f,  0.0f,   0.0f, 1.0f,
-	  1.0f, 0.0f, 1.0f,   1.0f,  0.0f,  0.0f,   0.0f, 0.0f,
-	  1.0f, 1.0f, 1.0f,   1.0f,  0.0f,  0.0f,   1.0f, 0.0f,
-
-	  0.0f, 0.0f, 0.0f,   0.0f, -1.0f,  0.0f,   0.0f, 1.0f, // bottom
-	  1.0f, 0.0f, 0.0f,   0.0f, -1.0f,  0.0f,   1.0f, 1.0f,
-	  1.0f, 0.0f, 1.0f,   0.0f, -1.0f,  0.0f,   1.0f, 0.0f,
-	  1.0f, 0.0f, 1.0f,   0.0f, -1.0f,  0.0f,   1.0f, 0.0f,
-	  0.0f, 0.0f, 1.0f,   0.0f, -1.0f,  0.0f,   0.0f, 0.0f,
-	  0.0f, 0.0f, 0.0f,   0.0f, -1.0f,  0.0f,   0.0f, 1.0f,
-
-	  0.0f, 1.0f, 0.0f,   0.0f,  1.0f,  0.0f,   0.0f, 1.0f, // top
-	  1.0f, 1.0f, 0.0f,   0.0f,  1.0f,  0.0f,   1.0f, 1.0f,
-	  1.0f, 1.0f, 1.0f,   0.0f,  1.0f,  0.0f,   1.0f, 0.0f,
-	  1.0f, 1.0f, 1.0f,   0.0f,  1.0f,  0.0f,   1.0f, 0.0f,
-	  0.0f, 1.0f, 1.0f,   0.0f,  1.0f,  0.0f,   0.0f, 0.0f,
-	  0.0f, 1.0f, 0.0f,   0.0f,  1.0f,  0.0f,   0.0f, 1.0f
-};
-
-
 ThreadPool* Chunk::threadPool = ThreadPool::getInstance();
 
 
@@ -68,7 +22,7 @@ Chunk::~Chunk()
 
 void Chunk::init()
 {
-	Noise n(noiseSeed);
+	Noise n(params::noise::SEED);
 	const int noiseBorderSize = WIDTH * SPREAD,
 			  half_height = (float)HEIGHT * 0.5f,
 			  offsetX = ((SPREAD + (this->x % SPREAD)) % SPREAD) * WIDTH,
@@ -76,8 +30,8 @@ void Chunk::init()
 
 	double* heightMap(
 		n.detailed2DNoise(
-			floor((float)this->x / SPREAD) + noiseFrequency,
-			floor((float)this->y / SPREAD) + noiseFrequency,
+			floor((float)this->x / SPREAD) + params::noise::FREQUENCY,
+			floor((float)this->y / SPREAD) + params::noise::FREQUENCY,
 			noiseBorderSize
 		)
 	);
@@ -120,12 +74,6 @@ bool Chunk::isThereABlock(int x, int y, int z)
 }
 
 
-void Chunk::updateMesh()
-{
-	threadPool->submitNoReturn(std::bind(&Chunk::generateMesh, this));
-}
-
-
 void Chunk::generateMesh()
 {
 	std::vector<BufferVertex>* meshVAO = new std::vector<BufferVertex>();
@@ -158,22 +106,23 @@ void Chunk::generateMesh()
 							&& !(x == (WIDTH - 1) && i == 3 && (neighbors[2] == nullptr || neighbors[2]->isThereABlock(0, y, z))))
 						{
 							// iterate over each vertex which compose a cube face
-							for (int j = 0; j < cubeFaceSize; j += 8)
+							for (int j = 0; j < ChunkMeshBuffer::cube_face_size; j += 8)
 							{
-								int vertex_index = i * cubeFaceSize + j;
+								int vertex_index = i * ChunkMeshBuffer::cube_face_size + j;
 
 								BufferVertex bv = {
-									(getIndex(x, y, z) << 16) | (i << 8) | (j / 8),
+									getBufferId(x, y, z, i, j / 8),
+									//(getIndex(x, y, z) << 16) | (i << 8) | (j / 8),
 
-									cubeVerticesVAOcnt[vertex_index + 0] + (float)x,
-									cubeVerticesVAOcnt[vertex_index + 1] + (float)y,
-									cubeVerticesVAOcnt[vertex_index + 2] + (float)z,
+									ChunkMeshBuffer::cube_vertices[vertex_index + 0] + (float)x,
+									ChunkMeshBuffer::cube_vertices[vertex_index + 1] + (float)y,
+									ChunkMeshBuffer::cube_vertices[vertex_index + 2] + (float)z,
 
-									cubeVerticesVAOcnt[vertex_index + 3],
-									cubeVerticesVAOcnt[vertex_index + 4],
-									cubeVerticesVAOcnt[vertex_index + 5],
-									cubeVerticesVAOcnt[vertex_index + 6],
-									cubeVerticesVAOcnt[vertex_index + 7]
+									ChunkMeshBuffer::cube_vertices[vertex_index + 3],
+									ChunkMeshBuffer::cube_vertices[vertex_index + 4],
+									ChunkMeshBuffer::cube_vertices[vertex_index + 5],
+									ChunkMeshBuffer::cube_vertices[vertex_index + 6],
+									ChunkMeshBuffer::cube_vertices[vertex_index + 7]
 								};
 
 								meshVAO->insert(meshVAO->end(), bv);
@@ -185,8 +134,38 @@ void Chunk::generateMesh()
 		}
 	}
 
+	delete buffer, mesh;
+
 	buffer = new ChunkMeshBuffer(meshVAO);
 	mesh = new Mesh(*meshVAO, glm::vec3(x * WIDTH, 0.0f, y * WIDTH), texture);
+}
+
+
+void Chunk::updateBorders(int borderIndex)
+{
+	/*
+	chunkData[getIndex(    i, j, WIDTH)]; // north
+	chunkData[getIndex(    i, j,     0)]; // south
+	chunkData[getIndex(WIDTH, j,     i)]; // est
+	chunkData[getIndex(    0, j,     i)]; // west
+	*/
+
+	for (int i = 0; i < WIDTH; i++)
+	{
+		for (int j = 0; i < HEIGHT; j++)
+		{
+			chunkData[getIndex(i, j, WIDTH)];
+
+			if (neighbors[borderIndex]->isThereABlock(i, j, 0))
+			{
+				buffer->removeFace(getBufferId(i, j, 0, 1, 0));
+			}
+			else
+			{
+				//buffer->insertFace(getBufferId(i, j, 0, 1, 0));
+			}
+		}
+	}
 }
 
 
@@ -214,8 +193,7 @@ void Chunk::setNeighbor(Chunk** value)
 		neighbors[3] = value[3];
 
 		//threadPool->submitNoReturn([=]() { this->generateMesh(); });
-		generateMesh();
-		//updateMesh();
+		//generateMesh();
 	}
 }
 

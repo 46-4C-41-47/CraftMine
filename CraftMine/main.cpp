@@ -118,7 +118,7 @@ int main()
 
     double startingTime;
 
-    const int tabSize = (Chunk::RADIUS * 2 + 1) * (Chunk::RADIUS * 2 + 1);
+    const int tabSize = (params::chunk::RADIUS * 2 + 1) * (params::chunk::RADIUS * 2 + 1);
 
     Chunk* visibleChunks[tabSize] = { nullptr };
     Shader* objectShader, *lightShader;
@@ -270,6 +270,7 @@ ajouter un readme sur git
 faire une doc si j'ai pas la flemme
 rendre asynchrone la generation des chunks
 soft reload des chunks
+finir la classe camera
 prise en charge de textures différentes pour les blocs (finir la classe Block)
 ajouter des grottes
 rendre le décor destructible

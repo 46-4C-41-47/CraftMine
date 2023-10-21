@@ -4,29 +4,32 @@
 #include <iostream>
 #include <algorithm>
 
+#include "Parameters.h"
 #include "BufferElement.h"
 
 
 class ChunkMeshBuffer {
 private:
-	static const int cube_face_size = 48;
-	static const std::vector<float> cube_vertices;
 	std::vector<BufferVertex>* buffer;
 
-	int getInterpolationIndex(int id);
+	int getInterpolationIndex(unsigned int id);
 
 public:
+	static const std::vector<float> cube_vertices;
 	static const int VERTEX_SIZE = 8, COORDINATES_SIZE = 3, NORMALS_SIZE = 3, TEXTURES_SIZE = 2;
+	static const int cube_face_size = 48;
 
 	ChunkMeshBuffer() : buffer{ new std::vector<BufferVertex> } {}
 	ChunkMeshBuffer(std::vector<BufferVertex>* constructedBuffer);
 	~ChunkMeshBuffer();
 
-	void insertCube(int id, int x, int y, int z);
-	void removeCube(int id);
+	int find(unsigned int id);
 
-	void insertFace(int id, int x, int y, int z, int face_index);
-	void removeFace(int id, int x, int y, int z, int face_index);
+	void insertCube(unsigned int id, int x, int y, int z);
+	void removeCube(unsigned int id);
+
+	void insertFace(unsigned int id, int x, int y, int z, int face_index);
+	void removeFace(unsigned int id);
 
 	void print();
 

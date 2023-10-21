@@ -61,7 +61,7 @@ ChunkMeshBuffer::~ChunkMeshBuffer()
 }
 
 
-int ChunkMeshBuffer::getInterpolationIndex(int id)
+int ChunkMeshBuffer::getInterpolationIndex(unsigned int id)
 {
 	for (int i = 0; i < buffer->size(); i++)
 	{
@@ -73,13 +73,29 @@ int ChunkMeshBuffer::getInterpolationIndex(int id)
 }
 
 
-void ChunkMeshBuffer::insertCube(int id, int x, int y, int z)
+int ChunkMeshBuffer::find(unsigned int id)
 {
+	int start = 0, end = buffer->size() - 1, middle;
+	
+	while (start <= end)
+	{
+		middle = floor((start + end) / 2);
 
+		if ((*buffer)[middle].id == id)
+			return middle;
+
+		else if (id < (*buffer)[middle].id)
+			end = middle - 1;
+		
+		else
+			start = middle + 1;
+	}
+
+	return -1;
 }
 
 
-void ChunkMeshBuffer::insertFace(int id, int x, int y, int z, int face_index)
+void ChunkMeshBuffer::insertFace(unsigned int id, int x, int y, int z, int face_index)
 {
 	int index = getInterpolationIndex(id);
 
@@ -106,6 +122,15 @@ void ChunkMeshBuffer::insertFace(int id, int x, int y, int z, int face_index)
 }
 
 
+void ChunkMeshBuffer::removeFace(unsigned int id)
+{
+	int index = find(id);
+
+	if (index != -1)
+		buffer->erase(buffer->begin() + id);
+}
+
+
 void ChunkMeshBuffer::print()
 {
 	for (int i = 0; i < buffer->size(); i++)
@@ -117,8 +142,8 @@ void ChunkMeshBuffer::print()
 		std::cout << "z : " << (*buffer)[i].z << "\n";
 
 		std::cout << "normal x : " << (*buffer)[i].normal_x << "\n";
-		std::cout << "normal y : " << (*buffer)[i].normal_x << "\n";
-		std::cout << "normal z : " << (*buffer)[i].normal_x << "\n";
+		std::cout << "normal y : " << (*buffer)[i].normal_y << "\n";
+		std::cout << "normal z : " << (*buffer)[i].normal_z << "\n";
 
 		std::cout << "texture x : " << (*buffer)[i].texture_x << "\n";
 		std::cout << "texture y : " << (*buffer)[i].texture_y << "\n\n";
