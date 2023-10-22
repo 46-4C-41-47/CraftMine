@@ -112,7 +112,6 @@ void Chunk::generateMesh()
 
 								BufferVertex bv = {
 									getBufferId(x, y, z, i, j / 8),
-									//(getIndex(x, y, z) << 16) | (i << 8) | (j / 8),
 
 									ChunkMeshBuffer::cube_vertices[vertex_index + 0] + (float)x,
 									ChunkMeshBuffer::cube_vertices[vertex_index + 1] + (float)y,
@@ -193,7 +192,7 @@ void Chunk::setNeighbor(Chunk** value)
 		neighbors[3] = value[3];
 
 		//threadPool->submitNoReturn([=]() { this->generateMesh(); });
-		//generateMesh();
+		generateMesh();
 	}
 }
 
