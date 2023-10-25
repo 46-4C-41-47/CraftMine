@@ -10,11 +10,11 @@
 
 class ChunkMeshBuffer {
 private:
-	std::vector<BufferVertex>* buffer;
 
 	int getInterpolationIndex(unsigned int id);
 
 public:
+	std::vector<BufferVertex>* buffer;
 	static const std::vector<float> cube_vertices;
 	static const int VERTEX_SIZE = 8, COORDINATES_SIZE = 3, NORMALS_SIZE = 3, TEXTURES_SIZE = 2;
 	static const int cube_face_size = 48;

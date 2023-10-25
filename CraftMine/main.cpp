@@ -220,30 +220,6 @@ int main()
 
 /*int main()
 {
-    Chunk c(0, 0, nullptr, 0);
-    std::vector<BufferVertex> b = c.generateMesh();
-
-    int count = 0;
-    for (int* i = (int*)&b[0]; i < (int*)&b[0] + b.size() * 9; i++)
-    {
-        if (count % 9 == 0)
-        {
-            int index = (0xFFFF0000 & (*i)) >> 16, 
-                face_index = (0x0000FF00 & (*i)) >> 8, 
-                vertex_index = 0x000000FF & (*i);
-
-            std::cout << "\nindex : " << index << ", face index : " << face_index << ", vertex index : " << vertex_index << "\n";
-        }
-        else
-            std::cout << "value : " << *(float*)i << "\n";
-
-        count += 1;
-    }
-}*/
-
-
-/*int main()
-{
     glfwInit();
 
     double start, avg, sum = 0, d = 1000000;

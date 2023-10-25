@@ -99,12 +99,12 @@ void ChunkMeshBuffer::insertFace(int x, int y, int z, int face_index)
 {
 	int index = getInterpolationIndex(func::getBufferId(x, y, z, face_index, 0));
 
-	for (int i = 0; i < cube_face_size; i += 8)
+	for (int i = 0; i < cube_face_size / 8; i++)
 	{
-		int vertex_index = face_index * cube_face_size + i;
+		int vertex_index = face_index * cube_face_size + i * 8;
 
 		BufferVertex bv = {
-			func::getBufferId(x, y, z, face_index, i / 8),
+			func::getBufferId(x, y, z, face_index, i),
 
 			cube_vertices[vertex_index + 0] + (float)x,
 			cube_vertices[vertex_index + 1] + (float)y,
@@ -117,17 +117,17 @@ void ChunkMeshBuffer::insertFace(int x, int y, int z, int face_index)
 			cube_vertices[vertex_index + 7]
 		};
 
-		buffer->insert(buffer->begin() + index + i / 8, bv);
+		buffer->insert(buffer->begin() + index + i, bv);
 	}
 }
 
 
 void ChunkMeshBuffer::removeFace(unsigned int id)
 {
-	int index = find(id);
+	int offset = find(id);
 
-	if (index != -1)
-		buffer->erase(buffer->begin() + id);
+	if (offset != -1)
+		buffer->erase(buffer->begin() + offset, buffer->begin() + offset + 6);
 }
 
 

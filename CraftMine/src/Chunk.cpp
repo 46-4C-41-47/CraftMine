@@ -148,20 +148,17 @@ void Chunk::updateBorders(int borderIndex)
 	chunkData[getIndex(WIDTH, j,     i)]; // est
 	chunkData[getIndex(    0, j,     i)]; // west
 	*/
-
-	for (int i = 0; i < WIDTH; i++)
+	if (neighbors[borderIndex] != nullptr)
 	{
-		for (int j = 0; i < HEIGHT; j++)
+		for (int i = 0; i < WIDTH; i++)
 		{
-			chunkData[getChunkIndex(i, j, WIDTH)];
+			for (int j = 0; j < HEIGHT; j++)
+			{
+				if (neighbors[borderIndex]->isThereABlock(i, j, 0))
+					buffer->removeFace(getBufferId(i, j, WIDTH, 1, 0));
 
-			if (neighbors[borderIndex]->isThereABlock(i, j, 0))
-			{
-				buffer->removeFace(getBufferId(i, j, 0, 1, 0));
-			}
-			else
-			{
-				//buffer->insertFace(getBufferId(i, j, 0, 1, 0));
+				else if (buffer->find(getBufferId(i, j, WIDTH, 1, 0)) != -1)
+					buffer->insertFace(i, j, WIDTH, 1);
 			}
 		}
 	}
@@ -193,6 +190,7 @@ void Chunk::setNeighbor(Chunk** value)
 
 		//threadPool->submitNoReturn([=]() { this->generateMesh(); });
 		generateMesh();
+		//updateBorders(NORTH);
 	}
 }
 

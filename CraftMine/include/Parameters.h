@@ -1,13 +1,9 @@
 #pragma once
 
-
-enum class cardinal
-{
-	NORTH = 0,
-	SOUTH = 1,
-	 EAST = 2,
-	 WEST = 3
-};
+static const int NORTH = 0;
+static const int SOUTH = 1;
+static const int EAST = 2;
+static const int WEST = 3;
 
 
 namespace params 
