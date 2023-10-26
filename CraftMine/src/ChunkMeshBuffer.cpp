@@ -97,6 +97,9 @@ int ChunkMeshBuffer::find(unsigned int id)
 
 void ChunkMeshBuffer::insertFace(int x, int y, int z, int face_index)
 {
+	if (find(func::getBufferId(x, y, z, face_index, 0)) != -1)
+		return;
+
 	int index = getInterpolationIndex(func::getBufferId(x, y, z, face_index, 0));
 
 	for (int i = 0; i < cube_face_size / 8; i++)

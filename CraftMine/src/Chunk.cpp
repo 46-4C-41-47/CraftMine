@@ -1,7 +1,7 @@
 #include "../include/Chunk.h"
 
 
-ThreadPool* Chunk::threadPool = ThreadPool::getInstance();
+//ThreadPool* Chunk::threadPool = ThreadPool::getInstance();
 
 
 Chunk::Chunk(int x, int y, Light* l, unsigned int t) : x{ x }, y{ y }, light{ l }, texture{ t }
@@ -136,7 +136,7 @@ void Chunk::generateMesh()
 	delete buffer, mesh;
 
 	buffer = new ChunkMeshBuffer(meshVAO);
-	mesh = new Mesh(*meshVAO, glm::vec3(x * WIDTH, 0.0f, y * WIDTH), texture);
+	//mesh = new Mesh(*meshVAO, glm::vec3(x * WIDTH, 0.0f, y * WIDTH), texture);
 }
 
 
@@ -189,8 +189,8 @@ void Chunk::setNeighbor(Chunk** value)
 		neighbors[3] = value[3];
 
 		//threadPool->submitNoReturn([=]() { this->generateMesh(); });
-		generateMesh();
-		//updateBorders(NORTH);
+		//generateMesh();
+		updateBorders(NORTH);
 	}
 }
 

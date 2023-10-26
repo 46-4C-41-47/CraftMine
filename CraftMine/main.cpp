@@ -110,7 +110,7 @@ Texture* loadTexture(std::string path) {
 }
 
 
-int main()
+/*int main()
 {
     const double delta = 1000.0f / 60;
     const int frameWidth = 1200, frameHeight = 800;
@@ -215,6 +215,25 @@ int main()
 
     glfwTerminate();
     return 0;
+}*/
+
+
+int main()
+{
+    Chunk* c1 = new Chunk(0, 0, nullptr, 0);
+    Chunk* c2 = new Chunk(0, 1, nullptr, 0);
+
+    for (int i = 0; i < params::chunk::WIDTH; i++)
+    {
+        for (int j = 0; j < params::chunk::HEIGHT; j++)
+        {
+            if (!c2->isThereABlock(i, j, 0) && c1->isThereABlock(i, j, WIDTH - 1))
+            {
+                c1->buffer->insertFace(i, j, WIDTH - 1, 1);
+                std::cout << "insert x : " << i << ", y : " << j << "\n";
+            }
+        }
+    }
 }
 
 

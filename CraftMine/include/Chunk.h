@@ -52,7 +52,6 @@ private:
 	unsigned int texture, chunkDataSize;
     bool updatingMesh = false;
 	
-	ChunkMeshBuffer* buffer;
 	Chunk* neighbors[4]; /* north south east west */
     Mesh* mesh;
 	Light* light;
@@ -70,6 +69,7 @@ private:
 
 public:
 	const int x, y;
+	ChunkMeshBuffer* buffer;
 
 	Chunk(int x, int y, Light* l, unsigned int t);
 	~Chunk();

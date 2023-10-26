@@ -28,7 +28,7 @@ void Mesh::initMesh(vector<BufferVertex>& buffer)
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
     /*   /!\ A potentiellement remplacer par GL_DYNAMIC_DRAW /!\   */
-    glBufferData(GL_ARRAY_BUFFER, buffer.size() * sizeof(BufferVertex), &buffer[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, buffer.size() * sizeof(BufferVertex), &buffer[0], GL_DYNAMIC_DRAW);
 
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 1, GL_INT, GL_FALSE, sizeof(BufferVertex), (void*)0);
@@ -86,5 +86,5 @@ void Mesh::setBuffer(vector<BufferVertex>& newBuffer)
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
     /*   /!\ A potentiellement remplacer par GL_DYNAMIC_DRAW /!\   */
-    glBufferData(GL_ARRAY_BUFFER, newBuffer.size() * sizeof(float), &newBuffer[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, newBuffer.size() * sizeof(float), &newBuffer[0], GL_DYNAMIC_DRAW);
 }
