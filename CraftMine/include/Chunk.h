@@ -86,4 +86,6 @@ public:
 	bool isThereABlock(int x, int y, int z);
 
 	void setNeighbor(Chunk** value);
+
+	void updateMesh();
 };

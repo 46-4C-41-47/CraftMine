@@ -2,7 +2,7 @@
 
 
 const std::vector<float> ChunkMeshBuffer::cube_vertices = {
-	// vertex coordinates    normal vector         texture coordinates
+   // vertex coordinates  normal vector         texture coordinates
 	  0.0f, 0.0f, 0.0f,   0.0f,  0.0f, -1.0f,   0.0f, 0.0f, // front
 	  1.0f, 0.0f, 0.0f,   0.0f,  0.0f, -1.0f,   1.0f, 0.0f,
 	  1.0f, 1.0f, 0.0f,   0.0f,  0.0f, -1.0f,   1.0f, 1.0f,

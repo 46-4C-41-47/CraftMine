@@ -133,10 +133,10 @@ void Chunk::generateMesh()
 		}
 	}
 
-	delete buffer, mesh;
-
+	delete buffer;
 	buffer = new ChunkMeshBuffer(meshVAO);
-	//mesh = new Mesh(*meshVAO, glm::vec3(x * WIDTH, 0.0f, y * WIDTH), texture);
+	
+	updateMesh();
 }
 
 
@@ -162,6 +162,13 @@ void Chunk::updateBorders(int borderIndex)
 			}
 		}
 	}
+}
+
+
+void Chunk::updateMesh()
+{
+	delete mesh;
+	mesh = new Mesh(*buffer->getData(), glm::vec3(x * WIDTH, 0.0f, y * WIDTH), texture);
 }
 
 
