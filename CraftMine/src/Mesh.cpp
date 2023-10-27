@@ -81,10 +81,8 @@ void Mesh::draw(Shader& shader, Light& light, glm::mat4& projection, glm::mat4& 
 }
 
 
-void Mesh::setBuffer(vector<BufferVertex>& newBuffer)
+void Mesh::updateBuffer(vector<BufferVertex>& newBuffer, size_t elementSize)
 {
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-
-    /*   /!\ A potentiellement remplacer par GL_DYNAMIC_DRAW /!\   */
-    glBufferData(GL_ARRAY_BUFFER, newBuffer.size() * sizeof(float), &newBuffer[0], GL_DYNAMIC_DRAW);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, newBuffer.size() * elementSize, &newBuffer[0]);
 }

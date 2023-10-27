@@ -30,5 +30,5 @@ public:
     ~Mesh();
 
     void draw(Shader& shader, Light& light, glm::mat4& projection, glm::mat4& view);
-    void setBuffer(vector<BufferVertex>& newBuffer);
+    void updateBuffer(vector<BufferVertex>& newBuffer, size_t elementSize);
 };

@@ -35,14 +35,26 @@
 				SOUTH
 */
 
-using func::getChunkIndex;
-using func::getBufferId;
+using constants::NORTH;
+using constants::SOUTH;
+using constants::EAST;
+using constants::WEST;
+
+using constants::FRONT;
+using constants::BACK;
+using constants::LEFT;
+using constants::RIGHT;
+using constants::BOTTOM;
+using constants::TOP;
 
 using params::chunk::WIDTH;
 using params::chunk::HEIGHT;
 using params::chunk::SPREAD;
 using params::chunk::RADIUS;
 using params::chunk::HEIGHT_RANGE;
+
+using func::getChunkIndex;
+using func::getBufferId;
 
 
 class Chunk {
@@ -56,20 +68,20 @@ private:
     Mesh* mesh;
 	Light* light;
 	Block::Type* chunkData;
+	ChunkMeshBuffer* buffer;
 
 	std::mutex meshMutex;
     glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f);
 	
 	void init();
 	void addWater();
-	void updateBorders(int borderIndex);
 	void createCaves();
 	void generateMesh();
+	void updateBorders();
 	Block::Type getBlock(int x, int y, int z);
 
 public:
 	const int x, y;
-	ChunkMeshBuffer* buffer;
 
 	Chunk(int x, int y, Light* l, unsigned int t);
 	~Chunk();

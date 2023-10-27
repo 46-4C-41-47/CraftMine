@@ -110,7 +110,7 @@ Texture* loadTexture(std::string path) {
 }
 
 
-/*int main()
+int main()
 {
     const double delta = 1000.0f / 60;
     const int frameWidth = 1200, frameHeight = 800;
@@ -136,6 +136,7 @@ Texture* loadTexture(std::string path) {
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     GLFWwindow* window = glfwCreateWindow(frameWidth, frameHeight, "CraftMine", NULL, NULL);
+    glfwSetWindowPos(window, 1920, 200);
 
     if (window == NULL)
     {
@@ -215,10 +216,10 @@ Texture* loadTexture(std::string path) {
 
     glfwTerminate();
     return 0;
-}*/
+}
 
 
-int main()
+/*int main()
 {
     const double delta = 1000.0f / 60;
     const int frameWidth = 1200, frameHeight = 800;
@@ -241,6 +242,7 @@ int main()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     GLFWwindow* window = glfwCreateWindow(frameWidth, frameHeight, "CraftMine", NULL, NULL);
+    glfwSetWindowPos(window, 1920, 200);
 
     if (window == NULL)
     {
@@ -294,9 +296,9 @@ int main()
     {
         for (int j = 0; j < params::chunk::HEIGHT; j++)
         {
-            if (!c1->isThereABlock(0, j, i) && c2->isThereABlock(params::chunk::WIDTH - 1, j, i))
+            if (!c1->isThereABlock(params::chunk::WIDTH - 1, j, i) && c2->isThereABlock(0, j, i))
             {
-                c2->buffer->insertFace(params::chunk::WIDTH - 1, j, i, 3);
+                c2->buffer->insertFace(0, j, i, 2);
                 std::cout << "insert z : " << i << ", y : " << j << "\n";
             }
         }
@@ -333,7 +335,7 @@ int main()
 
     glfwTerminate();
     return 0;
-}
+}*/
 
 
 /*int main()

@@ -99,11 +99,11 @@ void Chunk::generateMesh()
 					for (int i = 0; i < 6; i++)
 					{
 						if ((nearCube[i] == Block::Type::Null || nearCube[i] == Block::Type::Empty)
-							&& !(y == 0 && i == 4)
-							&& !(z == 0 && i == 0 && (neighbors[1] == nullptr || neighbors[1]->isThereABlock(x, y, WIDTH - 1)))
-							&& !(x == 0 && i == 2 && (neighbors[3] == nullptr || neighbors[3]->isThereABlock(WIDTH - 1, y, z)))
-							&& !(z == (WIDTH - 1) && i == 1 && (neighbors[0] == nullptr || neighbors[0]->isThereABlock(x, y, 0)))
-							&& !(x == (WIDTH - 1) && i == 3 && (neighbors[2] == nullptr || neighbors[2]->isThereABlock(0, y, z))))
+							&& !(i == 4 && y == 0)
+							&& !(i == 0 && z == 0)
+							&& !(i == 2 && x == 0)
+							&& !(i == 1 && z == (WIDTH - 1))
+							&& !(i == 3 && x == (WIDTH - 1)))
 						{
 							// iterate over each vertex which compose a cube face
 							for (int j = 0; j < ChunkMeshBuffer::cube_face_size; j += 8)
@@ -140,28 +140,47 @@ void Chunk::generateMesh()
 }
 
 
-void Chunk::updateBorders(int borderIndex)
+void Chunk::updateBorders()
 {
-	/*
-	chunkData[getIndex(    i, j, WIDTH)]; // north
-	chunkData[getIndex(    i, j,     0)]; // south
-	chunkData[getIndex(WIDTH, j,     i)]; // est
-	chunkData[getIndex(    0, j,     i)]; // west
-	*/
-	if (neighbors[borderIndex] != nullptr)
+	for (int i = 0; i < WIDTH; i++)
 	{
-		for (int i = 0; i < WIDTH; i++)
+		for (int j = 0; j < HEIGHT; j++)
 		{
-			for (int j = 0; j < HEIGHT; j++)
+			// NORTH
+			if (neighbors[NORTH] != nullptr 
+				&& !neighbors[NORTH]->isThereABlock(i, j, 0)
+				&& isThereABlock(i, j, params::chunk::WIDTH - 1))
 			{
-				if (neighbors[borderIndex]->isThereABlock(i, j, 0))
-					buffer->removeFace(getBufferId(i, j, WIDTH, 1, 0));
+				buffer->insertFace(i, j, params::chunk::WIDTH - 1, BACK);
+			}
 
-				else if (buffer->find(getBufferId(i, j, WIDTH, 1, 0)) != -1)
-					buffer->insertFace(i, j, WIDTH, 1);
+			// SOUTH
+			if (neighbors[SOUTH] != nullptr
+				&& !neighbors[SOUTH]->isThereABlock(i, j, params::chunk::WIDTH - 1)
+				&& isThereABlock(i, j, 0))
+			{
+				buffer->insertFace(i, j, 0, FRONT);
+			}
+
+			// EAST
+			if (neighbors[EAST] != nullptr
+				&& !neighbors[EAST]->isThereABlock(0, j, i)
+				&& isThereABlock(params::chunk::WIDTH - 1, j, i))
+			{
+				buffer->insertFace(params::chunk::WIDTH - 1, j, i, RIGHT);
+			}
+
+			// WEST
+			if (neighbors[WEST] != nullptr
+				&& !neighbors[WEST]->isThereABlock(params::chunk::WIDTH - 1, j, i)
+				&& isThereABlock(0, j, i))
+			{
+				buffer->insertFace(0, j, i, LEFT);
 			}
 		}
 	}
+	
+	updateMesh();
 }
 
 
@@ -197,7 +216,7 @@ void Chunk::setNeighbor(Chunk** value)
 
 		//threadPool->submitNoReturn([=]() { this->generateMesh(); });
 		//generateMesh();
-		updateBorders(NORTH);
+		updateBorders();
 	}
 }
 
@@ -264,10 +283,10 @@ glm::vec2 Chunk::updateChunks(
 		x = i % borderSize;
 		y = i / borderSize;
 
-		neighborBuffer[0] = (y + 1) < borderSize ? visibleChunks[x + (y + 1) * borderSize] : nullptr;
-		neighborBuffer[2] = (x + 1) < borderSize ? visibleChunks[(x + 1) + y * borderSize] : nullptr;
-		neighborBuffer[1] = 0 <= (y - 1) ? visibleChunks[x + (y - 1) * borderSize] : nullptr;
-		neighborBuffer[3] = 0 <= (x - 1) ? visibleChunks[(x - 1) + y * borderSize] : nullptr;
+		neighborBuffer[NORTH] = (y + 1) < borderSize ? visibleChunks[x + (y + 1) * borderSize] : nullptr;
+		neighborBuffer[EAST]  = (x + 1) < borderSize ? visibleChunks[(x + 1) + y * borderSize] : nullptr;
+		neighborBuffer[SOUTH] = 0 <= (y - 1) ? visibleChunks[x + (y - 1) * borderSize] : nullptr;
+		neighborBuffer[WEST]  = 0 <= (x - 1) ? visibleChunks[(x - 1) + y * borderSize] : nullptr;
 
 		if (visibleChunks[i] != nullptr)
 			visibleChunks[i]->setNeighbor(neighborBuffer);
@@ -282,7 +301,8 @@ glm::vec2 Chunk::updateChunks(
 		std::cout << "(Chunk::updateChunks) elpased time :\n";
 		std::cout << "\telpased time 0 : " << end0 << " ms\n";
 		std::cout << "\telpased time 1 : " << end1 << " ms\n";
-		std::cout << "\telpased time 2 : " << end2 << " ms\n\n";
+		std::cout << "\telpased time 2 : " << end2 << " ms\n";
+		std::cout << "\ttotal : " << (end0 + end1 + end2) << " ms\n\n";
 	}*/
 
 	return glm::vec2((float)camPosX, (float)camPosY);
