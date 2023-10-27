@@ -62,7 +62,6 @@ private:
 	static ThreadPool* threadPool;
 	    
 	unsigned int texture, chunkDataSize;
-    bool updatingMesh = false;
 	
 	Chunk* neighbors[4]; /* north south east west */
     Mesh* mesh;
@@ -70,15 +69,16 @@ private:
 	Block::Type* chunkData;
 	ChunkMeshBuffer* buffer;
 
+	std::future<ChunkMeshBuffer*> asyncBuffer;
 	std::mutex meshMutex;
     glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f);
 	
 	void init();
 	void addWater();
 	void createCaves();
-	void generateMesh();
 	void updateBorders();
 	Block::Type getBlock(int x, int y, int z);
+	ChunkMeshBuffer* generateMesh();
 
 public:
 	const int x, y;

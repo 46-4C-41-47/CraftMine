@@ -110,7 +110,7 @@ Texture* loadTexture(std::string path) {
 }
 
 
-int main()
+/*int main()
 {
     const double delta = 1000.0f / 60;
     const int frameWidth = 1200, frameHeight = 800;
@@ -216,148 +216,36 @@ int main()
 
     glfwTerminate();
     return 0;
-}
-
-
-/*int main()
-{
-    const double delta = 1000.0f / 60;
-    const int frameWidth = 1200, frameHeight = 800;
-    const float aspectRatio = (float)frameWidth / (float)frameHeight;
-
-    double startingTime;
-
-    Shader* objectShader, * lightShader;
-
-    glm::mat4 projection = glm::perspective(glm::radians(90.0f), aspectRatio, 0.1f, 200.0f);
-
-    if (!glfwInit())
-    {
-        cerr << "Initialization of GLFW failed\n";
-        return 1;
-    }
-
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-    GLFWwindow* window = glfwCreateWindow(frameWidth, frameHeight, "CraftMine", NULL, NULL);
-    glfwSetWindowPos(window, 1920, 200);
-
-    if (window == NULL)
-    {
-        cerr << "GLFW window creation failed\n";
-        glfwTerminate();
-        return 2;
-    }
-
-    glfwMakeContextCurrent(window);
-
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-    {
-        cerr << "Failed to initialize GLAD\n";
-        return 3;
-    }
-
-    glViewport(0, 0, frameWidth, frameHeight);
-
-    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-    glfwSetCursorPosCallback(window, mouse_callback);
-
-    try
-    {
-        objectShader = new Shader(
-            "./res/shaders/vertexShader.glsl",
-            "./res/shaders/fragmentShader.glsl"
-        );
-        lightShader = new Shader(
-            "./res/shaders/light/lightVertexShader.glsl",
-            "./res/shaders/light/lightFragmentShader.glsl"
-        );
-    }
-    catch (std::exception)
-    {
-        return 1;
-    }
-
-    glEnable(GL_DEPTH_TEST);
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-
-    Texture* t = loadTexture("./res/textures/texture.jpg");
-    Light* light = new Light(vec3(0.0f, 180.0f, -5.0f), vec3(0.99f, 0.99f, 0.99f), 0.6f);
-
-    cam = new Camera(vec3(15.0f, 150.0f, 15.0f), vec3(0.0f, 0.0f, 0.0f));
-    glm::vec2 previousPos;
-
-    Chunk* c1 = new Chunk(0, 0, light, t->id);
-    Chunk* c2 = new Chunk(1, 0, light, t->id);
-
-    for (int i = 0; i < params::chunk::WIDTH; i++)
-    {
-        for (int j = 0; j < params::chunk::HEIGHT; j++)
-        {
-            if (!c1->isThereABlock(params::chunk::WIDTH - 1, j, i) && c2->isThereABlock(0, j, i))
-            {
-                c2->buffer->insertFace(0, j, i, 2);
-                std::cout << "insert z : " << i << ", y : " << j << "\n";
-            }
-        }
-    }
-    double start = glfwGetTime();
-    c2->updateMesh();
-    double end = (glfwGetTime() - start) * 1000;
-    std::cout << "update time : " << end << " ms\n";
-
-    // game loop
-    while (!glfwWindowShouldClose(window))
-    {
-        startingTime = glfwGetTime();
-
-        processInput(window, cam, light);
-
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        glm::mat4 view = cam->getViewMatrix();
-
-        light->draw(*lightShader, projection, view);
-
-        c1->draw(*objectShader, projection, view);
-        c2->draw(*objectShader, projection, view);
-
-        glfwSwapBuffers(window);
-        glfwPollEvents();
-
-        Sleep(max(delta - ((glfwGetTime() - startingTime) * 1000), 0));
-    }
-
-    delete cam, objectShader, lightShader;
-
-    glfwTerminate();
-    return 0;
 }*/
 
 
-/*int main()
+int main()
 {
     glfwInit();
 
-    double start, avg, sum = 0, d = 1000000;
+    double start, avg, sum = 0, d = 1000;
+
+    std::function<void(void)> f = []() { int x = 2; };
 
     for (int i = 0; i < d; i++)
     {
         start = glfwGetTime();
 
+        
 
         sum += (glfwGetTime() - start) * 1000;
     }
 
     avg = sum / d;
 
-    cout << "average elapsed time : " << avg << "\n";
+    cout << "average elapsed time : " << avg << " ms\n";
+    cout << d << " iterations\n";
+    char a;
+    std::cin >> a;
 
+    glfwTerminate();
     return 0;
-}*/
+}
 
 /*
 TODO :
@@ -365,7 +253,6 @@ classe Joueur
 ajouter un readme sur git
 faire une doc si j'ai pas la flemme
 rendre asynchrone la generation des chunks
-soft reload des chunks
 finir la classe camera
 prise en charge de textures différentes pour les blocs (finir la classe Block)
 ajouter des grottes

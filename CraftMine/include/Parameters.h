@@ -1,5 +1,8 @@
 #pragma once
 
+#include <future>
+#include <chrono>
+
 
 namespace constants
 {
@@ -49,6 +52,12 @@ namespace func
 	static inline unsigned int getBufferId(int x, int y, int z, int faceIndex, int vertexIndex)
 	{
 		return (getChunkIndex(x, y, z) << 16) | (faceIndex << 8) | vertexIndex;
+	}
+
+	template<typename T>
+	static inline bool isFuturReady(const std::future<T>& f) 
+	{
+		return f.wait_for(std::chrono::seconds(0)) == std::future_status::ready;
 	}
 }
 

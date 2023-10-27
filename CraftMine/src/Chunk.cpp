@@ -8,8 +8,11 @@ Chunk::Chunk(int x, int y, Light* l, unsigned int t) : x{ x }, y{ y }, light{ l 
 {
 	chunkData = new Block::Type[WIDTH * WIDTH * HEIGHT];
 	chunkDataSize = WIDTH * WIDTH * HEIGHT;
-	init();
-	generateMesh();
+	
+	asyncBuffer = std::async([&]() {
+			init();
+			return generateMesh();
+		});
 }
 
 
@@ -74,7 +77,7 @@ bool Chunk::isThereABlock(int x, int y, int z)
 }
 
 
-void Chunk::generateMesh()
+ChunkMeshBuffer* Chunk::generateMesh()
 {
 	std::vector<BufferVertex>* meshVAO = new std::vector<BufferVertex>();
 
@@ -106,12 +109,12 @@ void Chunk::generateMesh()
 							&& !(i == 3 && x == (WIDTH - 1)))
 						{
 							// iterate over each vertex which compose a cube face
-							for (int j = 0; j < ChunkMeshBuffer::cube_face_size; j += 8)
+							for (int j = 0; j < ChunkMeshBuffer::cube_face_size / 8; j++)
 							{
-								int vertex_index = i * ChunkMeshBuffer::cube_face_size + j;
+								int vertex_index = i * ChunkMeshBuffer::cube_face_size + j * 8;
 
 								BufferVertex bv = {
-									getBufferId(x, y, z, i, j / 8),
+									getBufferId(x, y, z, i, j),
 
 									ChunkMeshBuffer::cube_vertices[vertex_index + 0] + (float)x,
 									ChunkMeshBuffer::cube_vertices[vertex_index + 1] + (float)y,
@@ -134,14 +137,15 @@ void Chunk::generateMesh()
 	}
 
 	delete buffer;
-	buffer = new ChunkMeshBuffer(meshVAO);
-	
-	updateMesh();
+	return new ChunkMeshBuffer(meshVAO);
 }
 
 
 void Chunk::updateBorders()
 {
+	if (buffer == nullptr)
+		return;
+
 	for (int i = 0; i < WIDTH; i++)
 	{
 		for (int j = 0; j < HEIGHT; j++)
@@ -193,12 +197,18 @@ void Chunk::updateMesh()
 
 void Chunk::draw(Shader& shader, glm::mat4& projection, glm::mat4& view) 
 {
-	if (mesh != nullptr)
+	if (mesh == nullptr)
 	{
-		meshMutex.lock();
-		mesh->draw(shader, *light, projection, view);
-		meshMutex.unlock();
+		if (func::isFuturReady(asyncBuffer))
+		{
+			buffer = asyncBuffer.get();
+			updateMesh();
+		}
+		else
+			return;
 	}
+
+	mesh->draw(shader, *light, projection, view);
 }
 
 
@@ -214,8 +224,6 @@ void Chunk::setNeighbor(Chunk** value)
 		neighbors[2] = value[2];
 		neighbors[3] = value[3];
 
-		//threadPool->submitNoReturn([=]() { this->generateMesh(); });
-		//generateMesh();
 		updateBorders();
 	}
 }
@@ -266,10 +274,8 @@ glm::vec2 Chunk::updateChunks(
 		}
 		else
 		{
-			//threadPool->submitNoReturn([=]() {
-				int chunkX = camPosX + (x - RADIUS), chunkY = camPosY + (y - RADIUS);
-				visibleChunks[x + y * borderSize] = new Chunk(chunkX, chunkY, l, t);
-			//});
+			int chunkX = camPosX + (x - RADIUS), chunkY = camPosY + (y - RADIUS);
+			visibleChunks[x + y * borderSize] = new Chunk(chunkX, chunkY, l, t);
 			newChunk = true;
 		}
 	}
@@ -296,14 +302,14 @@ glm::vec2 Chunk::updateChunks(
 
 	end2 = (glfwGetTime() - start) * 1000;
 
-	/*if (newChunk)
+	if (newChunk)
 	{
 		std::cout << "(Chunk::updateChunks) elpased time :\n";
 		std::cout << "\telpased time 0 : " << end0 << " ms\n";
 		std::cout << "\telpased time 1 : " << end1 << " ms\n";
 		std::cout << "\telpased time 2 : " << end2 << " ms\n";
 		std::cout << "\ttotal : " << (end0 + end1 + end2) << " ms\n\n";
-	}*/
+	}
 
 	return glm::vec2((float)camPosX, (float)camPosY);
 }
