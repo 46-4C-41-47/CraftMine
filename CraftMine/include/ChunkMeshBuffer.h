@@ -10,7 +10,6 @@
 
 class ChunkMeshBuffer {
 private:
-
 	int getInterpolationIndex(unsigned int id);
 
 public:

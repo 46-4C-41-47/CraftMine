@@ -26,8 +26,8 @@ namespace params
 		static const int
 			WIDTH = 16,
 			HEIGHT = 256,
-			RADIUS = 8, // number of chunks visible around the player
-			SPREAD = 4, // number of noise value on one chunk border
+			RADIUS = 20, // nombre de chunks visible autour du joueur
+			SPREAD = 8,
 			GROUND_MIN_HEIGHT = 128,
 			GROUND_MAX_HEIGHT = 192,
 			HEIGHT_RANGE = GROUND_MAX_HEIGHT - GROUND_MIN_HEIGHT;
@@ -38,6 +38,16 @@ namespace params
 		static const double 
 			FREQUENCY = 0.15413, 
 			SEED = 684.6565;
+	}
+
+	namespace graphical
+	{
+		static const int FRAME_WIDTH = 1200, FRAME_HEIGHT = 800;
+		static const float 
+			DELTA = 1000.0f / 60, 
+			ASPECT_RATIO = (float)FRAME_WIDTH / (float)FRAME_HEIGHT,
+			NEAR_PLANE = 0.1f,
+			FAR_PLANE = 400.0f;
 	}
 }
 

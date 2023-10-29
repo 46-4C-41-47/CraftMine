@@ -63,14 +63,14 @@ private:
 	    
 	unsigned int texture, chunkDataSize;
 	
-	Chunk* neighbors[4]; /* north south east west */
+	Light& light;
     Mesh* mesh;
-	Light* light;
+	Chunk* neighbors[4]; /* north south east west */
 	Block::Type* chunkData;
 	ChunkMeshBuffer* buffer;
 
 	std::future<ChunkMeshBuffer*> asyncBuffer;
-	std::mutex meshMutex;
+	std::mutex meshMutex, bufferMutex;
     glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f);
 	
 	void init();
@@ -83,21 +83,20 @@ private:
 public:
 	const int x, y;
 
-	Chunk(int x, int y, Light* l, unsigned int t);
+	Chunk(int x, int y, Light& l, unsigned int t);
+	Chunk(const Chunk&) = delete;
 	~Chunk();
 
     void draw(Shader& shader, glm::mat4& projection, glm::mat4& view);
 
 	static glm::vec2 updateChunks(
 		Chunk** visibleChunks, 
-		Light* l, 
+		Light& l, 
 		const glm::vec2& previousPos, 
 		const glm::vec3& pos, 
 		unsigned int t
 	);
 	bool isThereABlock(int x, int y, int z);
-
 	void setNeighbor(Chunk** value);
-
 	void updateMesh();
 };

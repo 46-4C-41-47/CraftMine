@@ -110,12 +110,8 @@ Texture* loadTexture(std::string path) {
 }
 
 
-/*int main()
+int main()
 {
-    const double delta = 1000.0f / 60;
-    const int frameWidth = 1200, frameHeight = 800;
-    const float aspectRatio = (float)frameWidth / (float)frameHeight;
-
     double startingTime;
 
     const int tabSize = (params::chunk::RADIUS * 2 + 1) * (params::chunk::RADIUS * 2 + 1);
@@ -123,7 +119,12 @@ Texture* loadTexture(std::string path) {
     Chunk* visibleChunks[tabSize] = { nullptr };
     Shader* objectShader, *lightShader;
 
-    glm::mat4 projection = glm::perspective(glm::radians(90.0f), aspectRatio, 0.1f, 200.0f);
+    glm::mat4 projection = glm::perspective(
+        glm::radians(90.0f), 
+        params::graphical::ASPECT_RATIO, 
+        params::graphical::NEAR_PLANE, 
+        params::graphical::FAR_PLANE
+    );
 
     if (!glfwInit())
     {
@@ -135,8 +136,8 @@ Texture* loadTexture(std::string path) {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    GLFWwindow* window = glfwCreateWindow(frameWidth, frameHeight, "CraftMine", NULL, NULL);
-    glfwSetWindowPos(window, 1920, 200);
+    GLFWwindow* window = glfwCreateWindow(params::graphical::FRAME_WIDTH, params::graphical::FRAME_HEIGHT, "CraftMine", NULL, NULL);
+    //glfwSetWindowPos(window, 1920, 200);
 
     if (window == NULL)
     {
@@ -153,7 +154,7 @@ Texture* loadTexture(std::string path) {
         return 3;
     }
 
-    glViewport(0, 0, frameWidth, frameHeight);
+    glViewport(0, 0, params::graphical::FRAME_WIDTH, params::graphical::FRAME_HEIGHT);
 
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     glfwSetCursorPosCallback(window, mouse_callback);
@@ -178,7 +179,7 @@ Texture* loadTexture(std::string path) {
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     Texture* t = loadTexture("./res/textures/texture.jpg");
-    Light* light = new Light(vec3(0.0f, 180.0f, -5.0f), vec3(0.99f, 0.99f, 0.99f), 0.6f);
+    Light light(vec3(0.0f, 180.0f, -5.0f), vec3(0.99f, 0.99f, 0.99f), 0.6f);
     
     cam = new Camera(vec3(15.0f, 150.0f, 15.0f), vec3(0.0f, 0.0f, 0.0f));
     glm::vec2 previousPos;
@@ -188,9 +189,9 @@ Texture* loadTexture(std::string path) {
     {
         startingTime = glfwGetTime();
 
-        processInput(window, cam, light);
+        processInput(window, cam, &light);
 
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glClearColor(0.2f, 0.4f, 0.5f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         previousPos = Chunk::updateChunks(visibleChunks, light, previousPos, cam->position, t->id);
@@ -198,7 +199,7 @@ Texture* loadTexture(std::string path) {
 
         glm::mat4 view = cam->getViewMatrix();
 
-        light->draw(*lightShader, projection, view);
+        light.draw(*lightShader, projection, view);
 
         for (int i = 0; i < tabSize; i++)
         {
@@ -209,29 +210,27 @@ Texture* loadTexture(std::string path) {
         glfwSwapBuffers(window);
         glfwPollEvents();
 
-        Sleep(max(delta - ((glfwGetTime() - startingTime) * 1000), 0));
+        Sleep(max(params::graphical::DELTA - ((glfwGetTime() - startingTime) * 1000), 0));
     }
 
     delete cam, objectShader, lightShader, visibleChunks;
 
     glfwTerminate();
     return 0;
-}*/
+}
 
 
-int main()
+/*int main()
 {
     glfwInit();
 
-    double start, avg, sum = 0, d = 1000;
-
-    std::function<void(void)> f = []() { int x = 2; };
+    double start, avg, sum = 0, d = 10000;
 
     for (int i = 0; i < d; i++)
     {
         start = glfwGetTime();
 
-        
+        // stuff that needs to be measured
 
         sum += (glfwGetTime() - start) * 1000;
     }
@@ -245,7 +244,7 @@ int main()
 
     glfwTerminate();
     return 0;
-}
+}*/
 
 /*
 TODO :
