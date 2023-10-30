@@ -137,7 +137,7 @@ int main()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     GLFWwindow* window = glfwCreateWindow(params::graphical::FRAME_WIDTH, params::graphical::FRAME_HEIGHT, "CraftMine", NULL, NULL);
-    //glfwSetWindowPos(window, 1920, 200);
+    glfwSetWindowPos(window, 1920, 200);
 
     if (window == NULL)
     {
@@ -248,6 +248,7 @@ int main()
 
 /*
 TODO :
+trouver la fuite de mémoire
 classe Joueur
 ajouter un readme sur git
 faire une doc si j'ai pas la flemme
