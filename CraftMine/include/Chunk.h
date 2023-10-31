@@ -62,6 +62,7 @@ class Chunk {
 private:
 	static ThreadPool* threadPool;
 	    
+	bool initStatus = false, bordersFullyUpdated = false;
 	unsigned int texture, chunkDataSize;
 	
 	Light& light;
@@ -88,7 +89,12 @@ public:
 	Chunk(const Chunk&) = delete;
 	~Chunk();
 
+	bool isThereABlock(int x, int y, int z);
+	bool getInitStatus() { return initStatus; }
+
     void draw(Shader& shader, glm::mat4& projection, glm::mat4& view);
+	void setNeighbor(Chunk** value);
+	void updateMesh();
 
 	static void updateChunks(
 		Chunk** visibleChunks, 
@@ -96,7 +102,4 @@ public:
 		Player& p, 
 		unsigned int t
 	);
-	bool isThereABlock(int x, int y, int z);
-	void setNeighbor(Chunk** value);
-	void updateMesh();
 };

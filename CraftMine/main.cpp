@@ -108,14 +108,14 @@ Texture* loadTexture(std::string path) {
 }
 
 
-int main()
+/*int main()
 {
     double startingTime;
 
     const int tabSize = (params::chunk::RADIUS * 2 + 1) * (params::chunk::RADIUS * 2 + 1);
 
     Chunk* visibleChunks[tabSize] = { nullptr };
-    Shader* objectShader, *lightShader;
+    Shader* objectShader, * lightShader;
 
     glm::mat4 view;
     glm::mat4 projection = glm::perspective(
@@ -136,7 +136,7 @@ int main()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     GLFWwindow* window = glfwCreateWindow(params::graphical::FRAME_WIDTH, params::graphical::FRAME_HEIGHT, "CraftMine", NULL, NULL);
-    glfwSetWindowPos(window, 1920, 50);
+    glfwSetWindowPos(window, 2625, 200);
 
     if (window == NULL)
     {
@@ -177,7 +177,6 @@ int main()
     glEnable(GL_DEPTH_TEST);
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-    //cam = new Camera(vec3(15.0f, 150.0f, 15.0f), vec3(0.0f, 0.0f, 0.0f));
     Texture* t = loadTexture("./res/textures/texture.jpg");
     Light light(vec3(0.0f, 180.0f, -5.0f), vec3(0.99f, 0.9f, 0.9f), 0.6f);
 
@@ -209,7 +208,58 @@ int main()
         Sleep(max(params::graphical::DELTA - ((glfwGetTime() - startingTime) * 1000), 0));
     }
 
-    delete objectShader, lightShader, visibleChunks;
+    delete t, objectShader, lightShader, visibleChunks, window;
+
+    glfwTerminate();
+    return 0;
+}*/
+
+
+int main()
+{
+    if (!glfwInit())
+    {
+        std::cerr << "Initialization of GLFW failed\n";
+        return 1;
+    }
+
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+    GLFWwindow* window = glfwCreateWindow(params::graphical::FRAME_WIDTH, params::graphical::FRAME_HEIGHT, "CraftMine", NULL, NULL);
+    glfwSetWindowPos(window, 2625, 200);
+
+    if (window == NULL)
+    {
+        std::cerr << "GLFW window creation failed\n";
+        glfwTerminate();
+        return 2;
+    }
+
+    glfwMakeContextCurrent(window);
+
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+    {
+        std::cerr << "Failed to initialize GLAD\n";
+        return 3;
+    }
+
+    std::vector<Mesh*> m;
+    ChunkMeshBuffer a;
+
+    a.insertFace(0, 0, 0, 0);
+    a.insertFace(0, 0, 0, 1);
+    a.insertFace(0, 0, 0, 2);
+    a.insertFace(0, 0, 0, 3);
+    a.insertFace(0, 0, 0, 4);
+    a.insertFace(0, 0, 0, 5);
+
+    for (int i = 0; i < 10000; i++)
+        m.push_back(new Mesh(*a.getData(), glm::vec3(0.0f), 0));
+
+    for (int i = 0; i < 10000; i++)
+        delete m[i];
 
     glfwTerminate();
     return 0;
@@ -242,10 +292,10 @@ int main()
     return 0;
 }*/
 
+
 /*
-TODO :
+À FAIRE  :
 trouver la fuite de mémoire
-classe Joueur
 ajouter un readme sur git
 faire une doc si j'ai pas la flemme
 rendre asynchrone la generation des chunks

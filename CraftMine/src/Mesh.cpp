@@ -27,13 +27,13 @@ void Mesh::initMesh(vector<BufferVertex>& buffer)
     glBindVertexArray(VAO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
-    /*   /!\ A potentiellement remplacer par GL_DYNAMIC_DRAW /!\   */
-    glBufferData(GL_ARRAY_BUFFER, buffer.size() * sizeof(BufferVertex), &buffer[0], GL_DYNAMIC_DRAW);
+    /*   /!\ Potentiellement a remplacer par GL_DYNAMIC_DRAW /!\   */
+    glBufferData(GL_ARRAY_BUFFER, buffer.size() * sizeof(BufferVertex), &buffer[0], GL_STATIC_DRAW);
 
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 1, GL_INT, GL_FALSE, sizeof(BufferVertex), (void*)0);
 
-    // start at 1 to skip the id which is an int not a float
+    // commence a 1 pour passer l'id
     int byte_offset = 1;
     for (int i = 1; i < BV_DISPOSITION_SIZE; i++)
     {

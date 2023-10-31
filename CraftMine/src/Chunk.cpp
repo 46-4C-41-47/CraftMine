@@ -9,10 +9,10 @@ Chunk::Chunk(int x, int y, Light& l, unsigned int t) : x{ x }, y{ y }, light{ l 
 	chunkData = new Block::Type[WIDTH * WIDTH * HEIGHT];
 	chunkDataSize = WIDTH * WIDTH * HEIGHT;
 	
-	asyncBuffer = std::async([&]() {
+	/*asyncBuffer = std::async([&]() {
 			init();
 			return generateMesh();
-		});
+		});*/
 }
 
 
@@ -31,12 +31,10 @@ void Chunk::init()
 			  offsetX = ((SPREAD + (this->x % SPREAD)) % SPREAD) * WIDTH,
 			  offsetY = ((SPREAD + (this->y % SPREAD)) % SPREAD) * WIDTH;
 
-	double* heightMap(
-		n.detailed2DNoise(
-			floor((float)this->x / SPREAD) + params::noise::FREQUENCY,
-			floor((float)this->y / SPREAD) + params::noise::FREQUENCY,
-			noiseBorderSize
-		)
+	double* heightMap = n.detailed2DNoise(
+		floor((float)this->x / SPREAD) + params::noise::FREQUENCY,
+		floor((float)this->y / SPREAD) + params::noise::FREQUENCY,
+		noiseBorderSize
 	);
 
 	for (int z = 0; z < WIDTH; z++)
@@ -53,6 +51,7 @@ void Chunk::init()
 		}
 	}
 
+	initStatus = true;
 	delete heightMap;
 }
 
@@ -146,6 +145,12 @@ void Chunk::updateBorders()
 	if (buffer == nullptr)
 		return;
 
+	bordersFullyUpdated =
+		   (neighbors[NORTH] == nullptr || neighbors[NORTH]->getInitStatus())
+		&& (neighbors[SOUTH] == nullptr || neighbors[SOUTH]->getInitStatus())
+		&& (neighbors[EAST ] == nullptr || neighbors[EAST ]->getInitStatus())
+		&& (neighbors[WEST ] == nullptr || neighbors[WEST ]->getInitStatus());
+
 	bufferMutex.lock();
 	for (int i = 0; i < WIDTH; i++)
 	{
@@ -224,16 +229,18 @@ void Chunk::draw(Shader& shader, glm::mat4& projection, glm::mat4& view)
 
 void Chunk::setNeighbor(Chunk** value)
 {
-	if (value[NORTH] != neighbors[NORTH]
+	if (   value[NORTH] != neighbors[NORTH]
 		|| value[SOUTH] != neighbors[SOUTH]
-		|| value[EAST] != neighbors[EAST]
-		|| value[WEST] != neighbors[WEST])
+		|| value[EAST ] != neighbors[EAST ]
+		|| value[WEST ] != neighbors[WEST ]
+		|| !bordersFullyUpdated)
 	{
 		neighbors[NORTH] = value[NORTH];
 		neighbors[SOUTH] = value[SOUTH];
-		neighbors[EAST]  = value[EAST];
-		neighbors[WEST]  = value[WEST];
+		neighbors[EAST ] = value[EAST ];
+		neighbors[WEST ] = value[WEST ];
 
+		bordersFullyUpdated = false;
 		//std::thread(&Chunk::updateBorders, this).detach();
 		updateBorders();
 	}
@@ -261,7 +268,8 @@ void Chunk::updateChunks(
 
 	int x, y, newX, newY;
 
-	Chunk* neighborBuffer[4], * visibleChunksCopy[borderSize * borderSize];
+	Chunk* neighborBuffer[4];
+	Chunk* visibleChunksCopy[borderSize * borderSize];
 
 	std::copy(visibleChunks, visibleChunks + borderSize * borderSize, visibleChunksCopy);
 
@@ -304,8 +312,7 @@ void Chunk::updateChunks(
 		neighborBuffer[SOUTH] = 0 <= (y - 1) ? visibleChunks[x + (y - 1) * borderSize] : nullptr;
 		neighborBuffer[WEST ] = 0 <= (x - 1) ? visibleChunks[(x - 1) + y * borderSize] : nullptr;
 
-		if (visibleChunks[i] != nullptr)
-			visibleChunks[i]->setNeighbor(neighborBuffer);
+		visibleChunks[i]->setNeighbor(neighborBuffer);
 
 		delete visibleChunksCopy[i];
 	}

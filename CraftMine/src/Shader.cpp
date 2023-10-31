@@ -6,7 +6,8 @@ using std::endl;
 using std::string;
 
 
-Shader::Shader(const char* vertexShaderPath, const char* fragmentShaderPath) {
+Shader::Shader(const char* vertexShaderPath, const char* fragmentShaderPath) 
+{
     int  success;
     char infoLog[512];
     string vertexCode, fragmentCode;
@@ -38,7 +39,8 @@ Shader::Shader(const char* vertexShaderPath, const char* fragmentShaderPath) {
 }
 
 
-string Shader::getShaderCode(const char* shaderPath) {
+string Shader::getShaderCode(const char* shaderPath) 
+{
     string shaderCode;
     std::ifstream shaderFile;
 
@@ -57,7 +59,7 @@ string Shader::getShaderCode(const char* shaderPath) {
     }
     catch (std::ifstream::failure e)
     {
-        cerr << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << endl;
+        cerr << "ERROR::SHADER::FAIL_TO_READ_FILE" << endl;
         throw std::exception("unable to load the shader file");
     }
 
@@ -65,7 +67,8 @@ string Shader::getShaderCode(const char* shaderPath) {
 }
 
 
-unsigned int Shader::initShader(const char* shaderCode, GLenum shaderType) {
+unsigned int Shader::initShader(const char* shaderCode, GLenum shaderType) 
+{
     int  success;
     char infoLog[512];
     unsigned int shaderId;
