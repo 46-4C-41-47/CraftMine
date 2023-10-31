@@ -86,7 +86,7 @@ unsigned int Shader::initShader(const char* shaderCode, GLenum shaderType) {
 }
 
 
-void Shader::sendVec3(const std::string& name, glm::vec3& value)
+void Shader::sendVec3(const std::string& name, const glm::vec3& value)
 {
     glUniform3fv(glGetUniformLocation(finalShader, name.c_str()), 1, glm::value_ptr(value));
 }

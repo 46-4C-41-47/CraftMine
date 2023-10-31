@@ -28,17 +28,15 @@
 #include "include/BufferElement.h"
 
 
-using std::cout;
-using std::cerr;
-using std::endl;
-using std::unique_ptr;
+using params::graphical::SKY_COLOR;
 
-Camera* cam;
+
+Player p1(glm::vec3(15.0f, 150.0f, 15.0f));
 
 
 void mouse_callback(GLFWwindow* window, double xpos, double ypos) 
 {
-    cam->proccessMouse(xpos, ypos);
+    p1.getCam().proccessMouse(xpos, ypos);
 }
 
 
@@ -48,32 +46,32 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 }
 
 
-void processInput(GLFWwindow* window, Camera* cam, Light* lightSource)
+void processInput(GLFWwindow* window, Camera& cam, Light& lightSource)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        cam->moveForward(cam->CAM_SPEED);
+        cam.moveForward(params::controls::CAM_SPEED);
 
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        cam->moveSideWays(-cam->CAM_SPEED);
+        cam.moveSideWays(-params::controls::CAM_SPEED);
 
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        cam->moveForward(-cam->CAM_SPEED);
+        cam.moveForward(-params::controls::CAM_SPEED);
     
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        cam->moveSideWays(cam->CAM_SPEED);
+        cam.moveSideWays(params::controls::CAM_SPEED);
 
     if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
-        cam->moveUpward(cam->CAM_SPEED);
+        cam.moveUpward(params::controls::CAM_SPEED);
 
     if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
-        cam->moveUpward(-cam->CAM_SPEED);
+        cam.moveUpward(-params::controls::CAM_SPEED);
 
 
     if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS)
-        lightSource->position = cam->position;
+        lightSource.position = cam.position;
 }
 
 
@@ -102,7 +100,7 @@ Texture* loadTexture(std::string path) {
     }
     else
     {
-        cerr << "Failed to load texture, path : " << path << "\n";
+        std::cerr << "Failed to load texture, path : " << path << "\n";
     }
     stbi_image_free(data);
 
@@ -119,6 +117,7 @@ int main()
     Chunk* visibleChunks[tabSize] = { nullptr };
     Shader* objectShader, *lightShader;
 
+    glm::mat4 view;
     glm::mat4 projection = glm::perspective(
         glm::radians(90.0f), 
         params::graphical::ASPECT_RATIO, 
@@ -128,7 +127,7 @@ int main()
 
     if (!glfwInit())
     {
-        cerr << "Initialization of GLFW failed\n";
+        std::cerr << "Initialization of GLFW failed\n";
         return 1;
     }
 
@@ -137,11 +136,11 @@ int main()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     GLFWwindow* window = glfwCreateWindow(params::graphical::FRAME_WIDTH, params::graphical::FRAME_HEIGHT, "CraftMine", NULL, NULL);
-    glfwSetWindowPos(window, 1920, 200);
+    glfwSetWindowPos(window, 1920, 50);
 
     if (window == NULL)
     {
-        cerr << "GLFW window creation failed\n";
+        std::cerr << "GLFW window creation failed\n";
         glfwTerminate();
         return 2;
     }
@@ -150,7 +149,7 @@ int main()
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
-        cerr << "Failed to initialize GLAD\n";
+        std::cerr << "Failed to initialize GLAD\n";
         return 3;
     }
 
@@ -178,26 +177,23 @@ int main()
     glEnable(GL_DEPTH_TEST);
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
+    //cam = new Camera(vec3(15.0f, 150.0f, 15.0f), vec3(0.0f, 0.0f, 0.0f));
     Texture* t = loadTexture("./res/textures/texture.jpg");
-    Light light(vec3(0.0f, 180.0f, -5.0f), vec3(0.99f, 0.99f, 0.99f), 0.6f);
-    
-    cam = new Camera(vec3(15.0f, 150.0f, 15.0f), vec3(0.0f, 0.0f, 0.0f));
-    glm::vec2 previousPos;
+    Light light(vec3(0.0f, 180.0f, -5.0f), vec3(0.99f, 0.9f, 0.9f), 0.6f);
 
     // game loop
     while (!glfwWindowShouldClose(window))
     {
         startingTime = glfwGetTime();
 
-        processInput(window, cam, &light);
+        processInput(window, p1.getCam(), light);
 
-        glClearColor(0.2f, 0.4f, 0.5f, 1.0f);
+        glClearColor(SKY_COLOR.x, SKY_COLOR.y, SKY_COLOR.z, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        previousPos = Chunk::updateChunks(visibleChunks, light, previousPos, cam->position, t->id);
-//      ^~~~~~~~~~~ TODO trouver une alternative pour ce systeme chelou
+        Chunk::updateChunks(visibleChunks, light, p1, t->id);
 
-        glm::mat4 view = cam->getViewMatrix();
+        view = p1.getCam().getViewMatrix();
 
         light.draw(*lightShader, projection, view);
 
@@ -213,7 +209,7 @@ int main()
         Sleep(max(params::graphical::DELTA - ((glfwGetTime() - startingTime) * 1000), 0));
     }
 
-    delete cam, objectShader, lightShader, visibleChunks;
+    delete objectShader, lightShader, visibleChunks;
 
     glfwTerminate();
     return 0;

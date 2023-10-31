@@ -1,5 +1,7 @@
 #pragma once
 
+#include <glm/glm.hpp>
+
 #include <future>
 #include <chrono>
 
@@ -26,8 +28,8 @@ namespace params
 		static const int
 			WIDTH = 16,
 			HEIGHT = 256,
-			RADIUS = 20, // nombre de chunks visible autour du joueur
-			SPREAD = 8,
+			RADIUS = 8, // nombre de chunks visible autour du joueur
+			SPREAD = 4,
 			GROUND_MIN_HEIGHT = 128,
 			GROUND_MAX_HEIGHT = 192,
 			HEIGHT_RANGE = GROUND_MAX_HEIGHT - GROUND_MIN_HEIGHT;
@@ -48,6 +50,15 @@ namespace params
 			ASPECT_RATIO = (float)FRAME_WIDTH / (float)FRAME_HEIGHT,
 			NEAR_PLANE = 0.1f,
 			FAR_PLANE = 400.0f;
+		static const glm::vec3 
+			FOG_COLOR = glm::vec3(1.0f),
+			SKY_COLOR = glm::vec3(0.37f, 0.7f, 0.75f);
+	}
+
+	namespace controls
+	{
+		static const float HORIZONTAL_SENSITIVITY = 0.002f, VERTICAL_SENSITIVITY = 0.0016f;
+		static const float CAM_SPEED = 0.6f;
 	}
 }
 

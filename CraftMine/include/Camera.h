@@ -4,12 +4,14 @@
 #include <GLFW/glfw3.h>
 
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/string_cast.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
-#include <iostream>
 #include <cmath>
+#include <iostream>
+
+#include "Parameters.h"
 
 #define PI 3.141592653589793238462643383279502884L 
 
@@ -36,9 +38,6 @@ private:
 	void computeDirection();
 
 public:
-	const float HORIZONTAL_SENSITIVITY = 0.002f, VERTICAL_SENSITIVITY = 0.0016f;
-	const float CAM_SPEED = 0.6f;
-	
 	vec3 position;
 
 	Camera();
@@ -46,18 +45,18 @@ public:
 	~Camera();
 
 	void move(vec3 newLocation);
-	void lookAt(vec3 pointToLookAt);
+	void lookAt(vec3 pointToLookAt); // à finir
 
-	// positive value move the camera upward, negative downward
+	// les valeurs positives bougent la camera vers le haut et les négatives vers le bas
 	void moveUpward(float offset);
-	// positive value move the camera to the right, negative to the left
+	// les valeurs positives bougent la camera vers la droite et les négatives vers la gauche
 	void moveSideWays(float offset);
-	// positive value move the camera forward, negative backward
+	// les valeurs positives bougent la camera vers l'avant et les négatives vers l'arrière
 	void moveForward(float offset);
 
 	void yaw(float angleInRadians);
 	void pitch(float angleInRadians);
-	void roll(float angleInRadians);
+	void roll(float angleInRadians); // à finir
 
 	void proccessMouse(int x, int y);
 

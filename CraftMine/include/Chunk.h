@@ -15,6 +15,7 @@
 #include "Mesh.h"
 #include "Noise.h"
 #include "Block.h"
+#include "Player.h"
 #include "Shader.h"
 #include "Parameters.h"
 #include "ThreadPool.h"
@@ -89,11 +90,10 @@ public:
 
     void draw(Shader& shader, glm::mat4& projection, glm::mat4& view);
 
-	static glm::vec2 updateChunks(
+	static void updateChunks(
 		Chunk** visibleChunks, 
 		Light& l, 
-		const glm::vec2& previousPos, 
-		const glm::vec3& pos, 
+		Player& p, 
 		unsigned int t
 	);
 	bool isThereABlock(int x, int y, int z);

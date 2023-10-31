@@ -10,6 +10,7 @@
 
 #include "Light.h"
 #include "Shader.h"
+#include "Parameters.h"
 #include "BufferElement.h"
 #include "ChunkMeshBuffer.h"
 

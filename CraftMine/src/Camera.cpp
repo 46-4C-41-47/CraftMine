@@ -129,8 +129,8 @@ void Camera::proccessMouse(int x, int y)
 		lastY = y;
 	}
 
-	yaw((x - lastX) * HORIZONTAL_SENSITIVITY);
-	pitch((y - lastY) * VERTICAL_SENSITIVITY);
+	yaw((x - lastX) * params::controls::HORIZONTAL_SENSITIVITY);
+	pitch((y - lastY) * params::controls::VERTICAL_SENSITIVITY);
 
 	lastX = x;
 	lastY = y;

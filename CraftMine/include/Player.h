@@ -14,9 +14,18 @@ private:
 	Camera cam;
 
 public:
-	Player() : position{ glm::vec3(0.0f) }, cam{ Camera() }, chunkPos{glm::vec2(0.0f)}, previousChunkPos{glm::vec2(0.0f)} {}
-	~Player();
+	const unsigned int PLAYER_HEIGTH = 2;
 
-	glm::vec2 getChunkPos();
-	glm::vec2 getPreviousChunkPos();
+	Player(glm::vec3 playerPosition) : position { glm::vec3(0.0f) }, chunkPos { glm::vec2(0.0f) }, previousChunkPos { glm::vec2(0.0f) } 
+	{
+		cam.move(playerPosition);
+	}
+	~Player() {}
+
+	void updateChunkPos();
+	
+	glm::vec2 getChunkPos() { return chunkPos; }
+	glm::vec2 getPreviousChunkPos() { return previousChunkPos; }
+
+	Camera& getCam() { return cam; }
 };

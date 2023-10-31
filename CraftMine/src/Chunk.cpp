@@ -240,11 +240,10 @@ void Chunk::setNeighbor(Chunk** value)
 }
 
 
-glm::vec2 Chunk::updateChunks(
+void Chunk::updateChunks(
 	Chunk** visibleChunks,
 	Light& l,
-	const glm::vec2& previousPos,
-	const glm::vec3& pos,
+	Player& p,
 	unsigned int t
 ) {
 	bool newChunk = false;
@@ -252,12 +251,13 @@ glm::vec2 Chunk::updateChunks(
 
 	start = glfwGetTime();
 
-	// init
+	p.updateChunkPos();
+	glm::vec2 camPos = p.getChunkPos();
+	glm::vec2 previousPos = p.getPreviousChunkPos();
+
 	const int borderSize = RADIUS * 2 + 1
-		,camPosX = floor(pos.x / WIDTH)
-		,camPosY = floor(pos.z / WIDTH)
-		,offsetX = camPosX - (int)previousPos.x
-		,offsetY = camPosY - (int)previousPos.y;
+		, offsetX = camPos.x - (int)previousPos.x
+		, offsetY = camPos.y - (int)previousPos.y;
 
 	int x, y, newX, newY;
 
@@ -284,7 +284,7 @@ glm::vec2 Chunk::updateChunks(
 		}
 		else
 		{
-			int chunkX = camPosX + (x - RADIUS), chunkY = camPosY + (y - RADIUS);
+			int chunkX = camPos.x + (x - RADIUS), chunkY = camPos.y + (y - RADIUS);
 			visibleChunks[x + y * borderSize] = new Chunk(chunkX, chunkY, l, t);
 			newChunk = true;
 		}
@@ -300,9 +300,9 @@ glm::vec2 Chunk::updateChunks(
 		y = i / borderSize;
 
 		neighborBuffer[NORTH] = (y + 1) < borderSize ? visibleChunks[x + (y + 1) * borderSize] : nullptr;
-		neighborBuffer[EAST]  = (x + 1) < borderSize ? visibleChunks[(x + 1) + y * borderSize] : nullptr;
+		neighborBuffer[EAST ] = (x + 1) < borderSize ? visibleChunks[(x + 1) + y * borderSize] : nullptr;
 		neighborBuffer[SOUTH] = 0 <= (y - 1) ? visibleChunks[x + (y - 1) * borderSize] : nullptr;
-		neighborBuffer[WEST]  = 0 <= (x - 1) ? visibleChunks[(x - 1) + y * borderSize] : nullptr;
+		neighborBuffer[WEST ] = 0 <= (x - 1) ? visibleChunks[(x - 1) + y * borderSize] : nullptr;
 
 		if (visibleChunks[i] != nullptr)
 			visibleChunks[i]->setNeighbor(neighborBuffer);
@@ -320,6 +320,4 @@ glm::vec2 Chunk::updateChunks(
 		std::cout << "\telpased time 2 : " << end2 << " ms\n";
 		std::cout << "\ttotal : " << (end0 + end1 + end2) << " ms\n\n";
 	}*/
-
-	return glm::vec2((float)camPosX, (float)camPosY);
 }

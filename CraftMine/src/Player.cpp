@@ -1,12 +1,8 @@
 #include "../include/Player.h"
 
 
-glm::vec2 Player::getChunkPos()
+void Player::updateChunkPos()
 {
 	previousChunkPos = chunkPos;
-	chunkPos = glm::vec2(floor(position.x / params::chunk::WIDTH), floor(position.z / params::chunk::WIDTH));
-	return chunkPos;
+	chunkPos = glm::vec2(floor(cam.position.x / params::chunk::WIDTH), floor(cam.position.z / params::chunk::WIDTH));
 }
-
-
-glm::vec2 Player::getPreviousChunkPos() { return previousChunkPos; }
