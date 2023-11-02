@@ -27,7 +27,7 @@ public:
 	void insertCube(int x, int y, int z);
 	void removeCube(unsigned int id);
 
-	void insertFace(int x, int y, int z, int face_index);
+	void insertFace(int x, int y, int z, int face_index, int blockType);
 	void removeFace(unsigned int id);
 
 	void print();

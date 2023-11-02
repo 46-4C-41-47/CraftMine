@@ -45,7 +45,7 @@ namespace constants
 		static const int PIXEL_WIDTH = 512;
 		static const int CHUNK_PIXEL_WIDTH = 16;
 		static const int CHUNK_COUNT = PIXEL_WIDTH / CHUNK_PIXEL_WIDTH;
-		static const float CHUNK_WIDTH = CHUNK_PIXEL_WIDTH / PIXEL_WIDTH;
+		static const float CHUNK_WIDTH = CHUNK_PIXEL_WIDTH / (float)PIXEL_WIDTH;
 	}
 }
 
@@ -94,7 +94,7 @@ namespace params
 
 namespace func
 {
-	static inline float getUIndex(int position, float offset)
+	static inline float getVIndex(int position, float offset)
 	{
 		return (((int)(position / constants::texture::CHUNK_COUNT)) 
 			/ 
@@ -102,7 +102,7 @@ namespace func
 			+ offset * constants::texture::CHUNK_WIDTH;
 	}
 
-	static inline float getVIndex(int position, float offset)
+	static inline float getUIndex(int position, float offset)
 	{
 		return ((position % constants::texture::CHUNK_COUNT) 
 			/ 

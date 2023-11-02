@@ -112,7 +112,7 @@ ChunkMeshBuffer* Chunk::generateMesh()
 							for (int j = 0; j < ChunkMeshBuffer::cube_face_size / 8; j++)
 							{
 								int vertex_index = i * ChunkMeshBuffer::cube_face_size + j * 8;
-
+								
 								BufferVertex bv = {
 									getBufferId(x, y, z, i, j),
 
@@ -123,8 +123,9 @@ ChunkMeshBuffer* Chunk::generateMesh()
 									ChunkMeshBuffer::cube_vertices[vertex_index + 3],
 									ChunkMeshBuffer::cube_vertices[vertex_index + 4],
 									ChunkMeshBuffer::cube_vertices[vertex_index + 5],
+
 									getUIndex(BlockType::Dirt, ChunkMeshBuffer::cube_vertices[vertex_index + 6]),
-									getVIndex(BlockType::Dirt, ChunkMeshBuffer::cube_vertices[vertex_index + 7]),
+									getVIndex(BlockType::Dirt, ChunkMeshBuffer::cube_vertices[vertex_index + 7])
 								};
 
 								meshVAO->insert(meshVAO->end(), bv);
@@ -162,7 +163,7 @@ void Chunk::updateBorders()
 				&& !neighbors[NORTH]->isThereABlock(i, j, 0)
 				&& isThereABlock(i, j, params::chunk::WIDTH - 1))
 			{
-				buffer->insertFace(i, j, params::chunk::WIDTH - 1, BACK);
+				buffer->insertFace(i, j, params::chunk::WIDTH - 1, BACK, BlockType::Dirt);
 			}
 
 			// SOUTH
@@ -170,7 +171,7 @@ void Chunk::updateBorders()
 				&& !neighbors[SOUTH]->isThereABlock(i, j, params::chunk::WIDTH - 1)
 				&& isThereABlock(i, j, 0))
 			{
-				buffer->insertFace(i, j, 0, FRONT);
+				buffer->insertFace(i, j, 0, FRONT, BlockType::Dirt);
 			}
 
 			// EAST
@@ -178,7 +179,7 @@ void Chunk::updateBorders()
 				&& !neighbors[EAST]->isThereABlock(0, j, i)
 				&& isThereABlock(params::chunk::WIDTH - 1, j, i))
 			{
-				buffer->insertFace(params::chunk::WIDTH - 1, j, i, RIGHT);
+				buffer->insertFace(params::chunk::WIDTH - 1, j, i, RIGHT, BlockType::Dirt);
 			}
 
 			// WEST
@@ -186,7 +187,7 @@ void Chunk::updateBorders()
 				&& !neighbors[WEST]->isThereABlock(params::chunk::WIDTH - 1, j, i)
 				&& isThereABlock(0, j, i))
 			{
-				buffer->insertFace(0, j, i, LEFT);
+				buffer->insertFace(0, j, i, LEFT, BlockType::Dirt);
 			}
 		}
 	}

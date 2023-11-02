@@ -2,7 +2,7 @@
 
 
 const std::vector<float> ChunkMeshBuffer::cube_vertices = {
-   // vertex coordinates  normal vector         texture coordinates
+//    vertex coordinates  normal vector         texture coordinates
 	  0.0f, 0.0f, 0.0f,   0.0f,  0.0f, -1.0f,   0.0f, 0.0f, // front
 	  1.0f, 0.0f, 0.0f,   0.0f,  0.0f, -1.0f,   1.0f, 0.0f,
 	  1.0f, 1.0f, 0.0f,   0.0f,  0.0f, -1.0f,   1.0f, 1.0f,
@@ -95,7 +95,7 @@ int ChunkMeshBuffer::find(unsigned int id)
 }
 
 
-void ChunkMeshBuffer::insertFace(int x, int y, int z, int face_index)
+void ChunkMeshBuffer::insertFace(int x, int y, int z, int face_index, int blockType)
 {
 	if (find(func::getBufferId(x, y, z, face_index, 0)) != -1)
 		return;
@@ -116,8 +116,9 @@ void ChunkMeshBuffer::insertFace(int x, int y, int z, int face_index)
 			cube_vertices[vertex_index + 3],
 			cube_vertices[vertex_index + 4],
 			cube_vertices[vertex_index + 5],
-			cube_vertices[vertex_index + 6],
-			cube_vertices[vertex_index + 7]
+
+			func::getUIndex(blockType, ChunkMeshBuffer::cube_vertices[vertex_index + 6]),
+			func::getVIndex(blockType, ChunkMeshBuffer::cube_vertices[vertex_index + 7])
 		};
 
 		buffer->insert(buffer->begin() + index + i, bv);
