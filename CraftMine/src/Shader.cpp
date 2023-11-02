@@ -1,16 +1,11 @@
 #include "../include/Shader.h"
 
 
-using std::cerr;
-using std::endl;
-using std::string;
-
-
 Shader::Shader(const char* vertexShaderPath, const char* fragmentShaderPath) 
 {
     int  success;
     char infoLog[512];
-    string vertexCode, fragmentCode;
+    std::string vertexCode, fragmentCode;
 
     try {
         vertexCode = getShaderCode(vertexShaderPath);
@@ -31,7 +26,8 @@ Shader::Shader(const char* vertexShaderPath, const char* fragmentShaderPath)
     glGetProgramiv(finalShader, GL_LINK_STATUS, &success);
     if (!success) {
         glGetProgramInfoLog(finalShader, 512, NULL, infoLog);
-        cerr << "ERROR::SHADER::LINKING_FAILED\n" << infoLog << endl;
+        std::cerr << "ERROR::SHADER::LINKING_FAILED\n" << infoLog << "\n";
+        exit(1);
     }
 
     glDeleteShader(vertexShader);
@@ -39,9 +35,9 @@ Shader::Shader(const char* vertexShaderPath, const char* fragmentShaderPath)
 }
 
 
-string Shader::getShaderCode(const char* shaderPath) 
+std::string Shader::getShaderCode(const char* shaderPath) 
 {
-    string shaderCode;
+    std::string shaderCode;
     std::ifstream shaderFile;
 
     shaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
@@ -59,8 +55,8 @@ string Shader::getShaderCode(const char* shaderPath)
     }
     catch (std::ifstream::failure e)
     {
-        cerr << "ERROR::SHADER::FAIL_TO_READ_FILE" << endl;
-        throw std::exception("unable to load the shader file");
+        std::cerr << "ERROR::SHADER::FAIL_TO_READ_FILE\n";
+        exit(1);
     }
 
     return shaderCode;
@@ -81,8 +77,8 @@ unsigned int Shader::initShader(const char* shaderCode, GLenum shaderType)
     if (!success)
     {
         glGetShaderInfoLog(shaderId, 512, NULL, infoLog);
-        cerr << "ERROR::SHADER::COMPILATION_FAILED\n" << infoLog << endl;
-        return NULL;
+        std::cerr << "ERROR::SHADER::COMPILATION_FAILED\n" << infoLog << "\n";
+        exit(1);
     }
 
     return shaderId;

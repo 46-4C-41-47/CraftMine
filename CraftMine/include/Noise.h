@@ -5,6 +5,8 @@
 #include <vector>
 #include <iostream>
 
+#include "Parameters.h"
+
 
 struct MyVec2
 {
@@ -14,8 +16,12 @@ struct MyVec2
 
 class Noise final {
 private:
+    static Noise* instance;
+
     int p[512];
     static const int permutation[256];
+
+    Noise(double s) : seed{ s } { init(); };
 
     void init();
     inline double dot(MyVec2 a, MyVec2 b) { return a.x * b.x + a.y * b.y; }
@@ -28,8 +34,7 @@ private:
 public:
     double seed;
 
-    Noise() : seed{ 0 } { init(); };
-    Noise(double s) : seed{ s } { init(); };
+    static Noise* getInstance();
     
     double classicNoise(double x, double y);
     double* detailed2DNoise(double x, double y, int resolution);

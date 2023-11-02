@@ -26,6 +26,7 @@
 #include "include/stb_image.h"
 #include "include/ThreadPool.h"
 #include "include/BufferElement.h"
+#include "include/TextureLoader.h"
 
 
 using params::graphical::SKY_COLOR;
@@ -75,40 +76,7 @@ void processInput(GLFWwindow* window, Camera& cam, Light& lightSource)
 }
 
 
-Texture* loadTexture(std::string path) {
-    unsigned int address;
-    int width, height, nrChannels;
-    unsigned char* data;
-
-    glGenTextures(1, &address);
-    glBindTexture(GL_TEXTURE_2D, address);
-    
-    // set the texture wrapping parameters
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    
-    // set texture filtering parameters
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    
-    // load image, create texture and generate mipmaps
-    data = stbi_load(path.c_str(), &width, &height, &nrChannels, 0);
-    if (data)
-    {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-        glGenerateMipmap(GL_TEXTURE_2D);
-    }
-    else
-    {
-        std::cerr << "Failed to load texture, path : " << path << "\n";
-    }
-    stbi_image_free(data);
-
-    return new Texture { address, width, height };
-}
-
-
-/*int main()
+int main()
 {
     double startingTime;
 
@@ -177,7 +145,7 @@ Texture* loadTexture(std::string path) {
     glEnable(GL_DEPTH_TEST);
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-    Texture* t = loadTexture("./res/textures/texture.jpg");
+    TextureLoader* textureLoader = TextureLoader::getInstance();
     Light light(vec3(0.0f, 180.0f, -5.0f), vec3(0.99f, 0.9f, 0.9f), 0.6f);
 
     // game loop
@@ -190,7 +158,7 @@ Texture* loadTexture(std::string path) {
         glClearColor(SKY_COLOR.x, SKY_COLOR.y, SKY_COLOR.z, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        Chunk::updateChunks(visibleChunks, light, p1, t->id);
+        Chunk::updateChunks(visibleChunks, light, p1, textureLoader->getTexture(0));
 
         view = p1.getCam().getViewMatrix();
 
@@ -208,58 +176,7 @@ Texture* loadTexture(std::string path) {
         Sleep(max(params::graphical::DELTA - ((glfwGetTime() - startingTime) * 1000), 0));
     }
 
-    delete t, objectShader, lightShader, visibleChunks, window;
-
-    glfwTerminate();
-    return 0;
-}*/
-
-
-int main()
-{
-    if (!glfwInit())
-    {
-        std::cerr << "Initialization of GLFW failed\n";
-        return 1;
-    }
-
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-    GLFWwindow* window = glfwCreateWindow(params::graphical::FRAME_WIDTH, params::graphical::FRAME_HEIGHT, "CraftMine", NULL, NULL);
-    glfwSetWindowPos(window, 2625, 200);
-
-    if (window == NULL)
-    {
-        std::cerr << "GLFW window creation failed\n";
-        glfwTerminate();
-        return 2;
-    }
-
-    glfwMakeContextCurrent(window);
-
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-    {
-        std::cerr << "Failed to initialize GLAD\n";
-        return 3;
-    }
-
-    std::vector<Mesh*> m;
-    ChunkMeshBuffer a;
-
-    a.insertFace(0, 0, 0, 0);
-    a.insertFace(0, 0, 0, 1);
-    a.insertFace(0, 0, 0, 2);
-    a.insertFace(0, 0, 0, 3);
-    a.insertFace(0, 0, 0, 4);
-    a.insertFace(0, 0, 0, 5);
-
-    for (int i = 0; i < 10000; i++)
-        m.push_back(new Mesh(*a.getData(), glm::vec3(0.0f), 0));
-
-    for (int i = 0; i < 10000; i++)
-        delete m[i];
+    delete textureLoader, objectShader, lightShader, visibleChunks, window;
 
     glfwTerminate();
     return 0;
@@ -295,7 +212,7 @@ int main()
 
 /*
 À FAIRE  :
-trouver la fuite de mémoire
+trouver la fuite de mémoire (classe Mesh)
 ajouter un readme sur git
 faire une doc si j'ai pas la flemme
 rendre asynchrone la generation des chunks

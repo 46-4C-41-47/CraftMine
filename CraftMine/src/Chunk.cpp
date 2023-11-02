@@ -6,13 +6,13 @@
 
 Chunk::Chunk(int x, int y, Light& l, unsigned int t) : x{ x }, y{ y }, light{ l }, texture{ t }
 {
-	chunkData = new Block::Type[WIDTH * WIDTH * HEIGHT];
+	chunkData = new BlockType[WIDTH * WIDTH * HEIGHT];
 	chunkDataSize = WIDTH * WIDTH * HEIGHT;
 	
-	/*asyncBuffer = std::async([&]() {
+	asyncBuffer = std::async([&]() {
 			init();
 			return generateMesh();
-		});*/
+		});
 }
 
 
@@ -25,13 +25,14 @@ Chunk::~Chunk()
 
 void Chunk::init()
 {
-	Noise n(params::noise::SEED);
+	Noise* n = Noise::getInstance();
+
 	const int noiseBorderSize = WIDTH * SPREAD,
 			  half_height = (float)HEIGHT * 0.5f,
 			  offsetX = ((SPREAD + (this->x % SPREAD)) % SPREAD) * WIDTH,
 			  offsetY = ((SPREAD + (this->y % SPREAD)) % SPREAD) * WIDTH;
 
-	double* heightMap = n.detailed2DNoise(
+	double* heightMap = n->detailed2DNoise(
 		floor((float)this->x / SPREAD) + params::noise::FREQUENCY,
 		floor((float)this->y / SPREAD) + params::noise::FREQUENCY,
 		noiseBorderSize
@@ -44,9 +45,9 @@ void Chunk::init()
 			for (int x = 0; x < WIDTH; x++)
 			{
 				if (y < heightMap[(x + offsetX) + (z + offsetY) * noiseBorderSize] * HEIGHT_RANGE + half_height)
-					chunkData[getChunkIndex(x, y, z)] = Block::Type::Dirt;
+					chunkData[getChunkIndex(x, y, z)] = BlockType::Dirt;
 				else
-					chunkData[getChunkIndex(x, y, z)] = Block::Type::Empty;
+					chunkData[getChunkIndex(x, y, z)] = BlockType::Empty;
 			}
 		}
 	}
@@ -56,11 +57,11 @@ void Chunk::init()
 }
 
 
-inline Block::Type Chunk::getBlock(int x, int y, int z)
+inline BlockType Chunk::getBlock(int x, int y, int z)
 {
 	if ((0 <= x && x < WIDTH) && (0 <= y && y < HEIGHT) && (0 <= z && z < WIDTH))
 		return chunkData[getChunkIndex(x, y, z)];
-	return Block::Type::Null;
+	return BlockType::Null;
 }
 
 
@@ -69,7 +70,7 @@ bool Chunk::isThereABlock(int x, int y, int z)
 	if ((0 <= x && x < WIDTH ) &&
 		(0 <= y && y < HEIGHT) &&
 		(0 <= z && z < WIDTH ) &&
-		chunkData[getChunkIndex(x, y, z)] != Block::Type::Empty) {
+		chunkData[getChunkIndex(x, y, z)] != BlockType::Empty) {
 		return true;
 	}
 	return false;
@@ -86,9 +87,9 @@ ChunkMeshBuffer* Chunk::generateMesh()
 		{
 			for (int x = 0; x < WIDTH; x++)
 			{
-				if (getBlock(x, y, z) != Block::Type::Empty)
+				if (getBlock(x, y, z) != BlockType::Empty)
 				{
-					Block::Type nearCube[] = {
+					BlockType nearCube[] = {
 						getBlock(x    , y    , z - 1),
 						getBlock(x    , y    , z + 1),
 						getBlock(x - 1, y    , z    ),
@@ -100,7 +101,7 @@ ChunkMeshBuffer* Chunk::generateMesh()
 					// iterate over each cube face and create the mesh buffer
 					for (int i = 0; i < 6; i++)
 					{
-						if ((nearCube[i] == Block::Type::Null || nearCube[i] == Block::Type::Empty)
+						if ((nearCube[i] == BlockType::Null || nearCube[i] == BlockType::Empty)
 							&& !(i == 4 && y == 0)
 							&& !(i == 0 && z == 0)
 							&& !(i == 2 && x == 0)
@@ -122,8 +123,8 @@ ChunkMeshBuffer* Chunk::generateMesh()
 									ChunkMeshBuffer::cube_vertices[vertex_index + 3],
 									ChunkMeshBuffer::cube_vertices[vertex_index + 4],
 									ChunkMeshBuffer::cube_vertices[vertex_index + 5],
-									ChunkMeshBuffer::cube_vertices[vertex_index + 6],
-									ChunkMeshBuffer::cube_vertices[vertex_index + 7]
+									getUIndex(BlockType::Dirt, ChunkMeshBuffer::cube_vertices[vertex_index + 6]),
+									getVIndex(BlockType::Dirt, ChunkMeshBuffer::cube_vertices[vertex_index + 7]),
 								};
 
 								meshVAO->insert(meshVAO->end(), bv);

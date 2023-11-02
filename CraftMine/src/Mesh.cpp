@@ -1,24 +1,13 @@
 #include "../include/Mesh.h"
 
 
-Mesh::Mesh(vector<BufferVertex>& v, glm::vec3 p, unsigned int t)
-{
-    texture = t;
-    position = p;
-
-    bufferSize = v.size();
-
-    initMesh(v);
-}
-
-
 Mesh::~Mesh() {
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
 }
 
 
-void Mesh::initMesh(vector<BufferVertex>& buffer)
+void Mesh::initMesh(std::vector<BufferVertex>& buffer)
 {
 
     glGenBuffers(1, &VBO);
@@ -84,7 +73,7 @@ void Mesh::draw(Shader& shader, Light& light, glm::mat4& projection, glm::mat4& 
 }
 
 
-void Mesh::updateBuffer(vector<BufferVertex>& newBuffer, size_t elementSize)
+void Mesh::updateBuffer(std::vector<BufferVertex>& newBuffer, size_t elementSize)
 {
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferSubData(GL_ARRAY_BUFFER, 0, newBuffer.size() * elementSize, &newBuffer[0]);

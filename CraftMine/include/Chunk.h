@@ -14,7 +14,6 @@
 
 #include "Mesh.h"
 #include "Noise.h"
-#include "Block.h"
 #include "Player.h"
 #include "Shader.h"
 #include "Parameters.h"
@@ -48,6 +47,10 @@ using constants::RIGHT;
 using constants::BOTTOM;
 using constants::TOP;
 
+using constants::BlockType;
+
+using constants::texture::CHUNK_WIDTH;
+
 using params::chunk::WIDTH;
 using params::chunk::HEIGHT;
 using params::chunk::SPREAD;
@@ -56,6 +59,8 @@ using params::chunk::HEIGHT_RANGE;
 
 using func::getChunkIndex;
 using func::getBufferId;
+using func::getUIndex;
+using func::getVIndex;
 
 
 class Chunk {
@@ -68,7 +73,7 @@ private:
 	Light& light;
     Mesh* mesh;
 	Chunk* neighbors[4]; /* north south east west */
-	Block::Type* chunkData;
+	BlockType* chunkData;
 	ChunkMeshBuffer* buffer;
 
 	std::future<ChunkMeshBuffer*> asyncBuffer;
@@ -79,7 +84,7 @@ private:
 	void addWater();
 	void createCaves();
 	void updateBorders();
-	Block::Type getBlock(int x, int y, int z);
+	BlockType getBlock(int x, int y, int z);
 	ChunkMeshBuffer* generateMesh();
 
 public:

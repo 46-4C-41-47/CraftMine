@@ -1,5 +1,9 @@
 #include "../include/Noise.h"
 
+
+Noise* Noise::instance = nullptr;
+
+
 const int Noise::permutation[256] = {
 		151,160,137, 91, 90, 15,131, 13,201, 95, 96, 53,194,233,  7,225,
 		140, 36,103, 30, 69,142,  8, 99, 37,240, 21, 10, 23,190,  6,148,
@@ -18,6 +22,15 @@ const int Noise::permutation[256] = {
 		184, 84,204,176,115,121, 50, 45,127,  4,150,254,138,236,205, 93,
 		222,114, 67, 29, 24, 72,243,141,128,195, 78, 66,215, 61,156,180
 };
+
+
+Noise* Noise::getInstance()
+{
+	if (instance == nullptr)
+		instance = new Noise(params::noise::SEED);
+
+	return instance;
+}
 
 
 void Noise::init()

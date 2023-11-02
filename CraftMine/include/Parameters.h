@@ -8,17 +8,45 @@
 
 namespace constants
 {
-	static const int NORTH = 0;
-	static const int SOUTH = 1;
-	static const int  EAST = 2;
-	static const int  WEST = 3;
+	enum cardinal 
+	{
+		NORTH = 0,
+		SOUTH = 1,
+		 EAST = 2,
+		 WEST = 3,
+	};
 
-	static const int  FRONT = 0;
-	static const int   BACK = 1;
-	static const int   LEFT = 2;
-	static const int  RIGHT = 3;
-	static const int BOTTOM = 4;
-	static const int    TOP = 5;
+	enum cube 
+	{
+		 FRONT = 0,
+		  BACK = 1,
+		  LEFT = 2,
+		 RIGHT = 3,
+		BOTTOM = 4,
+		   TOP = 5,
+	};
+
+	enum BlockType
+	{
+		Null = -1,
+		Empty = 1023,
+		Dirt = 200,
+		Grass = 3,
+		Stone = 4,
+		Water = 5,
+		Lava = 6,
+		Wood = 7,
+		Leaf = 8,
+		Diamond = 9,
+	};
+
+	namespace texture
+	{
+		static const int PIXEL_WIDTH = 512;
+		static const int CHUNK_PIXEL_WIDTH = 16;
+		static const int CHUNK_COUNT = PIXEL_WIDTH / CHUNK_PIXEL_WIDTH;
+		static const float CHUNK_WIDTH = CHUNK_PIXEL_WIDTH / PIXEL_WIDTH;
+	}
 }
 
 namespace params 
@@ -49,7 +77,7 @@ namespace params
 			DELTA = 1000.0f / 60.0f, 
 			ASPECT_RATIO = (float)FRAME_WIDTH / (float)FRAME_HEIGHT,
 			NEAR_PLANE = 0.1f,
-			FAR_PLANE = 160.0f;
+			FAR_PLANE = chunk::WIDTH * chunk::RADIUS;
 		static const glm::vec3 
 			FOG_COLOR = glm::vec3(0.0f),
 			SKY_COLOR = glm::vec3(0.0f);
@@ -66,6 +94,22 @@ namespace params
 
 namespace func
 {
+	static inline float getUIndex(int position, float offset)
+	{
+		return (((int)(position / constants::texture::CHUNK_COUNT)) 
+			/ 
+			(float)constants::texture::CHUNK_COUNT)
+			+ offset * constants::texture::CHUNK_WIDTH;
+	}
+
+	static inline float getVIndex(int position, float offset)
+	{
+		return ((position % constants::texture::CHUNK_COUNT) 
+			/ 
+			(float)constants::texture::CHUNK_COUNT)
+			+ offset * constants::texture::CHUNK_WIDTH;
+	}
+
 	static inline int getChunkIndex(int x, int y, int z) 
 	{ 
 		return x + (y * params::chunk::WIDTH) + (z * params::chunk::WIDTH * params::chunk::HEIGHT);
