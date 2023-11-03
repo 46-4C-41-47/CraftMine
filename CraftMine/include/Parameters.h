@@ -5,49 +5,8 @@
 #include <future>
 #include <chrono>
 
+#include "BufferElement.h"
 
-namespace constants
-{
-	enum cardinal 
-	{
-		NORTH = 0,
-		SOUTH = 1,
-		 EAST = 2,
-		 WEST = 3,
-	};
-
-	enum cube 
-	{
-		 FRONT = 0,
-		  BACK = 1,
-		  LEFT = 2,
-		 RIGHT = 3,
-		BOTTOM = 4,
-		   TOP = 5,
-	};
-
-	enum BlockType
-	{
-		Null = -1,
-		Empty = 1023,
-		Dirt = 200,
-		Grass = 3,
-		Stone = 4,
-		Water = 5,
-		Lava = 6,
-		Wood = 7,
-		Leaf = 8,
-		Diamond = 9,
-	};
-
-	namespace texture
-	{
-		static const int PIXEL_WIDTH = 512;
-		static const int CHUNK_PIXEL_WIDTH = 16;
-		static const int CHUNK_COUNT = PIXEL_WIDTH / CHUNK_PIXEL_WIDTH;
-		static const float CHUNK_WIDTH = CHUNK_PIXEL_WIDTH / (float)PIXEL_WIDTH;
-	}
-}
 
 namespace params 
 {
@@ -88,6 +47,55 @@ namespace params
 	{
 		static const float HORIZONTAL_SENSITIVITY = 0.002f, VERTICAL_SENSITIVITY = 0.0016f;
 		static const float CAM_SPEED = 15.0f;
+	}
+}
+
+
+namespace constants
+{
+	enum cardinal
+	{
+		NORTH = 0,
+		SOUTH = 1,
+		EAST = 2,
+		WEST = 3,
+	};
+
+	enum cube
+	{
+		FRONT = 0,
+		BACK = 1,
+		LEFT = 2,
+		RIGHT = 3,
+		BOTTOM = 4,
+		TOP = 5,
+	};
+
+	enum BlockType
+	{
+		Null = -1,
+		Empty = 1023,
+		Dirt = 200,
+		Grass = 3,
+		Stone = 4,
+		Water = 5,
+		Lava = 6,
+		Wood = 7,
+		Leaf = 8,
+		Diamond = 9,
+	};
+
+	namespace texture
+	{
+		static const int PIXEL_WIDTH = 512;
+		static const int CHUNK_PIXEL_WIDTH = 16;
+		static const int CHUNK_COUNT = PIXEL_WIDTH / CHUNK_PIXEL_WIDTH;
+		static const float CHUNK_WIDTH = CHUNK_PIXEL_WIDTH / (float)PIXEL_WIDTH;
+	}
+
+	namespace chunk
+	{
+		static const size_t MAX_MEM_SPACE = sizeof(BufferVertex) * (params::chunk::WIDTH * params::chunk::WIDTH * params::chunk::HEIGHT);
 	}
 }
 

@@ -51,6 +51,8 @@ using constants::BlockType;
 
 using constants::texture::CHUNK_WIDTH;
 
+using constants::chunk::MAX_MEM_SPACE;
+
 using params::chunk::WIDTH;
 using params::chunk::HEIGHT;
 using params::chunk::SPREAD;

@@ -7,17 +7,42 @@ Mesh::~Mesh() {
 }
 
 
+void Mesh::allocateMemory(std::vector<BufferVertex>& buffer)
+{
+    glGenBuffers(1, &VBO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
+    /*   /!\ Potentiellement a remplacer par GL_DYNAMIC_DRAW /!\   */
+    glBufferData(GL_ARRAY_BUFFER, bufferSize, nullptr, GL_STATIC_DRAW);
+
+    void* ptr = glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
+
+    memcpy(ptr, &buffer[0], sizeof(BufferVertex) * buffer.size());
+    glUnmapBuffer(GL_ARRAY_BUFFER);
+}
+
+
 void Mesh::initMesh(std::vector<BufferVertex>& buffer)
 {
+    bool reuseBuffer = true;
 
-    glGenBuffers(1, &VBO);
+    if (unusedBuffers.size() == 0)
+    {
+        glGenBuffers(1, &VBO);
+    }
+    else
+    {
+        VBO = unusedBuffers[unusedBuffers.size() - 1];
+        unusedBuffers.pop_back();
+    }
+
     glGenVertexArrays(1, &VAO);
 
     glBindVertexArray(VAO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
-    /*   /!\ Potentiellement a remplacer par GL_DYNAMIC_DRAW /!\   */
-    glBufferData(GL_ARRAY_BUFFER, buffer.size() * sizeof(BufferVertex), &buffer[0], GL_STATIC_DRAW);
+    if (!reuseBuffer)
+        allocateMemory(buffer);
 
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 1, GL_INT, GL_FALSE, sizeof(BufferVertex), (void*)0);
@@ -67,7 +92,7 @@ void Mesh::draw(Shader& shader, Light& light, glm::mat4& projection, glm::mat4& 
 
     // draw mesh
     glBindVertexArray(VAO);
-    glDrawArrays(GL_TRIANGLES, 0, bufferSize);
+    glDrawArrays(GL_TRIANGLES, 0, elementCount);
 
     glBindVertexArray(0);
 }

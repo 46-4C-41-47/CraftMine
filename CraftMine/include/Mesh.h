@@ -17,15 +17,30 @@
 
 class Mesh {
 private:
-    unsigned int VAO, VBO, bufferSize, texture = 0;
+    static std::vector<unsigned int> unusedBuffers;
+    const glm::vec3 position;
+    unsigned int VAO, VBO, texture = 0, elementCount;
+    size_t bufferSize;
 
     void initMesh(std::vector<BufferVertex>& buffer);
+    void allocateMemory(std::vector<BufferVertex>& buffer);
 
 public:
-    glm::vec3 position;
 
-    Mesh(std::vector<BufferVertex>& v, glm::vec3 p, unsigned int t) : texture{ t }, position{ p }, bufferSize{ (unsigned int)v.size() }
+    Mesh(std::vector<BufferVertex>& v, size_t b, glm::vec3 p, unsigned int t) : 
+        texture{ t }, 
+        position{ p }, 
+        bufferSize{ b },
+        elementCount{ (unsigned int)v.size() }
     { initMesh(v); }
+
+    Mesh(std::vector<BufferVertex>& v, glm::vec3 p, unsigned int t) : 
+        texture{ t }, 
+        position{ p }, 
+        bufferSize{ v.size() * sizeof(BufferVertex) },
+        elementCount{ (unsigned int)v.size() }
+    { initMesh(v); }
+    
     Mesh(const Mesh&) = delete;
     ~Mesh();
 
