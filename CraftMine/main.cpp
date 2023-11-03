@@ -6,8 +6,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/string_cast.hpp>
 
-#include <windows.h>
-
 #include <queue>
 #include <mutex>
 #include <vector>
@@ -15,7 +13,6 @@
 #include <thread>
 #include <iostream>
 #include <functional>
-
 
 #include "include/Mesh.h"
 #include "include/Chunk.h"
@@ -26,8 +23,9 @@
 #include "include/stb_image.h"
 #include "include/ThreadPool.h"
 #include "include/BufferElement.h"
-#include "include/TextureLoader.h"
+#include "include/TextureHandler.h"
 
+#define max(a, b) ((a > b) ? a : b)
 
 using params::graphical::SKY_COLOR;
 
@@ -47,28 +45,36 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 }
 
 
-void processInput(GLFWwindow* window, Camera& cam, Light& lightSource)
+void processInput(GLFWwindow* window, Camera& cam, Light& lightSource, double delta)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
 
+    double camSpeed;
+
+    if (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
+        camSpeed = params::controls::CAM_SPEED * 2.0 * (delta / 1000000);
+    else
+        camSpeed = params::controls::CAM_SPEED * (delta / 1000000);
+    
+
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        cam.moveForward(params::controls::CAM_SPEED);
+        cam.moveForward(camSpeed);
 
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        cam.moveSideWays(-params::controls::CAM_SPEED);
+        cam.moveSideWays(-camSpeed);
 
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        cam.moveForward(-params::controls::CAM_SPEED);
+        cam.moveForward(-camSpeed);
     
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        cam.moveSideWays(params::controls::CAM_SPEED);
+        cam.moveSideWays(camSpeed);
 
     if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
-        cam.moveUpward(params::controls::CAM_SPEED);
+        cam.moveUpward(camSpeed);
 
     if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
-        cam.moveUpward(-params::controls::CAM_SPEED);
+        cam.moveUpward(-camSpeed);
 
 
     if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS)
@@ -78,7 +84,9 @@ void processInput(GLFWwindow* window, Camera& cam, Light& lightSource)
 
 int main()
 {
-    double startingTime;
+    //double startingTime, sleepDuration;
+    std::chrono::high_resolution_clock::time_point start, end;
+    double delta = 0;
 
     const int tabSize = (params::chunk::RADIUS * 2 + 1) * (params::chunk::RADIUS * 2 + 1);
 
@@ -145,20 +153,20 @@ int main()
     glEnable(GL_DEPTH_TEST);
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-    TextureLoader* textureLoader = TextureLoader::getInstance();
+    TextureHandler* th = TextureHandler::getInstance();
     Light light(vec3(0.0f, 180.0f, -5.0f), vec3(0.99f, 0.9f, 0.9f), 0.6f);
 
     // game loop
     while (!glfwWindowShouldClose(window))
     {
-        startingTime = glfwGetTime();
+        start = std::chrono::high_resolution_clock::now();
 
-        processInput(window, p1.getCam(), light);
+        processInput(window, p1.getCam(), light, delta);
 
         glClearColor(SKY_COLOR.x, SKY_COLOR.y, SKY_COLOR.z, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        Chunk::updateChunks(visibleChunks, light, p1, textureLoader->getTexture(0));
+        Chunk::updateChunks(visibleChunks, light, p1, th->getTexture());
 
         view = p1.getCam().getViewMatrix();
 
@@ -173,10 +181,13 @@ int main()
         glfwSwapBuffers(window);
         glfwPollEvents();
 
-        Sleep(max(params::graphical::DELTA - ((glfwGetTime() - startingTime) * 1000), 0));
+        end = std::chrono::high_resolution_clock::now();
+        delta = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+        // std::this_thread::sleep_for(std::chrono::microseconds((int)max(params::graphical::FRAME_INTERVAL - delta, 0))); // limite de framerate
+        // comment c'est possible de faire un langage aussi illisible j'ai les yeux qui brûlent
     }
 
-    delete textureLoader, objectShader, lightShader, visibleChunks, window;
+    delete th, objectShader, lightShader, visibleChunks, window;
 
     glfwTerminate();
     return 0;

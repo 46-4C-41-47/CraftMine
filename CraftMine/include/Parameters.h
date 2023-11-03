@@ -74,7 +74,7 @@ namespace params
 	{
 		static const int FRAME_WIDTH = 1200, FRAME_HEIGHT = 800;
 		static const float 
-			DELTA = 1000.0f / 60.0f, 
+			FRAME_INTERVAL = 1000000.0f / 60.0f, // en microsecondes
 			ASPECT_RATIO = (float)FRAME_WIDTH / (float)FRAME_HEIGHT,
 			NEAR_PLANE = 0.1f,
 			FAR_PLANE = chunk::WIDTH * chunk::RADIUS;
@@ -87,7 +87,7 @@ namespace params
 	namespace controls
 	{
 		static const float HORIZONTAL_SENSITIVITY = 0.002f, VERTICAL_SENSITIVITY = 0.0016f;
-		static const float CAM_SPEED = 0.6f;
+		static const float CAM_SPEED = 15.0f;
 	}
 }
 

@@ -17,8 +17,8 @@
 #include "Player.h"
 #include "Shader.h"
 #include "Parameters.h"
-#include "ThreadPool.h"
 #include "BufferElement.h"
+#include "TextureHandler.h"
 #include "ChunkMeshBuffer.h"
 
 /*
@@ -65,7 +65,7 @@ using func::getVIndex;
 
 class Chunk {
 private:
-	static ThreadPool* threadPool;
+	const TextureHandler* th = TextureHandler::getInstance();
 	    
 	bool initStatus = false, bordersFullyUpdated = false;
 	unsigned int texture, chunkDataSize;
@@ -101,10 +101,5 @@ public:
 	void setNeighbor(Chunk** value);
 	void updateMesh();
 
-	static void updateChunks(
-		Chunk** visibleChunks, 
-		Light& l, 
-		Player& p, 
-		unsigned int t
-	);
+	static void updateChunks(Chunk** visibleChunks, Light& l, Player& p, unsigned int t);
 };

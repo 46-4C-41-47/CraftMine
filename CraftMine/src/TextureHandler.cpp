@@ -1,49 +1,22 @@
-#include "../include/TextureLoader.h"
+#include "../include/TextureHandler.h"
 
 
-TextureLoader* TextureLoader::instance = nullptr;
+TextureHandler* TextureHandler::instance = nullptr;
 
 
-const std::vector<std::string> TextureLoader::paths = {
-    "./res/textures/atlas.png",
-    /*
-    "./res/textures/atlas.png",
-    "./res/textures/dirt.jpg",
-    "./res/textures/grass.jpg",
-    "./res/textures/stone.jpg",
-    "./res/textures/water.jpg",
-    "./res/textures/lava.jpg",
-    "./res/textures/wood.jpg",
-    "./res/textures/leaf.jpg",
-    "./res/textures/diamond.jpg"
-    */
-};
+const std::string TextureHandler::path = "./res/textures/atlas.png";
 
 
-TextureLoader::TextureLoader()
-{
-    for (int i = 0; i < paths.size(); i++)
-        textures.push_back(loadTexture(paths[i]));
-}
-
-
-TextureLoader::~TextureLoader()
-{
-    for (int i = 0; i < textures.size(); i++)
-        delete textures[i];
-}
-
-
-TextureLoader* TextureLoader::getInstance()
+TextureHandler* TextureHandler::getInstance()
 {
     if (instance == nullptr)
-        instance = new TextureLoader();
+        instance = new TextureHandler();
 
     return instance;
 }
 
 
-Texture* TextureLoader::loadTexture(std::string path) {
+Texture* TextureHandler::loadTexture(std::string path) {
     unsigned int address;
     int width, height, nrChannels;
     unsigned char* data;

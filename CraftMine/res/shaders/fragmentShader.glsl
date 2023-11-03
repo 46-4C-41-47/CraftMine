@@ -15,7 +15,7 @@ uniform float ambientStrength;
 uniform sampler2D texture;
 
 
-float fogValue(float depth) 
+float linearZ(float depth) 
 {
     float z = depth * 2.0 - 1.0;
     return ((2.0 * nearPlane * farPlane) / (farPlane + nearPlane - z * (farPlane - nearPlane))) / farPlane;
@@ -29,5 +29,6 @@ void main()
 
     float c = ambientStrength + ((1 - ambientStrength) * colorStrength);
 
-    FragColor = mix(texture(texture, texCoor) * vec4(lightColor, 1.0) * c, vec4(fogColor, 1.0), 0);
+    // gl_FragCoord.z
+    FragColor = mix(texture(texture, texCoor) * vec4(lightColor, 1.0) * c, vec4(fogColor, 1.0), linearZ(gl_FragCoord.z));
 } 

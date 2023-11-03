@@ -1,7 +1,7 @@
 #include "../include/Chunk.h"
 
 
-//ThreadPool* Chunk::threadPool = ThreadPool::getInstance();
+//TextureHandler* Chunk::th = TextureHandler::getInstance();
 
 
 Chunk::Chunk(int x, int y, Light& l, unsigned int t) : x{ x }, y{ y }, light{ l }, texture{ t }
@@ -144,6 +144,7 @@ ChunkMeshBuffer* Chunk::generateMesh()
 
 void Chunk::updateBorders()
 {
+	
 	if (buffer == nullptr)
 		return;
 
@@ -152,7 +153,7 @@ void Chunk::updateBorders()
 		&& (neighbors[SOUTH] == nullptr || neighbors[SOUTH]->getInitStatus())
 		&& (neighbors[EAST ] == nullptr || neighbors[EAST ]->getInitStatus())
 		&& (neighbors[WEST ] == nullptr || neighbors[WEST ]->getInitStatus());
-
+	
 	bufferMutex.lock();
 	for (int i = 0; i < WIDTH; i++)
 	{
@@ -175,8 +176,8 @@ void Chunk::updateBorders()
 			}
 
 			// EAST
-			if (neighbors[EAST] != nullptr
-				&& !neighbors[EAST]->isThereABlock(0, j, i)
+			if (neighbors[EAST] != nullptr 
+				&& !neighbors[EAST]->isThereABlock(0, j, i) 
 				&& isThereABlock(params::chunk::WIDTH - 1, j, i))
 			{
 				buffer->insertFace(params::chunk::WIDTH - 1, j, i, RIGHT, BlockType::Dirt);
@@ -229,18 +230,18 @@ void Chunk::draw(Shader& shader, glm::mat4& projection, glm::mat4& view)
 }
 
 
-void Chunk::setNeighbor(Chunk** value)
+void Chunk::setNeighbor(Chunk** values)
 {
-	if (   value[NORTH] != neighbors[NORTH]
-		|| value[SOUTH] != neighbors[SOUTH]
-		|| value[EAST ] != neighbors[EAST ]
-		|| value[WEST ] != neighbors[WEST ]
+	if (   values[NORTH] != neighbors[NORTH]
+		|| values[SOUTH] != neighbors[SOUTH]
+		|| values[EAST ] != neighbors[EAST ]
+		|| values[WEST ] != neighbors[WEST ]
 		|| !bordersFullyUpdated)
 	{
-		neighbors[NORTH] = value[NORTH];
-		neighbors[SOUTH] = value[SOUTH];
-		neighbors[EAST ] = value[EAST ];
-		neighbors[WEST ] = value[WEST ];
+		neighbors[NORTH] = values[NORTH];
+		neighbors[SOUTH] = values[SOUTH];
+		neighbors[EAST ] = values[EAST ];
+		neighbors[WEST ] = values[WEST ];
 
 		bordersFullyUpdated = false;
 		//std::thread(&Chunk::updateBorders, this).detach();
@@ -249,12 +250,8 @@ void Chunk::setNeighbor(Chunk** value)
 }
 
 
-void Chunk::updateChunks(
-	Chunk** visibleChunks,
-	Light& l,
-	Player& p,
-	unsigned int t
-) {
+void Chunk::updateChunks(Chunk** visibleChunks, Light& l, Player& p, unsigned int t) 
+{
 	bool newChunk = false;
 	double start, end0, end1, end2;
 
