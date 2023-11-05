@@ -51,13 +51,12 @@ using constants::BlockType;
 
 using constants::texture::CHUNK_WIDTH;
 
-using constants::chunk::MAX_MEM_SPACE;
-
 using params::chunk::WIDTH;
 using params::chunk::HEIGHT;
 using params::chunk::SPREAD;
 using params::chunk::RADIUS;
 using params::chunk::HEIGHT_RANGE;
+using params::chunk::MAX_MEM_SPACE;
 
 using func::getChunkIndex;
 using func::getBufferId;
@@ -65,7 +64,8 @@ using func::getUIndex;
 using func::getVIndex;
 
 
-class Chunk {
+class Chunk 
+{
 private:
 	const TextureHandler* th = TextureHandler::getInstance();
 	    

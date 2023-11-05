@@ -112,7 +112,7 @@ int main()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     GLFWwindow* window = glfwCreateWindow(params::graphical::FRAME_WIDTH, params::graphical::FRAME_HEIGHT, "CraftMine", NULL, NULL);
-    glfwSetWindowPos(window, 2625, 200);
+    //glfwSetWindowPos(window, 2625, 200);
 
     if (window == NULL)
     {

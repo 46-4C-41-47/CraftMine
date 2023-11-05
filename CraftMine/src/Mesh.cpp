@@ -1,20 +1,17 @@
 #include "../include/Mesh.h"
 
 
+std::vector<unsigned int> Mesh::unusedBuffers = {};
+
+
 Mesh::~Mesh() {
+    unusedBuffers.push_back(VBO);
     glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
 }
 
 
-void Mesh::allocateMemory(std::vector<BufferVertex>& buffer)
+void Mesh::copyBuffer(std::vector<BufferVertex>& buffer)
 {
-    glGenBuffers(1, &VBO);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-
-    /*   /!\ Potentiellement a remplacer par GL_DYNAMIC_DRAW /!\   */
-    glBufferData(GL_ARRAY_BUFFER, bufferSize, nullptr, GL_STATIC_DRAW);
-
     void* ptr = glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
 
     memcpy(ptr, &buffer[0], sizeof(BufferVertex) * buffer.size());
@@ -24,11 +21,12 @@ void Mesh::allocateMemory(std::vector<BufferVertex>& buffer)
 
 void Mesh::initMesh(std::vector<BufferVertex>& buffer)
 {
-    bool reuseBuffer = true;
-
-    if (unusedBuffers.size() == 0)
+    if (unusedBuffers.empty())
     {
         glGenBuffers(1, &VBO);
+        glBindBuffer(GL_ARRAY_BUFFER, VBO);
+        /*   /!\ Potentiellement a remplacer par GL_DYNAMIC_DRAW /!\   */
+        glBufferData(GL_ARRAY_BUFFER, bufferSize, nullptr, GL_STATIC_DRAW);
     }
     else
     {
@@ -41,8 +39,7 @@ void Mesh::initMesh(std::vector<BufferVertex>& buffer)
     glBindVertexArray(VAO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
-    if (!reuseBuffer)
-        allocateMemory(buffer);
+    copyBuffer(buffer);
 
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 1, GL_INT, GL_FALSE, sizeof(BufferVertex), (void*)0);
@@ -79,6 +76,7 @@ void Mesh::draw(Shader& shader, Light& light, glm::mat4& projection, glm::mat4& 
     shader.sendFloat("ambientStrength", light.ambientStrength);
     shader.sendFloat("nearPlane", params::graphical::NEAR_PLANE);
     shader.sendFloat("farPlane", params::graphical::FAR_PLANE);
+    shader.sendFloat("fogStrength", params::scene::fogStrength);
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture);

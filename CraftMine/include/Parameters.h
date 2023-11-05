@@ -8,49 +8,6 @@
 #include "BufferElement.h"
 
 
-namespace params 
-{
-	namespace chunk
-	{
-		static const int
-			WIDTH = 16,
-			HEIGHT = 256,
-			RADIUS = 10, // nombre de chunks visible autour du joueur
-			SPREAD = 4,
-			GROUND_MIN_HEIGHT = 128,
-			GROUND_MAX_HEIGHT = 192,
-			HEIGHT_RANGE = GROUND_MAX_HEIGHT - GROUND_MIN_HEIGHT;
-	}
-	
-	namespace noise
-	{
-		static const double 
-			FREQUENCY = 0.15413, 
-			SEED = 684.6565;
-	}
-
-	namespace graphical
-	{
-		static const int FRAME_WIDTH = 1200, FRAME_HEIGHT = 800;
-		static const float 
-			FRAME_INTERVAL = 1000000.0f / 60.0f, // en microsecondes
-			ASPECT_RATIO = (float)FRAME_WIDTH / (float)FRAME_HEIGHT,
-			NEAR_PLANE = 0.1f,
-			FAR_PLANE = chunk::WIDTH * chunk::RADIUS;
-		static const glm::vec3 
-			FOG_COLOR = glm::vec3(0.0f),
-			SKY_COLOR = glm::vec3(0.0f);
-			//SKY_COLOR = glm::vec3(0.37f, 0.7f, 0.75f);
-	}
-
-	namespace controls
-	{
-		static const float HORIZONTAL_SENSITIVITY = 0.002f, VERTICAL_SENSITIVITY = 0.0016f;
-		static const float CAM_SPEED = 15.0f;
-	}
-}
-
-
 namespace constants
 {
 	enum cardinal
@@ -92,10 +49,57 @@ namespace constants
 		static const int CHUNK_COUNT = PIXEL_WIDTH / CHUNK_PIXEL_WIDTH;
 		static const float CHUNK_WIDTH = CHUNK_PIXEL_WIDTH / (float)PIXEL_WIDTH;
 	}
+}
 
+
+namespace params
+{
 	namespace chunk
 	{
+		static const int
+			WIDTH = 16,
+			HEIGHT = 256,
+			RADIUS = 7, // nombre de chunks visible autour du joueur
+			SPREAD = 4,
+			GROUND_MIN_HEIGHT = 128,
+			GROUND_MAX_HEIGHT = 192,
+			HEIGHT_RANGE = GROUND_MAX_HEIGHT - GROUND_MIN_HEIGHT;
+		
 		static const size_t MAX_MEM_SPACE = sizeof(BufferVertex) * (params::chunk::WIDTH * params::chunk::WIDTH * params::chunk::HEIGHT);
+	}
+
+
+	namespace scene
+	{
+		static const int fogStrength = 0.5; // cette valeur est prévue pour être entre 0.5 et 1 
+	}
+
+	
+	namespace noise
+	{
+		static const double 
+			FREQUENCY = 0.15413, 
+			SEED = 684.6565;
+	}
+
+	namespace graphical
+	{
+		static const int FRAME_WIDTH = 1200, FRAME_HEIGHT = 800;
+		static const float 
+			FRAME_INTERVAL = 1000000.0f / 60.0f, // en microsecondes
+			ASPECT_RATIO = (float)FRAME_WIDTH / (float)FRAME_HEIGHT,
+			NEAR_PLANE = 0.1f,
+			FAR_PLANE = chunk::WIDTH * chunk::RADIUS;
+		static const glm::vec3 
+			FOG_COLOR = glm::vec3(1.0f),
+			SKY_COLOR = glm::vec3(1.0f);
+			//SKY_COLOR = glm::vec3(0.37f, 0.7f, 0.75f);
+	}
+
+	namespace controls
+	{
+		static const float HORIZONTAL_SENSITIVITY = 0.002f, VERTICAL_SENSITIVITY = 0.0016f;
+		static const float CAM_SPEED = 15.0f;
 	}
 }
 

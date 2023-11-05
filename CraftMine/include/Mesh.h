@@ -23,7 +23,7 @@ private:
     size_t bufferSize;
 
     void initMesh(std::vector<BufferVertex>& buffer);
-    void allocateMemory(std::vector<BufferVertex>& buffer);
+    void copyBuffer(std::vector<BufferVertex>& buffer);
 
 public:
 
