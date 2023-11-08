@@ -67,7 +67,7 @@ using func::getVIndex;
 class Chunk 
 {
 private:
-	static std::vector<Chunk*>* visibleChunks;
+	static std::vector<Chunk*> visibleChunks;
 
 	const TextureHandler* th = TextureHandler::getInstance();
 	    
@@ -105,7 +105,6 @@ public:
 	void setNeighbor(Chunk** value);
 	void updateMesh();
 
-	const std::vector<Chunk*>& getVisibleChunks() { return visibleChunks; }
-
-	static void updateChunks(Chunk** visibleChunks, Light& l, Player& p, unsigned int t);
+	static const std::vector<Chunk*>& getVisibleChunks() { return visibleChunks; }
+	static void updateChunks(Light& l, Player& p, unsigned int t);
 };

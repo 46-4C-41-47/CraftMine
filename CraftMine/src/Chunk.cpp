@@ -2,7 +2,10 @@
 
 
 //TextureHandler* Chunk::th = TextureHandler::getInstance();
-std::vector<Chunk*>* Chunk::visibleChunks = new std::vector<Chunk*>(25, nullptr);
+std::vector<Chunk*> Chunk::visibleChunks(
+	(params::chunk::RADIUS * 2 + 1)* (params::chunk::RADIUS * 2 + 1), 
+	nullptr
+);
 
 
 Chunk::Chunk(int x, int y, Light& l, unsigned int t) : x{ x }, y{ y }, light{ l }, texture{ t }
@@ -251,7 +254,7 @@ void Chunk::setNeighbor(Chunk** values)
 }
 
 
-void Chunk::updateChunks(Chunk** visibleChunks, Light& l, Player& p, unsigned int t) 
+void Chunk::updateChunks(Light& l, Player& p, unsigned int t) 
 {
 	bool newChunk = false;
 	double start, end0, end1, end2;
@@ -271,7 +274,7 @@ void Chunk::updateChunks(Chunk** visibleChunks, Light& l, Player& p, unsigned in
 	Chunk* neighborBuffer[4];
 	Chunk* visibleChunksCopy[borderSize * borderSize];
 
-	std::copy(visibleChunks, visibleChunks + borderSize * borderSize, visibleChunksCopy);
+	std::copy(&visibleChunks[0], &visibleChunks[0] + borderSize * borderSize, visibleChunksCopy);
 
 	end0 = (glfwGetTime() - start) * 1000;
 	start = glfwGetTime();

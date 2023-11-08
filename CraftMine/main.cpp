@@ -82,16 +82,13 @@ void processInput(GLFWwindow* window, Camera& cam, Light& lightSource, double de
 }
 
 
-/*int main()
+int main()
 {
-    //double startingTime, sleepDuration;
     std::chrono::high_resolution_clock::time_point start, end;
     double delta = 0;
 
-    const int tabSize = (params::chunk::RADIUS * 2 + 1) * (params::chunk::RADIUS * 2 + 1);
-
-    Chunk* visibleChunks[tabSize] = { nullptr };
-    Shader* objectShader, * lightShader;
+    Shader* objectShader;
+    Shader *lightShader;
 
     glm::mat4 view;
     glm::mat4 projection = glm::perspective(
@@ -112,7 +109,7 @@ void processInput(GLFWwindow* window, Camera& cam, Light& lightSource, double de
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     GLFWwindow* window = glfwCreateWindow(params::graphical::FRAME_WIDTH, params::graphical::FRAME_HEIGHT, "CraftMine", NULL, NULL);
-    glfwSetWindowPos(window, 2625, 200);
+    //glfwSetWindowPos(window, 2625, 200);
 
     if (window == NULL)
     {
@@ -166,13 +163,15 @@ void processInput(GLFWwindow* window, Camera& cam, Light& lightSource, double de
         glClearColor(SKY_COLOR.x, SKY_COLOR.y, SKY_COLOR.z, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        Chunk::updateChunks(visibleChunks, light, p1, th->getTexture());
+        Chunk::updateChunks(light, p1, th->getTexture());
 
         view = p1.getCam().getViewMatrix();
 
         light.draw(*lightShader, projection, view);
 
-        for (int i = 0; i < tabSize; i++)
+        const std::vector<Chunk*>& visibleChunks = Chunk::getVisibleChunks();
+        
+        for (int i = 0; i < visibleChunks.size(); i++)
         {
             if (visibleChunks[i] != nullptr)
                 visibleChunks[i]->draw(*objectShader, projection, view);
@@ -187,34 +186,10 @@ void processInput(GLFWwindow* window, Camera& cam, Light& lightSource, double de
         // comment c'est possible de faire un langage aussi illisible j'ai les yeux qui brûlent
     }
 
-    delete th, objectShader, lightShader, visibleChunks, window;
+    delete th, objectShader, lightShader, window;
 
     glfwTerminate();
     return 0;
-}*/
-
-
-class Test
-{
-private:
-    static std::vector<int> vect;
-
-public:
-    const std::vector<int>& getVect() { return vect; }
-};
-
-
-std::vector<int> Test::vect = { 1, 2, 3 };
-
-
-int main()
-{
-    Test t;
-
-    for (int i = 0; i < t.getVect().size(); i++)
-        std::cout << t.getVect()[i] << "\n";
-
-    t.getVect()[0] = 4;
 }
 
 

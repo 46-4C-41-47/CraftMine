@@ -71,7 +71,7 @@ namespace params
 
 	namespace scene
 	{
-		static const int fogStrength = 0.5; // cette valeur est prévue pour être entre 0.5 et 1 
+		static const glm::vec2 fogStrength = glm::vec2(0.8f, 0.2f); // cette valeur est prevue pour etre entre 0.5 et 1 
 	}
 
 	

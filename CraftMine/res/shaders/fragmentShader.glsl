@@ -7,7 +7,7 @@ in vec3 fNormal;
 in vec2 texCoor;
 
 uniform vec3 fogColor;
-uniform float fogStrength;
+uniform vec2 fogStrength;
 
 uniform vec3 lightPos;
 uniform vec3 lightColor;
@@ -31,11 +31,10 @@ float linearZ(float depth)
 
 
 // Cette fonction est une courbe de Bézier quadratique dont fogStrength est le point de controle
-float fogValue(float t) 
+float fogValue(float x) 
 {
-    float tInverse = 1 - t;
-    // return tInverse * tInverse * A + 2 * tInverse * t * fogStrength + t * t * C // version Bézier
-    return tInverse * (tInverse * A + t * fogStrength) + t * (tInverse * fogStrength + t * C); // version De Casteljau
+    float t = (fogStrength.x + sqrt(fogStrength.x * fogStrength.x - 2 * x * fogStrength.x + x)) / 2 * fogStrength.x - 1;
+    return 2 * C * (1 - t) * t + t * t;
 }
 
 
@@ -47,5 +46,5 @@ void main()
     float c = ambientStrength + ((1 - ambientStrength) * colorStrength);
 
     // gl_FragCoord.z
-    FragColor = mix(texture(texture1, texCoor) * vec4(lightColor, 1.0) * c, vec4(fogColor, 1.0), fogValue(linearZ(gl_FragCoord.z)));
+    FragColor = mix(texture(texture1, texCoor) * vec4(lightColor, 1.0) * c, vec4(fogColor, 1.0), 0);
 } 
