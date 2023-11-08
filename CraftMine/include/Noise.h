@@ -38,6 +38,7 @@ public:
     
     double classicNoise(double x, double y);
     double* detailed2DNoise(double x, double y, int resolution);
+    double* detailed3DNoise(double x, double y, double z, int resolution, int height);
     double smoothNoise(double x, double y, double z);
 
     double noise1D(double x);

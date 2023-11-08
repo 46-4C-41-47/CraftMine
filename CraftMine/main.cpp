@@ -82,7 +82,7 @@ void processInput(GLFWwindow* window, Camera& cam, Light& lightSource, double de
 }
 
 
-int main()
+/*int main()
 {
     //double startingTime, sleepDuration;
     std::chrono::high_resolution_clock::time_point start, end;
@@ -112,7 +112,7 @@ int main()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     GLFWwindow* window = glfwCreateWindow(params::graphical::FRAME_WIDTH, params::graphical::FRAME_HEIGHT, "CraftMine", NULL, NULL);
-    //glfwSetWindowPos(window, 2625, 200);
+    glfwSetWindowPos(window, 2625, 200);
 
     if (window == NULL)
     {
@@ -191,6 +191,30 @@ int main()
 
     glfwTerminate();
     return 0;
+}*/
+
+
+class Test
+{
+private:
+    static std::vector<int> vect;
+
+public:
+    const std::vector<int>& getVect() { return vect; }
+};
+
+
+std::vector<int> Test::vect = { 1, 2, 3 };
+
+
+int main()
+{
+    Test t;
+
+    for (int i = 0; i < t.getVect().size(); i++)
+        std::cout << t.getVect()[i] << "\n";
+
+    t.getVect()[0] = 4;
 }
 
 
@@ -228,7 +252,6 @@ ajouter un readme sur git
 faire une doc si j'ai pas la flemme
 rendre asynchrone la generation des chunks
 finir la classe camera
-prise en charge de textures différentes pour les blocs (finir la classe Block)
 ajouter des grottes
 rendre le décor destructible
 ajouter des nuages

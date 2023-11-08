@@ -2,6 +2,7 @@
 
 
 //TextureHandler* Chunk::th = TextureHandler::getInstance();
+std::vector<Chunk*>* Chunk::visibleChunks = new std::vector<Chunk*>(25, nullptr);
 
 
 Chunk::Chunk(int x, int y, Light& l, unsigned int t) : x{ x }, y{ y }, light{ l }, texture{ t }

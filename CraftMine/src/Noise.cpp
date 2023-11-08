@@ -139,7 +139,7 @@ double* Noise::detailed2DNoise(double x, double y, int resolution)
 	cornerValue[2] = smoothNoise(x    , y + 1, 0);
 	cornerValue[3] = smoothNoise(x + 1, y + 1, 0);
 
-	double u, v, offset = 1.0 / resolution;
+	double u, v, w, offset = 1.0 / resolution;
 
 	for (int x = 0; x < resolution; x++)
 	{
@@ -152,6 +152,46 @@ double* Noise::detailed2DNoise(double x, double y, int resolution)
 				lerp(v, cornerValue[0], cornerValue[2]),
 				lerp(v, cornerValue[1], cornerValue[3])
 			);
+		}
+	}
+
+	return res;
+}
+
+
+double* Noise::detailed3DNoise(double x, double y, double z, int resolution, int height)
+{
+	double* res = new double[resolution * resolution * height];
+	double cornerValue[8];
+
+	// haut
+	cornerValue[0] = smoothNoise(x    , y    , z + 1);
+	cornerValue[1] = smoothNoise(x + 1, y    , z + 1);
+	cornerValue[2] = smoothNoise(x    , y + 1, z + 1);
+	cornerValue[3] = smoothNoise(x + 1, y + 1, z + 1);
+
+	// bas
+	cornerValue[4] = smoothNoise(x    , y    , z);
+	cornerValue[5] = smoothNoise(x + 1, y    , z);
+	cornerValue[6] = smoothNoise(x    , y + 1, z);
+	cornerValue[7] = smoothNoise(x + 1, y + 1, z);
+
+	double u, v, offset = 1.0 / resolution;
+
+	for (int X = 0; X < resolution; X++)
+	{
+		for (int Y = 0; Y < resolution; Y++)
+		{
+			for (int Z = 0; Z < height; Z++)
+			{
+				u = fade(X * offset);
+				v = fade(Y * offset);
+
+				res[X + Y * resolution] = lerp(u,
+					lerp(v, cornerValue[0], cornerValue[2]),
+					lerp(v, cornerValue[1], cornerValue[3])
+				);
+			}
 		}
 	}
 
