@@ -30,7 +30,7 @@
 using params::graphical::SKY_COLOR;
 
 
-Player p1(glm::vec3(15.0f, 150.0f, 15.0f));
+Player p1(glm::vec3(15.0f, 300.0f, 15.0f));
 
 
 void mouse_callback(GLFWwindow* window, double xpos, double ypos) 
@@ -109,7 +109,7 @@ int main()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     GLFWwindow* window = glfwCreateWindow(params::graphical::FRAME_WIDTH, params::graphical::FRAME_HEIGHT, "CraftMine", NULL, NULL);
-    //glfwSetWindowPos(window, 2625, 200);
+    glfwSetWindowPos(window, 2625, 200);
 
     if (window == NULL)
     {
