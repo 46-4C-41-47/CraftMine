@@ -26,6 +26,8 @@
 #include "include/TextureHandler.h"
 
 #define max(a, b) ((a > b) ? a : b)
+#define min(a, b) ((a < b) ? a : b)
+#define lerp(x, y, a) (a * (1 - a) + y * a)
 
 using params::graphical::SKY_COLOR;
 
@@ -191,6 +193,18 @@ int main()
     glfwTerminate();
     return 0;
 }
+
+
+/*int main()
+{
+    float farPlane = 112, fragX = 150, windowWidth = 1200, t = 0.00253;
+
+    float correctFarPlane = sin(acos(abs((fragX - (windowWidth * 0.5)) / (windowWidth * 0.5)))) * farPlane;
+    float res = min(correctFarPlane, lerp(0, farPlane, t)) / correctFarPlane;
+
+    std::cout << correctFarPlane << "\n";
+    std::cout << res << "\n";
+}*/
 
 
 /*int main()

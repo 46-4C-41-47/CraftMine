@@ -69,14 +69,18 @@ void Mesh::draw(Shader& shader, Light& light, glm::mat4& projection, glm::mat4& 
 {
     shader.use();
 
-    shader.sendInt("texture1", 0);
     shader.sendVec3("fogColor", params::graphical::FOG_COLOR);
     shader.sendVec3("lightPos", light.position);
     shader.sendVec3("lightColor", light.color);
+    
+    shader.sendVec2("fogStrength", params::scene::fogStrength);
+    
+    shader.sendFloat("windowWidth", params::graphical::FRAME_WIDTH);
     shader.sendFloat("ambientStrength", light.ambientStrength);
     shader.sendFloat("nearPlane", params::graphical::NEAR_PLANE);
     shader.sendFloat("farPlane", params::graphical::FAR_PLANE);
-    shader.sendVec2("fogStrength", params::scene::fogStrength);
+    
+    shader.sendInt("texture1", 0);
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture);
