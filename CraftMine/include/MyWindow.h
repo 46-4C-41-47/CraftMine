@@ -15,7 +15,14 @@
 class MyWindow
 {
 private:
-	
+	const double delta = 1000.0f / 60;
+	float aspectRatio;
+    unsigned int compiledShader;
+	const char* vertexShaderPath = "./vertexShader.glsl";
+	const char* fragmentShaderPath = "./fragmentShader.glsl";
+	GLFWwindow* window;
+    Shader* shader;
+
 	void processInput();
 
 public:

@@ -59,7 +59,7 @@ namespace params
 		static const int
 			WIDTH = 16,
 			HEIGHT = 256,
-			RADIUS = 1, // nombre de chunks visible autour du joueur
+			RADIUS = 7, // nombre de chunks visible autour du joueur
 			SPREAD = 4,
 			GROUND_MIN_HEIGHT = 128,
 			GROUND_MAX_HEIGHT = 192,
@@ -71,7 +71,7 @@ namespace params
 
 	namespace scene
 	{
-		static const glm::vec2 fogStrength = glm::vec2(0.8f, 0.2f);
+		static const glm::vec2 fogStrength = glm::vec2(0.8f, 0.2f); // cette valeur est prevue pour etre entre 0.5 et 1 
 	}
 
 	
@@ -85,11 +85,11 @@ namespace params
 	namespace graphical
 	{
 		static const int FRAME_WIDTH = 1200, FRAME_HEIGHT = 800;
-		static const float
+		static const float 
 			FRAME_INTERVAL = 1000000.0f / 60.0f, // en microsecondes
 			ASPECT_RATIO = (float)FRAME_WIDTH / (float)FRAME_HEIGHT,
 			NEAR_PLANE = 0.1f,
-			FAR_PLANE = 200;//chunk::WIDTH * chunk::RADIUS;
+			FAR_PLANE = chunk::WIDTH * chunk::RADIUS;
 		static const glm::vec3 
 			FOG_COLOR = glm::vec3(1.0f),
 			SKY_COLOR = glm::vec3(1.0f);

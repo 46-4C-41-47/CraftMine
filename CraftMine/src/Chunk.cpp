@@ -30,29 +30,6 @@ Chunk::~Chunk()
 void Chunk::init()
 {
 	Noise* n = Noise::getInstance();
-	double frequency = 0.00015;
-
-	for (int z = 0; z < WIDTH; z++)
-	{
-		for (int y = 0; y < HEIGHT; y++)
-		{
-			for (int x = 0; x < WIDTH; x++)
-			{
-				if (0.5 < n->smoothNoise(x + frequency, y + frequency, z + frequency))
-					chunkData[getChunkIndex(x, y, z)] = BlockType::Dirt;
-				else
-					chunkData[getChunkIndex(x, y, z)] = BlockType::Empty;
-			}
-		}
-	}
-
-	initStatus = true;
-}
-
-
-/*void Chunk::init()
-{
-	Noise* n = Noise::getInstance();
 
 	const int noiseBorderSize = WIDTH * SPREAD,
 			  half_height = (float)HEIGHT * 0.5f,
@@ -81,7 +58,7 @@ void Chunk::init()
 
 	initStatus = true;
 	delete heightMap;
-}*/
+}
 
 
 inline BlockType Chunk::getBlock(int x, int y, int z)
