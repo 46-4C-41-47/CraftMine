@@ -40,6 +40,7 @@ namespace constants
 		Wood = 7,
 		Leaf = 8,
 		Diamond = 9,
+		Library = 5,
 	};
 
 	namespace texture

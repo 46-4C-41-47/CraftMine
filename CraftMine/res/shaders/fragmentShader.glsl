@@ -27,7 +27,7 @@ float C = 1.0;
 
 float linearZ() 
 {
-    return ((2.0 * nearPlane * farPlane) / (farPlane + nearPlane - (gl_FragCoord.z * 2.0 - 1.0) * (farPlane - nearPlane))) / farPlane;
+    return (2.0 * nearPlane * farPlane) / (farPlane + nearPlane - (gl_FragCoord.z * 2.0 - 1.0) * (farPlane - nearPlane));
 }
 
 
@@ -39,10 +39,10 @@ float linearZ()
 }*/
 
 
-float correctHorizontalFov(float t)
+float correctHorizontalFov()
 {
     float correctFarPlane = sin(acos(abs((gl_FragCoord.x - (windowWidth * 0.5)) / (windowWidth * 0.5)))) * farPlane;
-    return min(correctFarPlane, mix(0, farPlane, t)) / correctFarPlane;
+    return min(correctFarPlane, mix(0, farPlane, (linearZ() + nearPlane) / farPlane)) / correctFarPlane;
 }
 
 
@@ -53,5 +53,5 @@ void main()
 
     float lightStrength = ambientStrength + ((1 - ambientStrength) * colorStrength);
 
-    FragColor = mix(texture(texture1, texCoor) * vec4(lightColor, 1.0) * lightStrength, vec4(fogColor, 1.0), correctHorizontalFov(linearZ()));
+    FragColor = mix(texture(texture1, texCoor) * vec4(lightColor, 1.0) * lightStrength, vec4(fogColor, 1.0), linearZ() / farPlane);
 } 

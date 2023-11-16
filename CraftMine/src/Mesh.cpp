@@ -69,6 +69,13 @@ void Mesh::draw(Shader& shader, Light& light, glm::mat4& projection, glm::mat4& 
 {
     shader.use();
 
+    glm::mat4 model = glm::mat4(1.0f);
+    model = glm::translate(model, position);
+
+    shader.sendMat4("model", model);
+    shader.sendMat4("view", view);
+    shader.sendMat4("projection", projection);
+
     shader.sendVec3("fogColor", params::graphical::FOG_COLOR);
     shader.sendVec3("lightPos", light.position);
     shader.sendVec3("lightColor", light.color);
@@ -84,13 +91,6 @@ void Mesh::draw(Shader& shader, Light& light, glm::mat4& projection, glm::mat4& 
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture);
-    
-    glm::mat4 model = glm::mat4(1.0f);
-    model = glm::translate(model, position);
-
-    shader.sendMat4("model", model);
-    shader.sendMat4("view", view);
-    shader.sendMat4("projection", projection);
 
     // draw mesh
     glBindVertexArray(VAO);

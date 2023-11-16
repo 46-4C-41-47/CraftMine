@@ -17,13 +17,13 @@ class Shader
 private: 
     unsigned int finalShader;
 
-    unsigned int initShader(const char* shaderCode, GLenum shaderType);
-    std::string getShaderCode(const char* shaderPath);
+    unsigned int initShader(const std::string& shaderCode, GLenum shaderType);
+    std::string getShaderCode(const std::string& shaderPath);
 
 public:
     unsigned int ID;
 
-    Shader(const char* vertexShaderPath, const char* fragmentShaderPath);
+    Shader(const std::string& vertexShaderPath, const std::string& fragmentShaderPath);
     Shader(const Shader&) = delete;
     Shader& operator = (const Shader&) = delete;
 

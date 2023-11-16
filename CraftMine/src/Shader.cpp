@@ -1,7 +1,7 @@
 #include "../include/Shader.h"
 
 
-Shader::Shader(const char* vertexShaderPath, const char* fragmentShaderPath) 
+Shader::Shader(const std::string& vertexShaderPath, const std::string& fragmentShaderPath)
 {
     int  success;
     char infoLog[512];
@@ -10,12 +10,14 @@ Shader::Shader(const char* vertexShaderPath, const char* fragmentShaderPath)
     try {
         vertexCode = getShaderCode(vertexShaderPath);
         fragmentCode = getShaderCode(fragmentShaderPath);
-    } catch (std::exception) {
+    } 
+    catch (std::exception) 
+    {
         throw std::exception("unable to create the shader object");
     }
 
-    unsigned int vertexShader = initShader(vertexCode.c_str(), GL_VERTEX_SHADER);
-    unsigned int fragmentShader = initShader(fragmentCode.c_str(), GL_FRAGMENT_SHADER);
+    unsigned int vertexShader = initShader(vertexCode, GL_VERTEX_SHADER);
+    unsigned int fragmentShader = initShader(fragmentCode, GL_FRAGMENT_SHADER);
 
     finalShader = glCreateProgram();
 
@@ -35,7 +37,7 @@ Shader::Shader(const char* vertexShaderPath, const char* fragmentShaderPath)
 }
 
 
-std::string Shader::getShaderCode(const char* shaderPath) 
+std::string Shader::getShaderCode(const std::string& shaderPath)
 {
     std::string shaderCode;
     std::ifstream shaderFile;
@@ -63,14 +65,15 @@ std::string Shader::getShaderCode(const char* shaderPath)
 }
 
 
-unsigned int Shader::initShader(const char* shaderCode, GLenum shaderType) 
+unsigned int Shader::initShader(const std::string& shaderCode, GLenum shaderType)
 {
     int  success;
     char infoLog[512];
     unsigned int shaderId;
+    const char* sc = shaderCode.c_str();
 
     shaderId = glCreateShader(shaderType);
-    glShaderSource(shaderId, 1, &shaderCode, NULL);
+    glShaderSource(shaderId, 1, &(sc), NULL);
     glCompileShader(shaderId);
 
     glGetShaderiv(shaderId, GL_COMPILE_STATUS, &success);
