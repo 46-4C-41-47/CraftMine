@@ -17,17 +17,23 @@ class Shader
 private: 
     unsigned int finalShader;
 
-    unsigned int initShader(const std::string& shaderCode, GLenum shaderType);
+    unsigned int initShaderStep(const std::string& codePath, GLenum shaderType);
+    unsigned int compileShaderStep(const std::string& shaderCode, GLenum shaderType);
+    void assertLinking();
     std::string getShaderCode(const std::string& shaderPath);
 
 public:
     unsigned int ID;
 
-    Shader(const std::string& vertexShaderPath, const std::string& fragmentShaderPath);
+    Shader(const std::string& vertexPath, const std::string& fragmentPath);
+    Shader(const std::string& vertexPath, const std::string& geometryPath, const std::string& fragmentPath);
+    
     Shader(const Shader&) = delete;
+
     Shader& operator = (const Shader&) = delete;
 
     inline unsigned int getId() { return finalShader; }
+
 
     void use();
     void sendVec2(const std::string& name, const glm::vec2& value);
