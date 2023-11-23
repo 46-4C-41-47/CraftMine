@@ -7,7 +7,7 @@ in vec3 fNormal;
 in vec2 texCoor;
 
 uniform vec3 fogColor;
-uniform vec2 fogStrength;
+uniform float fogStrength;
 
 uniform vec3 lightPos;
 uniform vec3 lightColor;
@@ -39,6 +39,12 @@ float linearZ()
 }*/
 
 
+float fogValue(float x)
+{
+    return 1 - sqrt(1 - pow(x, fogStrength));
+}
+
+
 float correctHorizontalFov()
 {
     float correctFarPlane = sin(acos(abs((gl_FragCoord.x - (windowWidth * 0.5)) / (windowWidth * 0.5)))) * farPlane;
@@ -53,5 +59,5 @@ void main()
 
     float lightStrength = ambientStrength + ((1 - ambientStrength) * colorStrength);
 
-    FragColor = mix(texture(texture1, texCoor) * vec4(lightColor, 1.0) * lightStrength, vec4(fogColor, 1.0), linearZ() / farPlane);
+    FragColor = mix(texture(texture1, texCoor) * vec4(lightColor, 1.0) * lightStrength, vec4(fogColor, 1.0), fogValue(linearZ() / farPlane));
 } 

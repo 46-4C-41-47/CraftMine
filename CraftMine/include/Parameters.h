@@ -72,7 +72,7 @@ namespace params
 
 	namespace scene
 	{
-		static const glm::vec2 fogStrength = glm::vec2(0.8f, 0.2f); // cette valeur est prevue pour etre entre 0.5 et 1 
+		static const float fogStrength = 5.0; // cette valeur est prevue pour etre entre 0.5 et 1 
 	}
 
 	
@@ -90,7 +90,7 @@ namespace params
 			FRAME_INTERVAL = 1000000.0f / 60.0f, // en microsecondes
 			ASPECT_RATIO = (float)FRAME_WIDTH / (float)FRAME_HEIGHT,
 			NEAR_PLANE = 0.1f,
-			FAR_PLANE = chunk::WIDTH * chunk::RADIUS;
+			FAR_PLANE = chunk::WIDTH * (chunk::RADIUS - 1);
 		static const glm::vec3 
 			FOG_COLOR = glm::vec3(1.0f),
 			SKY_COLOR = glm::vec3(1.0f);

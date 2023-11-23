@@ -80,8 +80,7 @@ void Mesh::draw(Shader& shader, Light& light, glm::mat4& projection, glm::mat4& 
     shader.sendVec3("lightPos", light.position);
     shader.sendVec3("lightColor", light.color);
     
-    shader.sendVec2("fogStrength", params::scene::fogStrength);
-    
+    shader.sendFloat("fogStrength", params::scene::fogStrength);
     shader.sendFloat("windowWidth", params::graphical::FRAME_WIDTH);
     shader.sendFloat("ambientStrength", light.ambientStrength);
     shader.sendFloat("nearPlane", params::graphical::NEAR_PLANE);
