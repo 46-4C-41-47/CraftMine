@@ -15,7 +15,7 @@
 #include "ChunkMeshBuffer.h"
 
 
-class Mesh {
+class ChunkMesh {
 private:
     static std::vector<unsigned int> unusedBuffers;
     const glm::vec3 position;
@@ -27,22 +27,22 @@ private:
 
 public:
 
-    Mesh(std::vector<BufferVertex>& v, size_t b, glm::vec3 p, unsigned int t) : 
+    ChunkMesh(std::vector<BufferVertex>& v, size_t b, glm::vec3 p, unsigned int t) : 
         texture{ t }, 
         position{ p }, 
         bufferSize{ b },
         elementCount{ (unsigned int)v.size() }
     { initMesh(v); }
 
-    Mesh(std::vector<BufferVertex>& v, glm::vec3 p, unsigned int t) : 
+    ChunkMesh(std::vector<BufferVertex>& v, glm::vec3 p, unsigned int t) : 
         texture{ t }, 
         position{ p }, 
         bufferSize{ v.size() * sizeof(BufferVertex) },
         elementCount{ (unsigned int)v.size() }
     { initMesh(v); }
     
-    Mesh(const Mesh&) = delete;
-    ~Mesh();
+    ChunkMesh(const ChunkMesh&) = delete;
+    ~ChunkMesh();
 
     void draw(Shader& shader, Light& light, glm::mat4& projection, glm::mat4& view);
     void updateBuffer(std::vector<BufferVertex>& newBuffer, size_t elementSize);

@@ -206,7 +206,7 @@ void Chunk::updateMesh()
 {
 	meshMutex.lock();
 	delete mesh;
-	mesh = new Mesh(*buffer->getData(), MAX_MEM_SPACE, glm::vec3(x * WIDTH, 0.0f, y * WIDTH), texture);
+	mesh = new ChunkMesh(*buffer->getData(), MAX_MEM_SPACE, glm::vec3(x * WIDTH, 0.0f, y * WIDTH), texture);
 	meshMutex.unlock();
 }
 

@@ -16,12 +16,12 @@
 
 #include <Windows.h>
 
-#include "include/Mesh.h"
 #include "include/Chunk.h"
 #include "include/Noise.h"
 #include "include/Shader.h"
 #include "include/Camera.h"
 #include "include/Texture.h"
+#include "include/ChunkMesh.h"
 #include "include/stb_image.h"
 #include "include/ThreadPool.h"
 #include "include/BufferElement.h"

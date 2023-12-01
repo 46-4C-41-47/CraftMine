@@ -12,10 +12,10 @@
 #include <iostream>
 #include <algorithm>
 
-#include "Mesh.h"
 #include "Noise.h"
 #include "Player.h"
 #include "Shader.h"
+#include "ChunkMesh.h"
 #include "Parameters.h"
 #include "FaceBuffer.h"
 #include "BufferElement.h"
@@ -77,7 +77,7 @@ private:
 	unsigned int texture, chunkDataSize;
 	
 	Light& light;
-    Mesh* mesh;
+    ChunkMesh* mesh;
 	Chunk* neighbors[4]; /* north south east west */
 	BlockType* chunkData;
 	ChunkMeshBuffer* buffer;
