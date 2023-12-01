@@ -17,6 +17,7 @@
 #include "Player.h"
 #include "Shader.h"
 #include "Parameters.h"
+#include "FaceBuffer.h"
 #include "BufferElement.h"
 #include "TextureHandler.h"
 #include "ChunkMeshBuffer.h"
@@ -68,6 +69,7 @@ class Chunk
 {
 private:
 	static std::vector<Chunk*> visibleChunks;
+	static FaceBuffer top, bottom, front, back, left, right;
 
 	const TextureHandler* th = TextureHandler::getInstance();
 	    

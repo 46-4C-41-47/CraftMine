@@ -6,7 +6,7 @@
 #include <vector>
 
 
-class ChunkMeshMap
+/*class ChunkMeshMap
 {
 private:
 	bool needToUpdate = true;
@@ -22,4 +22,4 @@ public:
 	void insert(int x, int y, int z, float u, float v);
 
 	std::vector<Vertex>& getData();
-};
+};*/

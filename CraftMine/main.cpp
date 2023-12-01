@@ -14,6 +14,8 @@
 #include <iostream>
 #include <functional>
 
+#include <Windows.h>
+
 #include "include/Mesh.h"
 #include "include/Chunk.h"
 #include "include/Noise.h"
@@ -28,6 +30,8 @@
 #define max(a, b) ((a > b) ? a : b)
 #define min(a, b) ((a < b) ? a : b)
 #define lerp(x, y, a) (a * (1 - a) + y * a)
+
+using namespace std::chrono_literals;
 
 using params::graphical::SKY_COLOR;
 
@@ -84,7 +88,7 @@ void processInput(GLFWwindow* window, Camera& cam, Light& lightSource, double de
 }
 
 
-int main()
+/*int main()
 {
     std::chrono::high_resolution_clock::time_point start, end;
     double delta = 0;
@@ -192,46 +196,88 @@ int main()
 
     glfwTerminate();
     return 0;
-}
-
-
-/*int main()
-{
-    float farPlane = 112, fragX = 150, windowWidth = 1200, t = 0.00253;
-
-    float correctFarPlane = sin(acos(abs((fragX - (windowWidth * 0.5)) / (windowWidth * 0.5)))) * farPlane;
-    float res = min(correctFarPlane, lerp(0, farPlane, t)) / correctFarPlane;
-
-    std::cout << correctFarPlane << "\n";
-    std::cout << res << "\n";
 }*/
 
 
-/*int main()
+int main()
 {
-    glfwInit();
+    double start, avg, sum = 0, d = 1000;
+    Shader* objectShader;
+    Shader* lightShader;
 
-    double start, avg, sum = 0, d = 10000;
+    if (!glfwInit())
+    {
+        std::cerr << "Initialization of GLFW failed\n";
+        return 1;
+    }
+
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+    GLFWwindow* window = glfwCreateWindow(params::graphical::FRAME_WIDTH, params::graphical::FRAME_HEIGHT, "CraftMine", NULL, NULL);
+    glfwSetWindowPos(window, 2625, 200);
+
+    if (window == NULL)
+    {
+        std::cerr << "GLFW window creation failed\n";
+        glfwTerminate();
+        return 2;
+    }
+
+    glfwMakeContextCurrent(window);
+
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+    {
+        std::cerr << "Failed to initialize GLAD\n";
+        return 3;
+    }
+
+    try
+    {
+        objectShader = new Shader(
+            "./res/shaders/vertexShader.glsl",
+            "./res/shaders/fragmentShader.glsl"
+        );
+        lightShader = new Shader(
+            "./res/shaders/light/lightVertexShader.glsl",
+            "./res/shaders/light/lightFragmentShader.glsl"
+        );
+    }
+    catch (std::exception)
+    {
+        return 1;
+    }
+
+    Light light(vec3(0.0f, 180.0f, -5.0f), vec3(0.99f, 0.9f, 0.9f), 0.6f);
+
+    using namespace std::chrono_literals;
 
     for (int i = 0; i < d; i++)
     {
         start = glfwGetTime();
 
-        // stuff that needs to be measured
+        glm::mat4 m1 = glm::mat4(0);
+        glm::mat4 m2 = glm::mat4(0);
+
+        Chunk* c = new Chunk(0, 0, light, 0);
+        c->draw(*objectShader, m1, m2);
 
         sum += (glfwGetTime() - start) * 1000;
+
+        delete c;
     }
 
     avg = sum / d;
 
-    cout << "average elapsed time : " << avg << " ms\n";
-    cout << d << " iterations\n";
+    std::cout << "average elapsed time : " << avg << " ms\n";
+    std::cout << d << " iterations\n";
     char a;
     std::cin >> a;
 
     glfwTerminate();
     return 0;
-}*/
+}
 
 
 /*

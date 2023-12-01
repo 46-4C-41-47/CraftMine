@@ -23,3 +23,13 @@ typedef struct {
 	float texture_x;
 	float texture_y;
 } BufferVertex;
+
+
+
+typedef struct {
+	int x;
+	int y;
+	int z;
+
+	int textureIndex;
+} face;
