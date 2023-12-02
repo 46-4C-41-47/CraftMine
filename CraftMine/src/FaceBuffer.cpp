@@ -9,13 +9,15 @@ FaceBuffer::~FaceBuffer()
 
 void FaceBuffer::insert(int x, int y, int z, int textureIndex)
 {
-	map->insert({ { x, y, z }, { x, y, z, textureIndex } });
+	map->insert({ getIndex(x, y, z), {x, y, z, textureIndex}});
+	dirty = true;
 }
 
 
 void FaceBuffer::remove(int x, int y, int z)
 {
-	map->erase({ x, y, z });
+	map->erase(getIndex(x, y, z));
+	dirty = true;
 }
 
 
@@ -26,7 +28,7 @@ const std::vector<face>& FaceBuffer::getData()
 		return *packedData;
 	}
 
-	for (const std::pair<mapKey, face>& kv : (*map))
+	for (const std::pair<long long int, face>& kv : (*map))
 	{
 		packedData->push_back(kv.second);
 	}

@@ -10,6 +10,7 @@
 
 #include "Light.h"
 #include "Shader.h"
+#include "FaceBuffer.h"
 #include "Parameters.h"
 #include "BufferElement.h"
 #include "ChunkMeshBuffer.h"
@@ -17,33 +18,16 @@
 
 class ChunkMesh {
 private:
-    static std::vector<unsigned int> unusedBuffers;
-    const glm::vec3 position;
-    unsigned int VAO, VBO, texture = 0, elementCount;
-    size_t bufferSize;
+    unsigned int VAO, faceDataVBO, VBO, texture = 0, elementCount;
 
-    void initMesh(std::vector<BufferVertex>& buffer);
-    void copyBuffer(std::vector<BufferVertex>& buffer);
+    void initMesh(FaceBuffer& faceBuffer);
 
 public:
-
-    ChunkMesh(std::vector<BufferVertex>& v, size_t b, glm::vec3 p, unsigned int t) : 
-        texture{ t }, 
-        position{ p }, 
-        bufferSize{ b },
-        elementCount{ (unsigned int)v.size() }
-    { initMesh(v); }
-
-    ChunkMesh(std::vector<BufferVertex>& v, glm::vec3 p, unsigned int t) : 
-        texture{ t }, 
-        position{ p }, 
-        bufferSize{ v.size() * sizeof(BufferVertex) },
-        elementCount{ (unsigned int)v.size() }
-    { initMesh(v); }
+    ChunkMesh(FaceBuffer& fb, unsigned int t) : texture{ t }, elementCount{ (unsigned int)fb.getData().size()}
+    { initMesh(fb); }
     
     ChunkMesh(const ChunkMesh&) = delete;
     ~ChunkMesh();
 
     void draw(Shader& shader, Light& light, glm::mat4& projection, glm::mat4& view);
-    void updateBuffer(std::vector<BufferVertex>& newBuffer, size_t elementSize);
 };

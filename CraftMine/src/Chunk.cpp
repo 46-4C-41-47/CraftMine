@@ -12,18 +12,26 @@ Chunk::Chunk(int x, int y, Light& l, unsigned int t) : x{ x }, y{ y }, light{ l 
 {
 	chunkData = new BlockType[WIDTH * WIDTH * HEIGHT];
 	chunkDataSize = WIDTH * WIDTH * HEIGHT;
+
+	for (int i = 0; i < 6; i++)
+		faces[i] = new FaceBuffer(i);
 	
-	asyncBuffer = std::async([&]() {
+	/*asyncBuffer = std::async([&]() {
 			init();
 			return generateMesh();
-		});
+		});*/
+
+	init();
+	generateMesh();
 }
 
 
 Chunk::~Chunk() 
 {
 	delete[] chunkData;
-	delete mesh, buffer;
+
+	for (int i = 0; i < 6; i++)
+		delete faces[i], meshFaces[i];
 }
 
 
@@ -81,10 +89,8 @@ bool Chunk::isThereABlock(int x, int y, int z)
 }
 
 
-ChunkMeshBuffer* Chunk::generateMesh()
+void Chunk::generateMesh()
 {
-	std::vector<BufferVertex>* meshVAO = new std::vector<BufferVertex>();
-
 	for (int z = 0; z < WIDTH; z++)
 	{
 		for (int y = 0; y < HEIGHT; y++)
@@ -112,28 +118,7 @@ ChunkMeshBuffer* Chunk::generateMesh()
 							&& !(i == 1 && z == (WIDTH - 1))
 							&& !(i == 3 && x == (WIDTH - 1)))
 						{
-							// iterate over each vertex which compose a cube face
-							for (int j = 0; j < ChunkMeshBuffer::cube_face_size / 8; j++)
-							{
-								int vertex_index = i * ChunkMeshBuffer::cube_face_size + j * 8;
-								
-								BufferVertex bv = {
-									getBufferId(x, y, z, i, j),
-
-									ChunkMeshBuffer::cube_vertices[vertex_index + 0] + (float)x,
-									ChunkMeshBuffer::cube_vertices[vertex_index + 1] + (float)y,
-									ChunkMeshBuffer::cube_vertices[vertex_index + 2] + (float)z,
-
-									ChunkMeshBuffer::cube_vertices[vertex_index + 3],
-									ChunkMeshBuffer::cube_vertices[vertex_index + 4],
-									ChunkMeshBuffer::cube_vertices[vertex_index + 5],
-
-									getUIndex(BlockType::Dirt, ChunkMeshBuffer::cube_vertices[vertex_index + 6]),
-									getVIndex(BlockType::Dirt, ChunkMeshBuffer::cube_vertices[vertex_index + 7])
-								};
-
-								meshVAO->insert(meshVAO->end(), bv);
-							}
+							faces[i]->insert(x, y, z, constants::BlockType::Dirt);
 						}
 					}
 				}
@@ -141,15 +126,14 @@ ChunkMeshBuffer* Chunk::generateMesh()
 		}
 	}
 
-	delete buffer;
-	return new ChunkMeshBuffer(meshVAO);
+	for (int i = 0; i < 6; i++)
+		meshFaces[i] = new ChunkMesh(*(faces[i]), texture);
 }
 
 
 void Chunk::updateBorders()
 {
-	
-	if (buffer == nullptr)
+	/*if (buffer == nullptr)
 		return;
 
 	bordersFullyUpdated =
@@ -198,39 +182,23 @@ void Chunk::updateBorders()
 	}
 	bufferMutex.unlock();
 	
-	updateMesh();
+	updateMesh();*/
 }
 
 
 void Chunk::updateMesh()
 {
-	meshMutex.lock();
+	/*meshMutex.lock();
 	delete mesh;
 	mesh = new ChunkMesh(*buffer->getData(), MAX_MEM_SPACE, glm::vec3(x * WIDTH, 0.0f, y * WIDTH), texture);
-	meshMutex.unlock();
+	meshMutex.unlock();*/
 }
 
 
 void Chunk::draw(Shader& shader, glm::mat4& projection, glm::mat4& view) 
 {
-	if (mesh == nullptr)
-	{
-		if (func::isFuturReady(asyncBuffer))
-		{
-			bufferMutex.lock();
-			buffer = asyncBuffer.get();
-			bufferMutex.unlock();
-			updateMesh();
-		}
-		else
-		{
-			return;
-		}
-	}
-
-	meshMutex.lock();
-	mesh->draw(shader, light, projection, view);
-	meshMutex.unlock();
+	for (int i = 0; i < 6; i++)
+		meshFaces[i]->draw(shader, light, projection, view);
 }
 
 
@@ -315,7 +283,7 @@ void Chunk::updateChunks(Light& l, Player& p, unsigned int t)
 		neighborBuffer[SOUTH] = 0 <= (y - 1) ? visibleChunks[x + (y - 1) * borderSize] : nullptr;
 		neighborBuffer[WEST ] = 0 <= (x - 1) ? visibleChunks[(x - 1) + y * borderSize] : nullptr;
 
-		visibleChunks[i]->setNeighbor(neighborBuffer);
+		//visibleChunks[i]->setNeighbor(neighborBuffer);
 
 		delete visibleChunksCopy[i];
 	}

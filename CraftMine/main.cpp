@@ -8,6 +8,7 @@
 
 #include <queue>
 #include <mutex>
+#include <bitset>
 #include <vector>
 #include <string>
 #include <thread>
@@ -88,7 +89,7 @@ void processInput(GLFWwindow* window, Camera& cam, Light& lightSource, double de
 }
 
 
-/*int main()
+int main()
 {
     std::chrono::high_resolution_clock::time_point start, end;
     double delta = 0;
@@ -140,8 +141,8 @@ void processInput(GLFWwindow* window, Camera& cam, Light& lightSource, double de
     try
     {
         objectShader = new Shader(
-            "./res/shaders/vertexShader.glsl", 
-            "./res/shaders/fragmentShader.glsl"
+            "./res/shaders/cubeVertex.glsl", 
+            "./res/shaders/cubeFragment.glsl"
         );
         lightShader = new Shader(
             "./res/shaders/light/lightVertexShader.glsl", 
@@ -159,6 +160,8 @@ void processInput(GLFWwindow* window, Camera& cam, Light& lightSource, double de
     TextureHandler* th = TextureHandler::getInstance();
     Light light(vec3(0.0f, 180.0f, -5.0f), vec3(0.99f, 0.9f, 0.9f), 0.6f);
 
+    Chunk c(0, 0, light, th->getTexture());
+
     // game loop
     while (!glfwWindowShouldClose(window))
     {
@@ -175,13 +178,14 @@ void processInput(GLFWwindow* window, Camera& cam, Light& lightSource, double de
 
         light.draw(*lightShader, projection, view);
 
-        const std::vector<Chunk*>& visibleChunks = Chunk::getVisibleChunks();
+        /*const std::vector<Chunk*>& visibleChunks = Chunk::getVisibleChunks();
         
         for (int i = 0; i < visibleChunks.size(); i++)
         {
             if (visibleChunks[i] != nullptr)
                 visibleChunks[i]->draw(*objectShader, projection, view);
-        }
+        }*/
+        c.draw(*objectShader, projection, view);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
@@ -196,10 +200,10 @@ void processInput(GLFWwindow* window, Camera& cam, Light& lightSource, double de
 
     glfwTerminate();
     return 0;
-}*/
+}
 
 
-int main()
+/*int main()
 {
     double start, avg, sum = 0, d = 1000;
     Shader* objectShader;
@@ -253,19 +257,15 @@ int main()
 
     using namespace std::chrono_literals;
 
+    FaceBuffer fb(0);
+
     for (int i = 0; i < d; i++)
     {
         start = glfwGetTime();
 
-        glm::mat4 m1 = glm::mat4(0);
-        glm::mat4 m2 = glm::mat4(0);
-
-        Chunk* c = new Chunk(0, 0, light, 0);
-        c->draw(*objectShader, m1, m2);
+        fb.insert(i, i, i, 0);
 
         sum += (glfwGetTime() - start) * 1000;
-
-        delete c;
     }
 
     avg = sum / d;
@@ -277,12 +277,12 @@ int main()
 
     glfwTerminate();
     return 0;
-}
+}*/
 
 
 /*
 À FAIRE  :
-trouver la fuite de mémoire (classe Mesh)
+réparer la fonction getIndex dans FaceBuffer
 ajouter un readme sur git
 faire une doc si j'ai pas la flemme
 rendre asynchrone la generation des chunks

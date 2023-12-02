@@ -14,31 +14,31 @@ namespace constants
 	{
 		NORTH = 0,
 		SOUTH = 1,
-		EAST = 2,
-		WEST = 3,
+		 EAST = 2,
+		 WEST = 3,
 	};
 
 	enum cube
 	{
-		FRONT = 0,
-		BACK = 1,
-		LEFT = 2,
-		RIGHT = 3,
+		 FRONT = 0,
+		  BACK = 1,
+		  LEFT = 2,
+		 RIGHT = 3,
 		BOTTOM = 4,
-		TOP = 5,
+		   TOP = 5,
 	};
 
 	enum BlockType
 	{
-		Null = -1,
-		Empty = 1023,
-		Dirt = 200,
-		Grass = 3,
-		Stone = 4,
-		Water = 5,
-		Lava = 6,
-		Wood = 7,
-		Leaf = 8,
+		   Null = -1,
+		  Empty = 1023,
+		   Dirt = 200,
+		  Grass = 3,
+		  Stone = 4,
+		  Water = 5,
+		   Lava = 6,
+		   Wood = 7,
+		   Leaf = 8,
 		Diamond = 9,
 		Library = 5,
 	};
@@ -93,7 +93,7 @@ namespace params
 			FAR_PLANE = chunk::WIDTH * (chunk::RADIUS - 1);
 		static const glm::vec3 
 			FOG_COLOR = glm::vec3(1.0f),
-			SKY_COLOR = glm::vec3(1.0f);
+			SKY_COLOR = glm::vec3(0.01f);
 			//SKY_COLOR = glm::vec3(0.37f, 0.7f, 0.75f);
 	}
 
@@ -143,5 +143,55 @@ namespace func
 
 namespace data
 {
-
+	const std::vector<float> cube_faces[6]{
+		{ // front
+//          vertex coordinates  normal vector         texture coordinates
+			0.0f, 0.0f, 0.0f,   0.0f,  0.0f, -1.0f,   0.0f, 0.0f,
+			1.0f, 0.0f, 0.0f,   0.0f,  0.0f, -1.0f,   1.0f, 0.0f,
+			1.0f, 1.0f, 0.0f,   0.0f,  0.0f, -1.0f,   1.0f, 1.0f,
+			1.0f, 1.0f, 0.0f,   0.0f,  0.0f, -1.0f,   1.0f, 1.0f,
+			0.0f, 1.0f, 0.0f,   0.0f,  0.0f, -1.0f,   0.0f, 1.0f,
+			0.0f, 0.0f, 0.0f,   0.0f,  0.0f, -1.0f,   0.0f, 0.0f,
+		},
+		{ // back
+			0.0f, 0.0f, 1.0f,   0.0f,  0.0f,  1.0f,   0.0f, 0.0f,
+			1.0f, 0.0f, 1.0f,   0.0f,  0.0f,  1.0f,   1.0f, 0.0f,
+			1.0f, 1.0f, 1.0f,   0.0f,  0.0f,  1.0f,   1.0f, 1.0f,
+			1.0f, 1.0f, 1.0f,   0.0f,  0.0f,  1.0f,   1.0f, 1.0f,
+			0.0f, 1.0f, 1.0f,   0.0f,  0.0f,  1.0f,   0.0f, 1.0f,
+			0.0f, 0.0f, 1.0f,   0.0f,  0.0f,  1.0f,   0.0f, 0.0f,
+		},
+		{ // left
+			0.0f, 1.0f, 1.0f,  -1.0f,  0.0f,  0.0f,   1.0f, 0.0f,
+			0.0f, 1.0f, 0.0f,  -1.0f,  0.0f,  0.0f,   1.0f, 1.0f,
+			0.0f, 0.0f, 0.0f,  -1.0f,  0.0f,  0.0f,   0.0f, 1.0f,
+			0.0f, 0.0f, 0.0f,  -1.0f,  0.0f,  0.0f,   0.0f, 1.0f,
+			0.0f, 0.0f, 1.0f,  -1.0f,  0.0f,  0.0f,   0.0f, 0.0f,
+			0.0f, 1.0f, 1.0f,  -1.0f,  0.0f,  0.0f,   1.0f, 0.0f,
+		},
+		{ // right
+			1.0f, 1.0f, 1.0f,   1.0f,  0.0f,  0.0f,   1.0f, 0.0f,
+			1.0f, 1.0f, 0.0f,   1.0f,  0.0f,  0.0f,   1.0f, 1.0f,
+			1.0f, 0.0f, 0.0f,   1.0f,  0.0f,  0.0f,   0.0f, 1.0f,
+			1.0f, 0.0f, 0.0f,   1.0f,  0.0f,  0.0f,   0.0f, 1.0f,
+			1.0f, 0.0f, 1.0f,   1.0f,  0.0f,  0.0f,   0.0f, 0.0f,
+			1.0f, 1.0f, 1.0f,   1.0f,  0.0f,  0.0f,   1.0f, 0.0f,
+		},
+		{ // bottom
+			0.0f, 0.0f, 0.0f,   0.0f, -1.0f,  0.0f,   0.0f, 1.0f,
+			1.0f, 0.0f, 0.0f,   0.0f, -1.0f,  0.0f,   1.0f, 1.0f,
+			1.0f, 0.0f, 1.0f,   0.0f, -1.0f,  0.0f,   1.0f, 0.0f,
+			1.0f, 0.0f, 1.0f,   0.0f, -1.0f,  0.0f,   1.0f, 0.0f,
+			0.0f, 0.0f, 1.0f,   0.0f, -1.0f,  0.0f,   0.0f, 0.0f,
+			0.0f, 0.0f, 0.0f,   0.0f, -1.0f,  0.0f,   0.0f, 1.0f,
+		},
+		{ // top
+			0.0f, 1.0f, 0.0f,   0.0f,  1.0f,  0.0f,   0.0f, 1.0f,
+			1.0f, 1.0f, 0.0f,   0.0f,  1.0f,  0.0f,   1.0f, 1.0f,
+			1.0f, 1.0f, 1.0f,   0.0f,  1.0f,  0.0f,   1.0f, 0.0f,
+			1.0f, 1.0f, 1.0f,   0.0f,  1.0f,  0.0f,   1.0f, 0.0f,
+			0.0f, 1.0f, 1.0f,   0.0f,  1.0f,  0.0f,   0.0f, 0.0f,
+			0.0f, 1.0f, 0.0f,   0.0f,  1.0f,  0.0f,   0.0f, 1.0f
+		},
+	};
 }

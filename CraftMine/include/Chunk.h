@@ -20,7 +20,6 @@
 #include "FaceBuffer.h"
 #include "BufferElement.h"
 #include "TextureHandler.h"
-#include "ChunkMeshBuffer.h"
 
 /*
 				NORTH
@@ -69,18 +68,19 @@ class Chunk
 {
 private:
 	static std::vector<Chunk*> visibleChunks;
-	static FaceBuffer top, bottom, front, back, left, right;
 
 	const TextureHandler* th = TextureHandler::getInstance();
 	    
 	bool initStatus = false, bordersFullyUpdated = false;
 	unsigned int texture, chunkDataSize;
 	
+	/* FRONT BACK LEFT RIGHT BOTTOM TOP */
+	FaceBuffer* faces[6];
+    ChunkMesh* meshFaces[6];
+	
 	Light& light;
-    ChunkMesh* mesh;
 	Chunk* neighbors[4]; /* north south east west */
 	BlockType* chunkData;
-	ChunkMeshBuffer* buffer;
 
 	std::future<ChunkMeshBuffer*> asyncBuffer;
 	std::mutex meshMutex, bufferMutex;
@@ -91,7 +91,7 @@ private:
 	void createCaves();
 	void updateBorders();
 	BlockType getBlock(int x, int y, int z);
-	ChunkMeshBuffer* generateMesh();
+	void generateMesh();
 
 public:
 	const int x, y;
